@@ -1,0 +1,36 @@
+organ to android
+	usb host, works fine
+
+android to dallben 
+	TouchDAW with ipMIDI to multimidicast, working.
+
+	TouchOSC, Control, etc can do OSC for stop console. TouchOSC doesn't
+	have custom layouts for android yet, so Control is it. bonus: easy to
+	do programmatic layouts with Control
+
+	need midi relay solution (probably write my own with nmj, or read midi
+	and send OSC. Maybe Control can be hacked to do it)
+
+aeolus headless
+	-t works, though you can't control midi settings with text ui they
+	won't need changing often and it remembers them. Adding midi commands
+	to the textui wouldn't be too hard.
+
+	midi or osc stop control ? supposedly it has midi support, so just
+	figure out a way to connect an osc console on android to midi (little
+	proxy program?)
+		Maybe Control can be adapted with nmj to send over ipMIDI
+		instead of only RTPMIDI. Otherwise a little relay program to
+		translate OSC to MIDI.
+
+	I'm using hw:0,3 which is the HDMI output. Works as long as the TV is
+	on, but hogs the device. I'll probably just figure out which device is
+	the audio jack on the front and run a wire to the receiver. Better than
+	having the TV on and fighting with myth.
+
+	Idea: run aeolus in a detachable X thing so you can hop in and tweak
+	things from time to time. nx or vnc probably.
+
+future work
+	if ipMIDI is found lacking, implement RTPMIDI (probably a matter of
+	adapting the sfront network code http://www.cs.berkeley.edu/~lazzaro/rtpmidi/)
