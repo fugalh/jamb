@@ -34,3 +34,6 @@ aeolus headless
 future work
 	if ipMIDI is found lacking, implement RTPMIDI (probably a matter of
 	adapting the sfront network code http://www.cs.berkeley.edu/~lazzaro/rtpmidi/)
+
+	enable full combination action control via MIDI. preset storage is
+	missing at the moment
