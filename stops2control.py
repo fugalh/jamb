@@ -59,10 +59,10 @@
 # basic unit is roughly 1em. Stop buttons are 4x2. There's a 1 unit gap between
 # divisions (the division name goes in here too). The combination action at the
 # bottom is 1 unit tall, and its buttons are 1x1.
+
 import json
 import os
 import struct
-import sys
 
 class AeolusInstrument(object):
     def __init__(self, instrument_dir):
@@ -187,3 +187,77 @@ class AeolusInstrument(object):
             elif t == '/instr/end':
                 break
 
+def emit_control(instrument_dir):
+    aeolus = AeolusInstrument(instrument_dir)
+    playpage = []
+
+
+    ux = 1.0 / 8
+    uy = 0.9 / (5 + 9*2)
+    x = 0
+    y = 0
+
+    # template
+    playpage.append({
+        "name": "refresh",
+        "type": "Button",
+        "bounds": [0, 0, 0.5, uy],
+        "startingValue": 0,
+        "isLocal": True,
+        "mode": "contact",
+        "ontouchstart": "interfaceManager.refreshInterface()",
+        "stroke": "#aaa",
+        "label": "refresh",
+        })
+    playpage.append({
+        "name": "tabButton",
+        "type": "Button",
+        "bounds": [0.5, 0, 0.5, uy],
+        "mode": "toggle",
+        "stroke": "#aaa",
+        "isLocal": True,
+        "ontouchstart": "if(this.value == this.max) { control.showToolbar(); } else { control.hideToolbar(); }",
+        "label": "menu",
+        })
+
+    y += uy
+
+    for g in aeolus.groups:
+        playpage.append({
+            'name': 'g%s' % g['index'],
+            'type': 'Label',
+            'x': 0, 'y': y,
+            'width': 1, 'height': uy,
+            'align': 'left',
+            'value': g['label'],
+            })
+        y += uy
+        for b in g['buttons']:
+            stroke = '#aaa'
+            playpage.append({
+                'name': 'g%s_%s' % (g['index'], b['mnemonic']),
+                'type': 'Button',
+                'x': x, 'y': y,
+                'width': ux, 'height': 2 * uy,
+                'stroke': stroke,
+                'label': b['label'].replace("\n", " ").replace("- ", "")
+                })
+            x += ux
+            if x >= 1:
+                x = 0
+                y += 2 * uy
+        y += 2 * uy
+        x = 0
+
+    pages = [playpage]
+    s = """
+loadedInterfaceName = "%s";
+interfaceOrientation = "landscape";
+
+pages = %s;
+    """ % (aeolus.label, json.dumps(pages, indent=2))
+    print s
+
+if __name__ == "__main__":
+    import sys
+    emit_control(sys.argv[1])
