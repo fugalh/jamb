@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # given a stops directory
 # generate a Control interface for each instrument (stops/*/definition).
 # http://charlie-roberts.com/Control/
