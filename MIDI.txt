@@ -1,0 +1,21 @@
+MIDI
+status  message
+0x8.....  note on
+0x9.....  note off
+0xB.07..  swell pedal
+0xB.0C..  tremulant frequency
+0xB.0D..  tremulant amplitude
+0xB.20..  preset bank         
+0xB.62..  stop control
+    01mm0ggg mode and group set
+        modes 00/01/10/11 are disabled/set off/set on/toggle
+    000bbbbb button
+0xC.....  program change
+
+OSC
+/aeolus/swell
+/aeolus/tfreq 
+/aeolus/tmodd 
+/aeolus/bank
+/aeolus/button/g/b
+/aeolus/preset/p
