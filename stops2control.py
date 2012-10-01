@@ -182,6 +182,17 @@ class AeolusInstrument(object):
                         })
                     bi += 1
 
+            elif t == '/coupler':
+                g['buttons'].append({
+                    'type': 'coupler',
+                    'index': bi,
+                    'keyboard': int(tokens[1]),
+                    'division': int(tokens[2]),
+                    'mnemonic': tokens[3],
+                    'label': tokens[4],
+                    })
+                bi += 1
+
             elif t == '/group/end':
                 g = None
                 bi = None
@@ -237,7 +248,7 @@ def emit_control(instrument_dir):
         for b in g['buttons']:
             stroke = '#aaa'
             playpage.append({
-                'name': 'g%s_%s' % (g['index'], b['mnemonic']),
+                'name': 'g%sb%s' % (g['index'], b['index']),
                 'type': 'Button',
                 'x': x, 'y': y,
                 'width': ux, 'height': 2 * uy,
