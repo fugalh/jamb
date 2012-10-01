@@ -235,6 +235,21 @@ def emit_control(instrument_dir):
 
     y += uy
 
+    palette = {
+            'stop': {
+                'fill': '#202040',
+                'stroke': '#eee'
+                },
+            'tremul': {
+                'fill': '#204020',
+                'stroke': '#5f5'
+                },
+            'coupler': {
+                'fill': '#403020',
+                'stroke': '#fa5'
+                },
+            }
+
     for g in aeolus.groups:
         playpage.append({
             'name': 'g%s' % g['index'],
@@ -246,14 +261,14 @@ def emit_control(instrument_dir):
             })
         y += uy
         for b in g['buttons']:
-            stroke = '#aaa'
             playpage.append({
                 'name': 'g%sb%s' % (g['index'], b['index']),
                 'type': 'Button',
                 'x': x, 'y': y,
                 'width': ux, 'height': 2 * uy,
-                'stroke': stroke,
-                'label': b['label'].replace("\n", " ").replace("- ", "")
+                'label': b['label'].replace("\n", " ").replace("- ", ""),
+                'color': palette[b['type']]['fill'],
+                'stroke': palette[b['type']]['stroke'],
                 })
             x += ux
             if x >= 1:
