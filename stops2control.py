@@ -269,6 +269,7 @@ def emit_control(instrument_dir):
                 'label': b['label'].replace("\n", " ").replace("- ", ""),
                 'color': palette[b['type']]['fill'],
                 'stroke': palette[b['type']]['stroke'],
+                'address': '/aeolus/button/%d/%d' % (g['index'], b['index']),
                 })
             x += ux
             if x >= 1:
