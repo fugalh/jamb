@@ -1,0 +1,16 @@
+loadedInterfaceName = "{name}";
+interfaceOrientation = "landscape";
+
+function general_cancel() {{
+    p = pages[0];
+    for (i=0; i<p.length; i++) {{
+        b = p[i];
+        prefix = '/aeolus/button';
+        if (b.address.substring(0, prefix.length) == prefix)
+            b.setValue(0);
+    }}
+}}
+
+pages = {pages};
+
+// vim: filetype=javascript

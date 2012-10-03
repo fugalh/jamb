@@ -212,16 +212,27 @@ def emit_control(instrument_dir):
 
     # template
     playpage.append({
+        "name": "refresh",
+        "type": "Button",
+        "bounds": [0, 0, 0.5, uy],
+        "startingValue": 0,
+        "isLocal": True,
+        "mode": "contact",
+        "ontouchstart": "interfaceManager.refreshInterface()",
+        "stroke": "#aaa",
+        "label": "refresh",
+        })
+    playpage.append({
         "name": "generalCancel",
         "type": "Button",
-        "bounds": [0, 0, 1, uy],
+        "bounds": [0.5, 0, 0.5, uy],
         "mode": "contact",
         "stroke": "#aaa",
         "address": "/aeolus/cancel",
         "max": 4,
-        "label": "general cancel (and refresh interface)",
+        "label": "general cancel",
         # TODO clear all buttons on our screen, hack now is to just refresh interface
-        "ontouchstart": "interfaceManager.refreshInterface()",
+        "ontouchstart": "general_cancel()",
         })
 
     y += uy
@@ -270,12 +281,11 @@ def emit_control(instrument_dir):
         x = 0
 
     pages = [playpage]
-    s = """
-loadedInterfaceName = "%s";
-interfaceOrientation = "landscape";
-
-pages = %s;
-    """ % (aeolus.label, json.dumps(pages, indent=2))
+    json.dumps(pages, indent=2)
+    s = open('aeolus.js.template', 'r').read().format(
+            name = aeolus.label,
+            pages = json.dumps(pages, indent=2),
+            )
     print s
 
 if __name__ == "__main__":
