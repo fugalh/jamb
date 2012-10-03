@@ -1,0 +1,3 @@
+aeolus-osc.py
+    requires pyOSC https://trac.v2.nl/wiki/pyOSC
+    requires alsaseq http://pp.com.mx/python/alsaseq/project.html

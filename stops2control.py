@@ -212,25 +212,16 @@ def emit_control(instrument_dir):
 
     # template
     playpage.append({
-        "name": "refresh",
+        "name": "generalCancel",
         "type": "Button",
-        "bounds": [0, 0, 0.5, uy],
-        "startingValue": 0,
-        "isLocal": True,
+        "bounds": [0, 0, 1, uy],
         "mode": "contact",
+        "stroke": "#aaa",
+        "address": "/aeolus/cancel",
+        "max": 4,
+        "label": "general cancel (and refresh interface)",
+        # TODO clear all buttons on our screen, hack now is to just refresh interface
         "ontouchstart": "interfaceManager.refreshInterface()",
-        "stroke": "#aaa",
-        "label": "refresh",
-        })
-    playpage.append({
-        "name": "tabButton",
-        "type": "Button",
-        "bounds": [0.5, 0, 0.5, uy],
-        "mode": "toggle",
-        "stroke": "#aaa",
-        "isLocal": True,
-        "ontouchstart": "if(this.value == this.max) { control.showToolbar(); } else { control.hideToolbar(); }",
-        "label": "menu",
         })
 
     y += uy
