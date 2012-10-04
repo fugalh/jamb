@@ -222,18 +222,6 @@ def emit_control(instrument_dir):
         "stroke": "#aaa",
         "label": "refresh",
         })
-    playpage.append({
-        "name": "generalCancel",
-        "type": "Button",
-        "bounds": [0.5, 0, 0.5, uy],
-        "mode": "contact",
-        "stroke": "#aaa",
-        "address": "/aeolus/cancel",
-        "max": 4,
-        "label": "general cancel",
-        # TODO clear all buttons on our screen, hack now is to just refresh interface
-        "ontouchstart": "general_cancel()",
-        })
 
     y += uy
 
@@ -249,6 +237,10 @@ def emit_control(instrument_dir):
             'coupler': {
                 'fill': '#403020',
                 'stroke': '#fa5'
+                },
+            'piston': {
+                'fill': '#202040',
+                'stroke': '#eee'
                 },
             }
 
@@ -274,11 +266,40 @@ def emit_control(instrument_dir):
                 'address': '/aeolus/button/%d/%d' % (g['index'], b['index']),
                 })
             x += ux
-            if x >= 1:
+            if x > 1:
                 x = 0
                 y += 2 * uy
         y += 2 * uy
         x = 0
+
+    y += uy
+
+    playpage.append({
+        "name": "generalCancel",
+        "type": "Button",
+        "bounds": [x, y, ux/2, 2 * uy],
+        "mode": "momentary",
+        'color': palette['piston']['fill'],
+        'stroke': palette['piston']['stroke'],
+        "address": "/aeolus/cancel",
+        "max": 4,
+        "label": "0",
+        "ontouchstart": "control.general_cancel()",
+        })
+    x += ux/2
+
+    for i in range(1, 16):
+        playpage.append({
+            'name': 'preset%d' % i,
+            'label': str(i),
+            'type': 'Button',
+            'bounds': [x, y, ux/2, 2*uy],
+            'mode': 'momentary',
+            'color': palette['piston']['fill'],
+            'stroke': palette['piston']['stroke'],
+            'address': '/aeolus/preset/%d' % i,
+            })
+        x += ux/2
 
     pages = [playpage]
     json.dumps(pages, indent=2)

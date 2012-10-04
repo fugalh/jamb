@@ -7,6 +7,7 @@ function general_cancel() {{
         b = p[i];
         prefix = '/aeolus/button';
         if (b.address.substring(0, prefix.length) == prefix)
+            // TODO this actually sends OSC events too. No harm but wasteful
             b.setValue(0);
     }}
 }}
