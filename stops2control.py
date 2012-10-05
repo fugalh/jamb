@@ -222,6 +222,16 @@ def emit_control(instrument_dir):
         "stroke": "#aaa",
         "label": "refresh",
         })
+    playpage.append({
+        "name": "tabButton",
+        "type": "Button",
+        "bounds": [0.5, 0, 0.5, uy],
+        "mode": "toggle",
+        "stroke": "#aaa",
+        "isLocal": True,
+        "ontouchstart": "if(this.value == this.max) { control.showToolbar(); } else { control.hideToolbar(); }",
+        "label": "menu",
+        })
 
     y += uy
 
@@ -294,10 +304,12 @@ def emit_control(instrument_dir):
             'label': str(i),
             'type': 'Button',
             'bounds': [x, y, ux/2, 2*uy],
-            'mode': 'momentary',
+            'mode': 'contact',
             'color': palette['piston']['fill'],
             'stroke': palette['piston']['stroke'],
             'address': '/aeolus/preset/%d' % i,
+            # TODO poll for stops
+            #'ontouchstart': 'control.general_cancel()',
             })
         x += ux/2
 
