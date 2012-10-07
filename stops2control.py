@@ -319,8 +319,8 @@ def emit_control(instrument_dir):
             name = aeolus.label,
             pages = json.dumps(pages, indent=2),
             )
-    print s
+    return s
 
 if __name__ == "__main__":
     import sys
-    emit_control(sys.argv[1])
+    print emit_control(sys.argv[1])
