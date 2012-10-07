@@ -8,7 +8,7 @@ class Aeolus(object):
     def __init__(self, addr='128:0', channel=0):
         self.ctrl_param = 98
         self.dst = tuple([int(i) for i in addr.split(':')])
-        self.channel = channel
+        self.channel = channel - 1
 
         alsaseq.client('Aeolus-OSC', 0, 1, True)
         alsaseq.start()
