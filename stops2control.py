@@ -292,9 +292,9 @@ def emit_control(instrument_dir):
         'color': palette['piston']['fill'],
         'stroke': palette['piston']['stroke'],
         "address": "/aeolus/cancel",
-        "max": 4,
+        "max": len(aeolus.groups),
         "label": "0",
-        "ontouchstart": "control.general_cancel()",
+        "ontouchend": "control.aeolus.general_cancel()",
         })
     x += ux/2
 
@@ -304,7 +304,7 @@ def emit_control(instrument_dir):
             'label': str(i),
             'type': 'Button',
             'bounds': [x, y, ux/2, 2*uy],
-            'mode': 'contact',
+            'mode': 'momentary',
             'color': palette['piston']['fill'],
             'stroke': palette['piston']['stroke'],
             'address': '/aeolus/preset/%d' % i,
@@ -324,3 +324,14 @@ def emit_control(instrument_dir):
 if __name__ == "__main__":
     import sys
     print emit_control(sys.argv[1])
+
+# TODO
+# . refactor javascript to store objects in preamble and make references to
+#   those in pages array, so it's easier to find only the groups/buttons
+# . store presets in lawnchair.
+#   var aeolus = Lawnchair('Aeolus')
+#   obj = {
+#     # a preset is a list of groups, which are lists of buttons, which are just on or off (or maybe 1/0 - whatever the value of the buttons is)
+#     'Aeolus': {'presets': [[[true, false, ...]], ...], ...},
+#     'Another Instrument': {...},
+#   aeolus.save(obj, callback)

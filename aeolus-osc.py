@@ -54,7 +54,20 @@ class Aeolus(object):
         #   4 bytes: bank, preset, 0, 0 
         #   for each group
         #       4-byte bitmasks ((p)[0] + ((p)[1] << 8) + ((p)[2] << 16) + ((p)[3] << 24))
-        pass
+        with open(filename, 'r') as f:
+            d = f.read(14)
+            if not d.startswith('PRESET\0'):
+                log.error("%s not a preset file" % filename)
+                self.presets = None
+                return
+            ngroup = struct.unpack('<h', f.read(2))
+            f.read(256)
+            while True:
+                # HERE
+                pass
+
+
+
 
 class Server(object):
     def __init__(self, addr=('0.0.0.0', 8080)):
