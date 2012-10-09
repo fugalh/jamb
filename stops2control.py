@@ -65,6 +65,7 @@
 import json
 import os
 import struct
+import time
 
 class AeolusInstrument(object):
     def __init__(self, instrument_dir):
@@ -203,6 +204,7 @@ class AeolusInstrument(object):
 def emit_control(instrument_dir):
     aeolus = AeolusInstrument(instrument_dir)
     playpage = []
+    groups = []
 
 
     ux = 1.0 / 8
@@ -255,6 +257,7 @@ def emit_control(instrument_dir):
             }
 
     for g in aeolus.groups:
+        group = []
         playpage.append({
             'name': 'g%s' % g['index'],
             'type': 'Label',
@@ -265,8 +268,10 @@ def emit_control(instrument_dir):
             })
         y += uy
         for b in g['buttons']:
+            name = 'g%sb%s' % (g['index'], b['index'])
+            group.append(name)
             playpage.append({
-                'name': 'g%sb%s' % (g['index'], b['index']),
+                'name': name,
                 'type': 'Button',
                 'x': x, 'y': y,
                 'width': ux, 'height': 2 * uy,
@@ -279,8 +284,16 @@ def emit_control(instrument_dir):
             if x > 1:
                 x = 0
                 y += 2 * uy
+        groups.append(group)
         y += 2 * uy
         x = 0
+
+    playpage.append({
+        'type': 'Label',
+        'name': 'statusBar',
+        'value': 'Build time: ' + time.strftime("%Y-%m-%d %H:%M:%S"),
+        'bounds': [x, y, 1, uy],
+        })
 
     y += uy
 
@@ -294,11 +307,11 @@ def emit_control(instrument_dir):
         "address": "/aeolus/cancel",
         "max": len(aeolus.groups),
         "label": "0",
-        "ontouchend": "control.aeolus.general_cancel()",
+        "ontouchend": "general_cancel()",
         })
     x += ux/2
 
-    for i in range(1, 16):
+    for i in range(1, 15):
         playpage.append({
             'name': 'preset%d' % i,
             'label': str(i),
@@ -307,17 +320,28 @@ def emit_control(instrument_dir):
             'mode': 'momentary',
             'color': palette['piston']['fill'],
             'stroke': palette['piston']['stroke'],
-            'address': '/aeolus/preset/%d' % i,
-            # TODO poll for stops
-            #'ontouchstart': 'control.general_cancel()',
+            'isLocal': True,
+            'ontouchstart': 'preset_action(%d)' % i,
             })
         x += ux/2
+
+    playpage.append({
+        'name': 'setButton',
+        'type': 'Button',
+        'label': 'set',
+        'bounds': [x, y, ux/2, 2*uy],
+        'mode': 'toggle',
+        'color': palette['piston']['fill'],
+        'stroke': palette['piston']['stroke'],
+        'isLocal': True,
+        })
 
     pages = [playpage]
     json.dumps(pages, indent=2)
     s = open('aeolus.js.template', 'r').read().format(
             name = aeolus.label,
             pages = json.dumps(pages, indent=2),
+            groups = json.dumps(groups, indent=2),
             )
     return s
 

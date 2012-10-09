@@ -46,28 +46,6 @@ class Aeolus(object):
         ev = (alsaseq.SND_SEQ_EVENT_PGMCHANGE, 0, 0, 0, (0,0), self.src, self.dst, (self.channel, 0, 0, 0, 0, program))
         self.send_event(ev)
 
-    def parse_presets(self, filename):
-        # 14 bytes starting with 'PRESET\0'
-        # 2 bytes, ((p)[0] + ((p)[1] << 8))) is ngroup
-        # 256 bytes of midi channel info
-        # for each preset
-        #   4 bytes: bank, preset, 0, 0 
-        #   for each group
-        #       4-byte bitmasks ((p)[0] + ((p)[1] << 8) + ((p)[2] << 16) + ((p)[3] << 24))
-        with open(filename, 'r') as f:
-            d = f.read(14)
-            if not d.startswith('PRESET\0'):
-                log.error("%s not a preset file" % filename)
-                self.presets = None
-                return
-            ngroup = struct.unpack('<h', f.read(2))
-            f.read(256)
-            while True:
-                # HERE
-                pass
-
-
-
 
 class Server(object):
     def __init__(self, addr=('0.0.0.0', 8080)):

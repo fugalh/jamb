@@ -1,16 +1,63 @@
 loadedInterfaceName = "{name}";
 interfaceOrientation = "landscape";
 
-function general_cancel() {{
-    p = pages[0];
-    for (i=0; i<p.length; i++) {{
-        b = p[i];
-        prefix = '/aeolus/button';
-        if (b.address.substring(0, prefix.length) == prefix)
-            // TODO this actually sends OSC events too. No harm but wasteful
-            b.setValue(0);
+aeolus = {{
+    groups: {groups},
+    chair: new Lawnchair('Aeolus'),
+}}
+
+general_cancel = function() {{
+    for (g=0; g<aeolus.groups.length; g++) {{
+        for (b=0; b<aeolus.groups[g].length; b++) {{
+            w = control.getWidgetWithName(aeolus.groups[g][b]);
+            if (w.value != 0)
+                w.setValue(0);
+        }}
     }}
 }}
+
+store_preset = function(num) {{
+    p = [];
+    ag = aeolus.groups;
+    for (g=0; g<ag.length; g++) {{
+        p[g] = [];
+        for (b=0; b<ag[g].length; b++) {{
+            w = control.getWidgetWithName(ag[g][b]);
+            p[g][b] = w.value;
+        }}
+    }}
+
+    aeolus.chair.save({{key: 'preset' + num, preset: p}});
+}}
+
+recall_preset = function(num) {{
+    aeolus.chair.get('preset' + num, function(o) {{
+        ag = aeolus.groups;
+        for (g=0; g<ag.length; g++) {{
+            for (b=0; b<ag[g].length; b++) {{
+                w = control.getWidgetWithName(ag[g][b]);
+                // TODO if we ever have aeolus-informed synchronization of
+                // stops, we could only change the ones that aren't the way we
+                // want it, that would be faster.
+                w.setValue(o.preset[g][b]);
+            }}
+        }}
+    }});
+}}
+
+preset_action = function(num) {{
+    if (setButton.value == 0) {{
+        recall_preset(num);
+    }} else {{
+        store_preset(num);
+        setButton.setValue(0);
+    }}
+    setButton.setValue(0);
+}}
+
+// until we can get info from aeolus directly this is the easiest way to
+// maintain some semblance of synchronization.
+general_cancel();
 
 pages = {pages};
 
