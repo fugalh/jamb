@@ -55,10 +55,6 @@ preset_action = function(num) {{
     setButton.setValue(0);
 }}
 
-// until we can get info from aeolus directly this is the easiest way to
-// maintain some semblance of synchronization.
-general_cancel();
-
 pages = {pages};
 
 // vim: filetype=javascript

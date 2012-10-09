@@ -308,6 +308,9 @@ def emit_control(instrument_dir):
         "max": len(aeolus.groups),
         "label": "0",
         "ontouchend": "general_cancel()",
+        # until we can get info from aeolus directly this is the easiest way
+        # to maintain some semblance of synchronization.
+        'oninit': 'general_cancel()',
         })
     x += ux/2
 
