@@ -5,14 +5,15 @@ import alsamidi
 import logging as log
 
 class Aeolus(object):
+    SUBSCRIBERS = (254, 0)
     def __init__(self, addr='128:0', channel=0):
         self.ctrl_param = 98
-        self.dst = tuple([int(i) for i in addr.split(':')])
+        dst = tuple([int(i) for i in addr.split(':')])
         self.channel = channel - 1
 
         alsaseq.client('Aeolus-OSC', 0, 1, True)
         alsaseq.start()
-        alsaseq.connectto(0, self.dst[0], self.dst[1])
+        alsaseq.connectto(0, dst[0], dst[1])
         self.src = (alsaseq.id(), 0)
         log.info('Output port %s:%s' % (str(self.src[0]), str(self.src[1])))
 
@@ -39,11 +40,11 @@ class Aeolus(object):
         alsaseq.output(ev)
 
     def send_control_event(self, value):
-        ev = (alsaseq.SND_SEQ_EVENT_CONTROLLER, 0, 0, 0, (0,0), self.src, self.dst, (self.channel, 0, 0, 0, self.ctrl_param, value))
+        ev = (alsaseq.SND_SEQ_EVENT_CONTROLLER, 0, 0, 0, (0,0), self.src, Aeolus.SUBSCRIBERS, (self.channel, 0, 0, 0, self.ctrl_param, value))
         self.send_event(ev)
 
     def send_program_change(self, program):
-        ev = (alsaseq.SND_SEQ_EVENT_PGMCHANGE, 0, 0, 0, (0,0), self.src, self.dst, (self.channel, 0, 0, 0, 0, program))
+        ev = (alsaseq.SND_SEQ_EVENT_PGMCHANGE, 0, 0, 0, (0,0), self.src, Aeolus.SUBSCRIBERS, (self.channel, 0, 0, 0, 0, program))
         self.send_event(ev)
 
 
