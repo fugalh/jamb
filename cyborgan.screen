@@ -1,0 +1,10 @@
+#!/usr/bin/screen -c
+source "$HOME/.screenrc"
+
+screen -t aeolus-osc ./aeolus-osc.py -v
+
+# Set up your Aeolus default options in ~/.aeolusrc. e.g. mine looks like
+# -A -d hw:0,0 -u -S /home/fugalh/src/aeolus/stops
+screen -t aeolus aeolus -t
+
+#screen -t multimidicast multimidicast
