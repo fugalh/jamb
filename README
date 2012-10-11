@@ -1,3 +1,19 @@
-aeolus-osc.py
-    requires pyOSC https://trac.v2.nl/wiki/pyOSC
-    requires alsaseq http://pp.com.mx/python/alsaseq/project.html
+The stop jamb is the panel that holds stop knobs.
+
+Hooking up MIDI keyboards to Aeolus is straightforward: connect them to your PC
+over a joystick port or with a USB MIDI adapter. But changing stops at the
+organ console is a more difficult proposition. This suite of tools will enable
+your Android tablet/iPad to become a stop jamb for controlling Aeolus.
+
+. Put Aeolus.js on your webserver (or use http://hans.fugal.net/jamb/Aeolus.js)
+. Start aeolus (perhaps with -t in a screen session for a headless setup)
+. Start aeolus-osc.py (perhaps providing non-default options)
+. Install Control on your tablet http://charlie-roberts.com/Control/
+. Add an Interface to Control using that URL
+. Set the Control OSC destination to your Aeolus server and port (default 8080)
+. Don't forget to connect your MIDI keyboard to Aeolus
+. Pull stops and perform!
+
+aeolus-osc.py requires
+    pyOSC   https://trac.v2.nl/wiki/pyOSC
+    alsaseq http://pp.com.mx/python/alsaseq/project.html

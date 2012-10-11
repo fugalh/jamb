@@ -1,3 +1,12 @@
-.PHONY: aeolus.js
-aeolus.js:
-	python stops2control.py stops/Aeolus > aeolus.js
+interfaces=Aeolus.js Aeolus1.js Aeolus2.js
+all: $(interfaces)
+
+# You need a symlink to the stops directory named stops in .
+
+%.js: stops2control.py
+	./stops2control.py stops/$* > $@
+
+clean: 
+	rm -f $(interfaces)
+
+#.PHONY: $(interfaces)

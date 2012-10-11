@@ -137,6 +137,4 @@ if __name__ == '__main__':
     osc.run()
 
 # TODO 
-# . autodetect aeolus
-# . send to subscriptions
 # . better log formatter
