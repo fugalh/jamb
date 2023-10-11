@@ -51,14 +51,16 @@ View Events (From Aeolus)
 # With "type" in {"stop","coupler","tremulant"}
 /aeolus/view/knob/describe ,iiss (group, knob, type, name)
 /aeolus/view/pong
+```
 
 ## The Launchpad UI
-Use the "functional UI" approach a la Elm and [Raj](https://jew.ski/raj/).
+Use the "Functional UI" ([Couriol][1]) approach a la Elm and [Raj](https://jew.ski/raj/).
 
 ```
 dispatch(message)
   (state, effect) := update(state, message)
-  effect(dispatch)
+  if (effect)
+    effect(dispatch)
   view(state, dispatch)
 ```
 
@@ -69,11 +71,14 @@ Incoming OSC `/aeolus/view` messages are `dispatch`ed, as are Launchpad button
 press/release events.
 
 I briefly debated the Raj approach (`effect` is a function) and the approach
-described in [Couriol] where a list of commands is returned. The latter seemed
+described in [Couriol][1] where a list of commands is returned. The latter seemed
 more testable, but less convenient. But then I realized we can still have a
 command dispatch (or list of commands) and `effect` just closes over calling
 it
-
-    auto effect = [aeolusLink]{ aeolusLink->dispatch(Command{...}); }
+```cpp
+auto effect = [=]{ aeolusLink->dispatch(PullKnobCommand{group, knob}}); }
+```
 
 And the link object can be substituted with a test fake during tests.
+
+[1]: https://www.infoq.com/articles/functional-UI-introduction-no-framework/ "Functional UI (Framework-Free at Last)"
