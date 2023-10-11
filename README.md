@@ -1,7 +1,7 @@
 The stop jamb is the panel that holds stop knobs.
 
 Hooking up MIDI keyboards to
-[Aeolus](http://www.muse-sequencer.org/index.php/Aeolus) is straightforward:
+[Aeolus](https://kokkinizita.linuxaudio.org/linuxaudio/aeolus/) is straightforward:
 connect them to your PC over a joystick port or with a USB MIDI adapter. But
 changing stops at the organ console is a more difficult proposition. This suite
 of tools will enable your Android tablet/iPad to become a stop jamb for
@@ -15,10 +15,10 @@ controlling Aeolus.
 - Set the Control OSC destination to your server running Aeolus
   (default port is 8080)
 - Don't forget to connect your MIDI keyboard to Aeolus
-- Pull stops and perform!
+- Pull out all the stops!
 
-`aeolus-osc.py` requires [pyOSC](https://trac.v2.nl/wiki/pyOSC) and
-[alsaseq](http://pp.com.mx/python/alsaseq/project.html)
+`aeolus-osc.py` requires [pyOSC](https://pypi.org/project/pyOSC/) and
+[alsaseq](https://github.com/ppaez/alsaseq)
 
 ## Hints
 - Start Aeolus and get all the audio and MIDI settings just as you like them
@@ -27,7 +27,7 @@ controlling Aeolus.
 - Don't forget realtime priority and memory locking capabilities.
 - Control has a screen autolock off setting, but it doesn't work in Android.
   There are apps that will keep your display from going to sleep while certain
-  applications are running, e.g. [Screen On](http://bit.ly/SS548q)
+  applications are running, e.g. [Screen On](https://play.google.com/store/apps/details?id=de.dieterthiess.keepiton&hl=en_US&gl=US&pli=1)
 - It works on a phone too in a pinch, but the labels are all screwed up because
   the buttons are too small for the font.
 - Run `aeolus-osc.py` with `-v` to see debug information.
