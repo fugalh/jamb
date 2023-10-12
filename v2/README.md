@@ -82,3 +82,7 @@ auto effect = [=]{ aeolusLink->dispatch(PullKnobCommand{group, knob}}); }
 And the link object can be substituted with a test fake during tests.
 
 [1]: https://www.infoq.com/articles/functional-UI-introduction-no-framework/ "Functional UI (Framework-Free at Last)"
+
+## Logistics
+### Run Tests
+    bazel test //...
