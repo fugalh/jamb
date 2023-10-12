@@ -40,3 +40,19 @@ TEST(Midi, note_dead) {
   EXPECT_EQ(Midi::note_on(Position{8, 0}, Button{}), 0x90080c);
   EXPECT_EQ(Midi::note_off(Position{8, 0}, Button{}) >> 8, 0x8008);
 }
+
+TEST(State, dump) {
+  State s;
+  s.at({3, 5}).color = {2, 3};
+  s.at({7, 7}).color = {1, 3};
+  EXPECT_EQ(s.dump(),
+            ".. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. O0 .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. o0 .. \n"
+            ".. .. .. .. .. .. .. .. .. \n");
+}
