@@ -64,7 +64,7 @@ struct State {
     return str;
   }
 
-  Button& at(Position p) { return buttons[p.x + p.y * 9]; }
+  Button& at(Position p) { return buttons.at(p.x + p.y * 9); }
   void visit(std::function<void(Position p, Button b)> func) {
     for (byte y = 0; y <= 8; y++)
       for (byte x = 0; x <= 8; x++) {
