@@ -5,14 +5,17 @@
 #include "launchpad.hh"
 
 namespace launchpad {
+using std::cout;
+using std::endl;
 using std::function;
+using std::get;
+using std::move;
 using std::tuple;
 
 struct ButtonPress {
   Position pos;
 };
 using Message = std::variant<ButtonPress>;
-
 using Dispatch = function<void(Message const&)>;
 using Effect = function<void(Dispatch)>;
 
@@ -29,7 +32,7 @@ struct Runtime {
     if (!program.update)
       return;
     auto [s, effect] = program.update(state, msg);
-    state = std::move(s);
+    state = move(s);
     if (effect)
       effect([this](Message const& msg) { dispatch(msg); });
     if (program.view)
@@ -42,10 +45,15 @@ static Program const jambProgram = {
     .update =
         [](State s1, Message const& msg) {
           State s2 = s1;
-          Position pos = std::get<ButtonPress>(msg).pos;
-          s2.at(pos).color = {3};
+          Position pos = get<ButtonPress>(msg).pos;
+          auto& button = s2.at(pos);
+          if (button.color.red > 0) {
+            button.color.red = 0;
+          } else {
+            button.color.red = 3;
+          }
           return tuple{s2, Effect{}};
         },
-    .view = [](State s) { std::cout << s.dump() << std::endl; }};
+    .view = [](State s) { cout << s.dump() << endl; }};
 
 }  // namespace launchpad

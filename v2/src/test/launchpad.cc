@@ -60,13 +60,10 @@ TEST(State, dump) {
 }
 
 TEST(Runtime, pullStops) {
-  State state;
-  Program p = jambProgram;
-  p.view = [&](State s) { state = s; };
-  Runtime r{p};
+  Runtime r{jambProgram};
   r.dispatch(ButtonPress{{2, 7}});
   r.dispatch(ButtonPress{{1, 2}});
-  EXPECT_EQ(state.dump(),
+  EXPECT_EQ(r.state.dump(),
             ".. .. .. .. .. .. .. .. \n"
             ".. .. .. .. .. .. .. .. .. \n"
             ".. 0. .. .. .. .. .. .. .. \n"
@@ -75,5 +72,32 @@ TEST(Runtime, pullStops) {
             ".. .. .. .. .. .. .. .. .. \n"
             ".. .. .. .. .. .. .. .. .. \n"
             ".. .. 0. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n");
+}
+
+TEST(Runtime, toggleStop) {
+  Runtime r{jambProgram};
+  Position pos{2, 7};
+  r.dispatch(ButtonPress{pos});
+  EXPECT_EQ(r.state.dump(),
+            ".. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. 0. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n");
+  r.dispatch(ButtonPress{pos});
+  EXPECT_EQ(r.state.dump(),
+            ".. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
             ".. .. .. .. .. .. .. .. .. \n");
 }
