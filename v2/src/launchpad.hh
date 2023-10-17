@@ -45,7 +45,7 @@ struct Position {
 struct State {
   State() : buttons(9 * 9) {}
 
-  std::string dump() {
+  std::string dump() const {
     std::string str;
     visit([&](Position p, Button b) {
       if (p.x == 8 && p.y == 0) {
@@ -65,7 +65,8 @@ struct State {
   }
 
   Button& at(Position p) { return buttons.at(p.x + p.y * 9); }
-  void visit(std::function<void(Position p, Button b)> func) {
+  Button at(Position p) const { return buttons.at(p.x + p.y * 9); }
+  void visit(std::function<void(Position p, Button b)> func) const {
     for (byte y = 0; y <= 8; y++)
       for (byte x = 0; x <= 8; x++) {
         Position p{x, y};

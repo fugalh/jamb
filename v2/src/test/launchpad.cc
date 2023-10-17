@@ -56,3 +56,11 @@ TEST(State, dump) {
             ".. .. .. .. .. .. .. o0 .. \n"
             ".. .. .. .. .. .. .. .. .. \n");
 }
+
+#include "runtime.hh"
+TEST(Runtime, pullStop) {
+  JambProgram p;
+  Runtime r{p};
+  r.dispatch({3, 5});
+  r.dispatch({7, 7});
+}
