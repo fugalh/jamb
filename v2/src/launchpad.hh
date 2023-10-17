@@ -45,25 +45,6 @@ struct Position {
 struct State {
   State() : buttons(9 * 9) {}
 
-  std::string dump() const {
-    std::string str;
-    visit([&](Position p, Button b) {
-      if (p.x == 8 && p.y == 0) {
-        str += "\n";
-        return;
-      }
-
-      char bright[] = {'.', 'o', 'O', '0'};
-      b.fix();
-      str += bright[b.color.red];
-      str += bright[b.color.green];
-      str += ' ';
-      if (p.x == 8)
-        str += "\n";
-    });
-    return str;
-  }
-
   Button& at(Position p) { return buttons.at(p.x + p.y * 9); }
   Button at(Position p) const { return buttons.at(p.x + p.y * 9); }
   void visit(std::function<void(Position p, Button b)> func) const {

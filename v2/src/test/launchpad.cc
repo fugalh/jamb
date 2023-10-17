@@ -59,8 +59,7 @@ TEST(State, dump) {
 
 #include "runtime.hh"
 TEST(Runtime, pullStop) {
-  JambProgram p;
-  Runtime r{p};
+  Runtime r{jambProgram};
   r.dispatch({3, 5});
   r.dispatch({7, 7});
 }
