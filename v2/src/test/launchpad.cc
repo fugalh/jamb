@@ -1,5 +1,7 @@
-#include "launchpad.hh"
 #include <gtest/gtest.h>
+
+#include "launchpad.hh"
+#include "runtime.hh"
 
 using namespace launchpad;
 
@@ -57,9 +59,21 @@ TEST(State, dump) {
             ".. .. .. .. .. .. .. .. .. \n");
 }
 
-#include "runtime.hh"
-TEST(Runtime, pullStop) {
-  Runtime r{jambProgram};
-  r.dispatch({3, 5});
-  r.dispatch({7, 7});
+TEST(Runtime, pullStops) {
+  State state;
+  Program p = jambProgram;
+  p.view = [&](State s) { state = s; };
+  Runtime r{p};
+  r.dispatch({2, 7});
+  r.dispatch({1, 2});
+  EXPECT_EQ(state.dump(),
+            ".. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. 0. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n"
+            ".. .. 0. .. .. .. .. .. .. \n"
+            ".. .. .. .. .. .. .. .. .. \n");
 }

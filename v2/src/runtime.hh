@@ -36,24 +36,6 @@ static Program const jambProgram = {
           s2.at(msg).color = {3};
           return std::tuple{s2, Effect{}};
         },
-    .view =
-        [](State s) {
-          std::string str;
-          s.visit([&](Position p, Button b) {
-            if (p.x == 8 && p.y == 0) {
-              str += "\n";
-              return;
-            }
-
-            char bright[] = {'.', 'o', 'O', '0'};
-            b.fix();
-            str += bright[b.color.red];
-            str += bright[b.color.green];
-            str += ' ';
-            if (p.x == 8)
-              str += "\n";
-          });
-          std::cout << str << std::endl;
-        }};
+    .view = [](State s) { std::cout << s.dump() << std::endl; }};
 
 }  // namespace launchpad
