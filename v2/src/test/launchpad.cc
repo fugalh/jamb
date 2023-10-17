@@ -64,8 +64,8 @@ TEST(Runtime, pullStops) {
   Program p = jambProgram;
   p.view = [&](State s) { state = s; };
   Runtime r{p};
-  r.dispatch({2, 7});
-  r.dispatch({1, 2});
+  r.dispatch(ButtonPress{{2, 7}});
+  r.dispatch(ButtonPress{{1, 2}});
   EXPECT_EQ(state.dump(),
             ".. .. .. .. .. .. .. .. \n"
             ".. .. .. .. .. .. .. .. .. \n"
