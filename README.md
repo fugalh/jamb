@@ -1,45 +1,33 @@
-The stop jamb is the panel that holds stop knobs.
+## Setup
+[Install buck2](https://buck2.build/docs/about/getting_started/#installing-buck2)
+e.g. download the binary then
+    unzstd buck2-*
+    mv buck2-* /usr/local/bin/buck2
 
-Hooking up MIDI keyboards to
-[Aeolus](https://kokkinizita.linuxaudio.org/linuxaudio/aeolus/) is straightforward:
-connect them to your PC over a joystick port or with a USB MIDI adapter. But
-changing stops at the organ console is a more difficult proposition. This suite
-of tools will enable your Android tablet/iPad to become a stop jamb for
-controlling Aeolus.
+[Install gtest](https://github.com/google/googletest/releases) e.g.
+    cmake .
+    make
+    sudo make install
 
-- Put Aeolus.js on your webserver (or use http://hans.fugal.net/jamb/Aeolus.js)
-- Start aeolus (perhaps with `-t` in a screen session for a headless setup)
-- Start `aeolus-osc.py` (perhaps providing non-default options)
-- Install [Control](http://charlie-roberts.com/Control/) on your tablet 
-- Add an Interface to Control using the Aeolus.js URL
-- Set the Control OSC destination to your server running Aeolus
-  (default port is 8080)
-- Don't forget to connect your MIDI keyboard to Aeolus
-- Pull out all the stops!
+Run tests
+    buck2 test ...
 
-`aeolus-osc.py` requires [pyOSC](https://pypi.org/project/pyOSC/) and
-[alsaseq](https://github.com/ppaez/alsaseq)
+## Plan
+I've had a few false starts on this but I have a week left in recharge (2024)
+and I think I can make something that works. I'm less ambitious than previous
+versions of myself, what I hope to accomplish this week is simply:
+- general cancel
+- midi panic
+- recall Aeolus presets
 
-## Hints
-- Start Aeolus and get all the audio and MIDI settings just as you like them
-  and then press Save. Thereafter you can run aeolus headless using `-t` and a
-  screen session, and never have to quit.
-- Don't forget realtime priority and memory locking capabilities.
-- Control has a screen autolock off setting, but it doesn't work in Android.
-  There are apps that will keep your display from going to sleep while certain
-  applications are running, e.g. [Screen On](https://play.google.com/store/apps/details?id=de.dieterthiess.keepiton&hl=en_US&gl=US&pli=1)
-- It works on a phone too in a pinch, but the labels are all screwed up because
-  the buttons are too small for the font.
-- Run `aeolus-osc.py` with `-v` to see debug information.
-- `aeolus-osc.py` will connect to the client named `aeolus`, and if it loses a
-  connection it will try again to find `aeolus` for every event. So you don't
-  need to restart `aeolus-osc.py` if you restart Aeolus.
-- Presets are stored client-side, so they do not correspond to Aeolus' presets.
-- Edit your `~/.aeolusrc` file to match your preferences, but leave off `-t` and
-  give it only when you start Aeolus headless.
-- `jamb.screen` is a screen session file for starting up aeolus, connecting it
-  to MIDI (change `connect.sh` as needed), and starting `aeolus-osc.py`. e.g.
-  `screen -S aeolus -c jamb.screen`
-- The makefile will build the three standard Aeolus instruments. You probably
-  won't need to do this, just use the ones in the distrubtion, but if you want
-  to hack `stops2control.py`...
+Later I'll move toward something more sophisticated, where I assume full
+control of the state and presets and can light up buttons accordingly.
+
+In spite of the modest goals, I am still being a bit pedagogic. I'm playing
+with approval testing to test the core in the absence of Alsa MIDI (on my
+Mac). I'll have a testing midi transport that just logs the midi messages, and
+implement that interface using the alsa sequencer API without any extra
+testing of that other than "it works".
+
+I'm also playing with the Mikado Method for making forward progress, and doing
+it TDD style.
