@@ -1,0 +1,13 @@
+## Setup
+[Install buck2](https://buck2.build/docs/about/getting_started/#installing-buck2)
+e.g. download the binary then
+    unzstd buck2-*
+    mv buck2-* /usr/local/bin/buck2
+
+[Install gtest](https://github.com/google/googletest/releases) e.g.
+    cmake .
+    make
+    sudo make install
+
+Run tests
+    buck2 test ...
