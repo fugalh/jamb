@@ -1,3 +1,2 @@
 trigger general cancel
-    fake launchpad
-        observe midi
+    jamb that binds launchpad and aeolus

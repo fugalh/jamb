@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <functional>
 
 namespace midi {
 struct Message {
@@ -10,6 +11,7 @@ struct Message {
 
 struct Transport {
   virtual void send(Message) = 0;
+  std::function<void(Message)> observer{};
 };
 
 }  // namespace midi

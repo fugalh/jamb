@@ -7,6 +7,11 @@ struct FakeMidi : public midi::Transport {
   std::vector<midi::Message> messages_;
 
   void send(midi::Message msg) override { messages_.push_back(msg); }
+  void emit(midi::Message msg) {
+    if (observer) {
+      observer(msg);
+    }
+  }
 
   friend std::ostream& operator<<(std::ostream& os, const FakeMidi& x) {
     for (auto const& msg : x.messages_) {

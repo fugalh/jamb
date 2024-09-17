@@ -10,3 +10,16 @@ TEST(Launchpad, init) {
   auto lp = Launchpad(midi);
   ApprovalTests::Approvals::verify(midi);
 }
+
+TEST(Launchpad, observerCalledBack) {
+  FakeMidi lpMidi;
+  bool visited = false;
+  Launchpad lp(lpMidi, [&](Launchpad::Event ev) {
+    EXPECT_EQ(ev.button, 0x78);
+    visited = true;
+  });
+
+  uint8_t const velocity = 1;
+  lpMidi.emit({0, 0x9, {0x78, velocity}});
+  EXPECT_TRUE(visited);
+}
