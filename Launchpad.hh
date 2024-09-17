@@ -14,7 +14,7 @@ struct Launchpad {
   midi::Transport& midi_;
   Observer observer_;
 
-  Launchpad(midi::Transport&, Observer = nullptr);
+  void init();
 
  protected:
   void dispatch(midi::Message const);

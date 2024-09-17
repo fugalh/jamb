@@ -1,10 +1,8 @@
-#include "../Aeolus.hh"
 #include <gtest/gtest.h>
 #include "ApprovalTests.hpp"
 #include "FakeMidi.hh"
 
-#include <string>
-#include <vector>
+#include "../Aeolus.hh"
 
 TEST(Aeolus, generalCancel) {
   FakeMidi midi;

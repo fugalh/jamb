@@ -1,7 +1,6 @@
 #include "Launchpad.hh"
 
-Launchpad::Launchpad(midi::Transport& midi, Launchpad::Observer observer)
-    : midi_{midi}, observer_{observer} {
+void Launchpad::init() {
   midi_.observer = [this](midi::Message msg) { dispatch(msg); };
   midi_.send({0xB0, {0, 0}});
 }
