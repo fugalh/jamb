@@ -20,6 +20,6 @@ TEST(Launchpad, observerCalledBack) {
   });
 
   uint8_t const velocity = 1;
-  lpMidi.emit({0, 0x9, {0x78, velocity}});
+  lpMidi.emit({0x90, {0x78, velocity}});
   EXPECT_TRUE(visited);
 }

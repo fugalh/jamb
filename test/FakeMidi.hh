@@ -15,9 +15,9 @@ struct FakeMidi : public midi::Transport {
 
   friend std::ostream& operator<<(std::ostream& os, const FakeMidi& x) {
     for (auto const& msg : x.messages_) {
-      os << std::format("0x{:X} {:X} {:X}", msg.status << 4 | msg.channel,
-                        msg.data[0], msg.data[1]);
-      switch (msg.status) {
+      os << std::format("0x{:X} {:X} {:X}", msg.status, msg.data[0],
+                        msg.data[1]);
+      switch ((msg.status & 0xf0) >> 4) {
         case 0xB:
           if (msg.data[0] == StopController) {
             if (msg.data[1] & 0b0100'0000) {
