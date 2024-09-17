@@ -13,7 +13,8 @@ struct FakeMidi : public midi::Transport {
     }
   }
 
-  friend std::ostream& operator<<(std::ostream& os, const FakeMidi& x) {
+  template <class STREAM>
+  friend STREAM& operator<<(STREAM& os, const FakeMidi& x) {
     for (auto const& msg : x.messages_) {
       os << std::format("0x{:X} {:X} {:X}", msg.status, msg.data[0],
                         msg.data[1]);

@@ -1,7 +1,11 @@
 cxx_library(
-    name = "jamb",
-    srcs = glob(["*.cc"]),
+    name = "lib",
+    srcs = glob(
+        ["*.cc"],
+        exclude = ["main.cc"]
+    ),
     headers = glob(["*.hh"]),
+
     compiler_flags = ['-g', '-O2', '-std=c++20'],
 )
 
@@ -9,7 +13,16 @@ cxx_test(
     name = 'test',
     srcs = glob(["test/*.cc"]),
     headers = glob(["test/*.hh"]),
-    compiler_flags = ['-g', '-O2', '-std=c++20'],
+    deps = [":lib"],
+
     linker_flags = ['-lgtest'],
-    deps = [":jamb"],
+    compiler_flags = ['-g', '-O2', '-std=c++20'],
+)
+
+cxx_binary(
+    name = "jamb",
+    srcs = ["main.cc"],
+    deps = [":lib"],
+
+    compiler_flags = ['-g', '-O2', '-std=c++20'],
 )
