@@ -9,8 +9,13 @@ e.g. download the binary then
     make
     sudo make install
 
+[Install spdlog](https://github.com/gabime/spdlog) e.g.
+    apt-get install libspdlog-dev
+or
+    brew install spdlog
+
 Run tests
-    buck2 test ...
+    ./test.sh
 
 ## Plan
 I've had a few false starts on this but I have a week left in recharge (2024)

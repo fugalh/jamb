@@ -1,5 +1,8 @@
 #pragma once
+#include <fmt/format.h>
 #include <format>
+#include <sstream>
+
 #include "../Aeolus.hh"
 #include "../Midi.hh"
 
@@ -46,3 +49,9 @@ struct FakeMidi : public midi::Transport {
     return os;
   }
 };
+
+static auto format_as(FakeMidi const& x) {
+  std::ostringstream os;
+  os << x;
+  return os.str();
+}

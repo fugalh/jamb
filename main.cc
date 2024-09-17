@@ -1,6 +1,6 @@
 #include "Jamb.hh"
-#include "test/FakeMidi.hh"
 #include "common.hh"
+#include "test/FakeMidi.hh"
 
 int main(void) {
   FakeMidi lpMidi, aeolusMidi;
@@ -10,8 +10,8 @@ int main(void) {
   launchpad.init();
   jamb.init();
 
-  lpMidi.emit({0x90, {0x78, 1}}); // temporary: general cancel at startup
-  std::cout << aeolusMidi << "\n";
+  lpMidi.emit({0x90, {0x78, 1}});  // temporary: general cancel at startup
+  spdlog::info("\n{}", aeolusMidi);
 
   return 0;
 }

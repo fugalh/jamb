@@ -1,3 +1,5 @@
+COMPILER_FLAGS = ['-g', '-O2', '-std=c++20', '-I/opt/homebrew/include']
+
 cxx_library(
     name = "lib",
     srcs = glob(
@@ -6,7 +8,7 @@ cxx_library(
     ),
     headers = glob(["*.hh"]),
 
-    compiler_flags = ['-g', '-O2', '-std=c++20'],
+    compiler_flags = COMPILER_FLAGS,
 )
 
 cxx_test(
@@ -16,7 +18,7 @@ cxx_test(
     deps = [":lib"],
 
     linker_flags = ['-lgtest'],
-    compiler_flags = ['-g', '-O2', '-std=c++20'],
+    compiler_flags = COMPILER_FLAGS,
 )
 
 cxx_binary(
@@ -24,5 +26,6 @@ cxx_binary(
     srcs = ["main.cc"],
     deps = [":lib"],
 
-    compiler_flags = ['-g', '-O2', '-std=c++20'],
+    linker_flags = ['-L/opt/homebrew/lib', '-lspdlog', '-lfmt'],
+    compiler_flags = COMPILER_FLAGS,
 )
