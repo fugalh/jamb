@@ -1,0 +1,3 @@
+trigger general cancel
+    fake launchpad
+        observe midi
