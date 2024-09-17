@@ -13,5 +13,15 @@ void Aeolus::generalCancel() {
 }
 
 void Aeolus::programChange(uint8_t program) {
-  aeolus_.send({0xC0, {program, 0}});
+  aeolus_.send({0xC0, {program}});
 }
+
+/*
+Make a seq, and two ports (one duplex for launchpad and one simplex output for
+aeolus)
+
+snd_seq_open
+snd_seq_set_client_name
+snd_seq_create_simple_port
+
+*/

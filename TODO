@@ -1,3 +1,8 @@
 trigger general cancel
-    alsa seq for aeolus
-    alsa seq for launchpad
+    launchpad event loop
+        alsa connections
+            alsa ports
+                for launchpad
+                for aeolus
+            connect launchpad
+            connect aeolus
