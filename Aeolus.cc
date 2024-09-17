@@ -12,3 +12,7 @@ void Aeolus::generalCancel() {
     aeolus_.send(midi::Message{channel, event, {param, value}});
   }
 }
+
+void Aeolus::programChange(uint8_t program) {
+  aeolus_.send({0, 0xC, {program, 0}});
+}

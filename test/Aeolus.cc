@@ -12,3 +12,10 @@ TEST(Aeolus, generalCancel) {
   aeolus.generalCancel();
   ApprovalTests::Approvals::verify(midi);
 }
+
+TEST(Aeolus, programChange) {
+  FakeMidi midi;
+  auto aeolus = Aeolus{midi};
+  aeolus.programChange(42);
+  ApprovalTests::Approvals::verify(midi);
+}

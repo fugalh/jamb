@@ -30,6 +30,13 @@ struct FakeMidi : public midi::Transport {
             }
           }
           break;
+
+        case 0xC:
+          if (msg.data[1] == 0) {
+            os << std::format(": program change {}", msg.data[0]);
+          }
+          break;
+
         default:
           break;
       }

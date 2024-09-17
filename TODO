@@ -1,2 +1,9 @@
 trigger general cancel
-    jamb that binds launchpad and aeolus
+    main.cc
+        temporary: sends general cancel and preset 1 on startup
+        jamb that binds launchpad and aeolus
+            button 0x78 causes general cancel
+            top row causes program change
+        alsa seq for aeolus
+        alsa seq for launchpad
+        
