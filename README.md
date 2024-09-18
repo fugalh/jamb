@@ -2,6 +2,7 @@
     apt-get install tup libasound-dev libfmt-dev
 
 [Install gtest](https://github.com/google/googletest/releases) e.g.
+    apt-get install cmake
     cmake .
     make
     sudo make install
@@ -11,9 +12,10 @@ Build and install
     install linux/jamb /usr/local/bin
 
 ## Raspberry Pi Development
-    apt-get install tup
+    apt-get install tup libasound-dev libfmt-dev
     
 [Install gtest](https://github.com/google/googletest/releases) e.g.
+    apt-get install cmake
     cmake .
     make
     sudo make install
