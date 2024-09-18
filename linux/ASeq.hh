@@ -5,6 +5,7 @@
 
 #include <alsa/asoundlib.h>
 
+#include <memory>
 #include <string>
 
 #define ASEQ_CHECK(cmd)          \
@@ -17,10 +18,21 @@
 
 namespace midi::aseq {
 struct Transport : public midi::Transport {
-  snd_seq_t* seq_{};
+  snd_seq_t* const& seq_;
+  int port_{-1};
 
-  Transport(std::string name, std::string client);
+  Transport(snd_seq_t* const&, std::string client);
   ~Transport() override;
-  void send(Message) override;
+  void send(Message) override {}
 };
+
+struct Sequencer {
+  snd_seq_t* seq_{};
+  std::unique_ptr<Transport> launchpad_;
+  std::unique_ptr<Transport> aeolus_;
+
+  Sequencer(std::string name);
+  ~Sequencer();
+};
+
 }  // namespace midi::aseq

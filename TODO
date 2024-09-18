@@ -1,13 +1,10 @@
 trigger general cancel
     launchpad event loop
         alsa connections
-            alsa ports
-                for launchpad
-                for aeolus
-                    shared Sequencer object
             connect launchpad
             connect aeolus
 
+update readme:
 Building on rpi is sloowwww. I tried to figure out how to cross-compile and
 didn't find an easy way (one needs to be proficient in dark magic)
 

@@ -8,9 +8,9 @@
 #include <thread>
 
 int main(void) {
+  midi::aseq::Sequencer seq("jamb");
   FakeMidi aeolusMidi;
-  midi::aseq::Transport lpMidi("jamb", "Launchpad");
-  Launchpad launchpad{lpMidi};
+  Launchpad launchpad{*seq.launchpad_};
   Aeolus aeolus{aeolusMidi};
   Jamb jamb{launchpad, aeolus};
   launchpad.init();

@@ -6,3 +6,4 @@ jamb
 test/jamb
 linux/jamb
 ._*
+.DS_Store
