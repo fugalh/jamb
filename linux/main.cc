@@ -11,7 +11,6 @@ int main(void) {
   jamb.init();
 
   lpMidi.emit({0x90, {0x78, 1}});  // temporary: general cancel at startup
-  spdlog::info("\n{}", aeolusMidi);
 
   return 0;
 }
