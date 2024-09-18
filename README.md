@@ -1,4 +1,26 @@
-## Setup
+## Raspberry Pi Installation
+    apt-get install tup libasound-dev libfmt-dev
+
+[Install gtest](https://github.com/google/googletest/releases) e.g.
+    cmake .
+    make
+    sudo make install
+
+Build and install
+    ./build.sh
+    install linux/jamb /usr/local/bin
+
+## Raspberry Pi Development
+    apt-get install tup
+    
+[Install gtest](https://github.com/google/googletest/releases) e.g.
+    cmake .
+    make
+    sudo make install
+
+then `./test.sh` or `tup`
+
+## Mac setup (for core development)
 [Install buck2](https://buck2.build/docs/about/getting_started/#installing-buck2)
 e.g. download the binary then
     unzstd buck2-*
@@ -8,11 +30,6 @@ e.g. download the binary then
     cmake .
     make
     sudo make install
-
-[Install spdlog](https://github.com/gabime/spdlog) e.g.
-    apt-get install libspdlog-dev
-or
-    brew install spdlog
 
 Run tests
     ./test.sh
