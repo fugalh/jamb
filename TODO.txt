@@ -1,0 +1,11 @@
+trigger general cancel
+    launchpad event loop
+        alsa connections
+            connect launchpad
+            connect aeolus
+
+make gtest optional (-lgtest -lfmt would fail)
+    vendor them?
+    tup generate just build linux (not tests)
+        linux/Tupfile or maybe tup options
+
