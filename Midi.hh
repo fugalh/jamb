@@ -9,6 +9,7 @@ struct Message {
 };
 
 struct Transport {
+  virtual ~Transport() = default;
   virtual void send(Message) = 0;
   std::function<void(Message)> observer{};
 };

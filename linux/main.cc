@@ -1,16 +1,24 @@
+
+#include "ASeq.hh"
+
 #include "../Jamb.hh"
 #include "../common.hh"
 #include "../test/FakeMidi.hh"
 
+#include <thread>
+
 int main(void) {
-  FakeMidi lpMidi, aeolusMidi;
+  FakeMidi aeolusMidi;
+  midi::aseq::Transport lpMidi("jamb", "Launchpad");
   Launchpad launchpad{lpMidi};
   Aeolus aeolus{aeolusMidi};
   Jamb jamb{launchpad, aeolus};
   launchpad.init();
   jamb.init();
 
-  lpMidi.emit({0x90, {0x78, 1}});  // temporary: general cancel at startup
+  LOG << "Waiting 30s\n";
+  std::this_thread::sleep_for(std::chrono::seconds(10));
+  LOG << "\n" << aeolusMidi << "\n";
 
   return 0;
 }

@@ -5,3 +5,4 @@ buck-out
 jamb
 test/jamb
 linux/jamb
+._*

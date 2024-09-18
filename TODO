@@ -4,6 +4,7 @@ trigger general cancel
             alsa ports
                 for launchpad
                 for aeolus
+                    shared Sequencer object
             connect launchpad
             connect aeolus
 
