@@ -1,6 +1,6 @@
 #pragma once
 #include <fmt/format.h>
-#include <format>
+#include <fmt/ostream.h>
 #include <sstream>
 
 #include "../Aeolus.hh"
@@ -19,7 +19,7 @@ struct FakeMidi : public midi::Transport {
   template <class STREAM>
   friend STREAM& operator<<(STREAM& os, const FakeMidi& x) {
     for (auto const& msg : x.messages_) {
-      os << std::format("0x{:X} {:X} {:X}", msg.status, msg.data[0],
+      os << fmt::format("0x{:X} {:X} {:X}", msg.status, msg.data[0],
                         msg.data[1]);
       switch ((msg.status & 0xf0) >> 4) {
         case 0xB:
@@ -28,16 +28,16 @@ struct FakeMidi : public midi::Transport {
               std::string const modes[4] = {"cancel", "off", "on", "toggle"};
               auto mm = (msg.data[1] & 0b110000) >> 4;
               auto ggg = msg.data[1] & 0b111;
-              os << std::format(": group {} {}", ggg, modes[mm]);
+              os << fmt::format(": group {} {}", ggg, modes[mm]);
             } else {
-              os << std::format(": stop {}", msg.data[1] & 0b00011111);
+              os << fmt::format(": stop {}", msg.data[1] & 0b00011111);
             }
           }
           break;
 
         case 0xC:
           if (msg.data[1] == 0) {
-            os << std::format(": program change {}", msg.data[0]);
+            os << fmt::format(": program change {}", msg.data[0]);
           }
           break;
 
@@ -50,8 +50,4 @@ struct FakeMidi : public midi::Transport {
   }
 };
 
-static auto format_as(FakeMidi const& x) {
-  std::ostringstream os;
-  os << x;
-  return os.str();
-}
+template <> struct fmt::formatter<FakeMidi> : fmt::ostream_formatter {};

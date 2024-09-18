@@ -1,6 +1,6 @@
-#include "Jamb.hh"
-#include "common.hh"
-#include "test/FakeMidi.hh"
+#include "../Jamb.hh"
+#include "../common.hh"
+#include "../test/FakeMidi.hh"
 
 int main(void) {
   FakeMidi lpMidi, aeolusMidi;

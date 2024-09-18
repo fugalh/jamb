@@ -1,0 +1,7 @@
+CXXFLAGS = -g
+CXX = c++
+: foreach *.cc |> $(CXX) $(CFLAGS) -c %f -o %o |> %B.o {objs}
+: foreach test/*.cc |> $(CXX) $(CFLAGS) -c %f -o %o |> test/%B.o {test_objs}
+: foreach linux/*.cc |> $(CXX) $(CFLAGS) -c %f -o %o |> linux/%B.o {linux_objs}
+: {objs} {test_objs} |> $(CXX) $(CFLAGS) %f -lspdlog -lfmt -lpthread -lgtest -o %o |> test/jamb
+: {objs} {linux_objs} |> $(CXX) $(CFLAGS) %f -lsdplog -lfmt -lpthread -lasound -o %o |> jamb

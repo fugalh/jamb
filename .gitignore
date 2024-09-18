@@ -1,1 +1,7 @@
 buck-out
+.tup
+*.o
+*.swp
+jamb
+test/jamb
+linux/jamb
