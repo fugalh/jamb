@@ -3,6 +3,10 @@ trigger general cancel
         alsa connections
             connect launchpad
             connect aeolus
+    update docs
+        what to install on rpi
+        how to build on rpi
+        building tests on rpi is slow
 
 update readme:
 Building on rpi is sloowwww. I tried to figure out how to cross-compile and
