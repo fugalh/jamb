@@ -20,7 +20,8 @@ namespace midi::aseq {
 struct Transport : public midi::Transport {
   snd_seq_t* const& seq_;
   short port_{-1};  // port is unsigned char, short is big enough to hold
-                    // unsigned char and still be negative.
+  // unsigned char and still be negative.
+  std::string name_;
 
   Transport(snd_seq_t* const&, std::string client);
   ~Transport() override;

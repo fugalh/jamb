@@ -15,6 +15,8 @@ int main(void) {
   Jamb jamb{launchpad, aeolus};
   launchpad.init();
   jamb.init();
+  aeolus.stopOn(1, 0);
+  aeolus.noteOn(0, 69);
 
   LOG << "Waiting 300s\n";
   std::this_thread::sleep_for(std::chrono::seconds(300));

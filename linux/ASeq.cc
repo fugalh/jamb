@@ -29,7 +29,8 @@ void sendEvent(snd_seq_t* seq, snd_seq_event_t& ev) {
 
 namespace midi::aseq {
 
-Transport::Transport(snd_seq_t* const& seq, std::string client) : seq_(seq) {
+Transport::Transport(snd_seq_t* const& seq, std::string client)
+    : seq_(seq), name_{client} {
   auto const otherClient = findClient(seq_, client);
   int const otherPort = 0;
   auto caps = SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ |
@@ -73,7 +74,8 @@ snd_seq_event_t Transport::eventPrototype() {
 }
 
 void Transport::send(Message msg) {
-  LOGf("%02x %02x %02x", msg.status, msg.data[0], msg.data[1]);
+  LOGf("[%14s] %02x %02x %02x", name_.c_str(), msg.status, msg.data[0],
+       msg.data[1]);
   auto ch = msg.status & 0x0f;
   switch (msg.status & 0xf0) {
     case 0xb0: {

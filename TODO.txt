@@ -3,9 +3,6 @@ trigger general cancel
         emit general cancel when 0x78
             confirm lp input
             confirm lp input dispatch
-            confirm emitted to aeolus
-                constant music playing
-                turn stop on command (text)
         
 
 make gtest optional (-lgtest -lfmt would fail)

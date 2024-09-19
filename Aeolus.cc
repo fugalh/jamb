@@ -16,8 +16,9 @@ void Aeolus::programChange(uint8_t program) {
   aeolus_.send({0xC0, {program}});
 }
 
-void Aeolus::noteOn(uint8_t key, uint8_t velocity) {
-  aeolus_.send({0x90, {key, velocity}});
+void Aeolus::noteOn(uint8_t channel, uint8_t key, uint8_t velocity) {
+  uint8_t status = 0x90 | (channel & 0xf);
+  aeolus_.send({status, {key, velocity}});
 }
 
 void Aeolus::setStop(uint8_t ggg, uint8_t element, uint8_t mm) {
