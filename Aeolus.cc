@@ -20,6 +20,25 @@ void Aeolus::noteOn(uint8_t key, uint8_t velocity) {
   aeolus_.send({0x90, {key, velocity}});
 }
 
+void Aeolus::setStop(uint8_t ggg, uint8_t element, uint8_t mm) {
+  uint8_t val = 0b0100'0000 | ((mm & 0b0011) << 4) | (ggg & 0b0111);
+  aeolus_.send({0xB0, {0x62, val}});
+  val = element & 0b0001'1111;
+  aeolus_.send({0xB0, {0x62, val}});
+}
+
+void Aeolus::stopOn(uint8_t group, uint8_t element) {
+  setStop(group, element, 0b10);
+}
+
+void Aeolus::stopOff(uint8_t group, uint8_t element) {
+  setStop(group, element, 0b01);
+}
+
+void Aeolus::stopToggle(uint8_t group, uint8_t element) {
+  setStop(group, element, 0b11);
+}
+
 /*
 Make a seq, and two ports (one duplex for launchpad and one simplex output for
 aeolus)

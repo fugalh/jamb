@@ -24,3 +24,12 @@ TEST(Aeolus, noteOn) {
   aeolus.noteOn(69, 64);  // A440 at half velocity
   ApprovalTests::Approvals::verify(midi);
 }
+
+TEST(Aeolus, stops) {
+  FakeMidi midi;
+  auto aeolus = Aeolus{midi};
+  aeolus.stopOn(1, 3);
+  aeolus.stopOff(2, 2);
+  aeolus.stopToggle(3, 1);
+  ApprovalTests::Approvals::verify(midi);
+}
