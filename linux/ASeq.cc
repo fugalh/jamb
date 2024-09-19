@@ -3,6 +3,7 @@
 #include <optional>
 
 namespace {
+
 std::optional<int> findClient(snd_seq_t* seq, std::string clientName) {
   snd_seq_client_info_t* cinfo;
   snd_seq_port_info_t* pinfo;
@@ -18,6 +19,7 @@ std::optional<int> findClient(snd_seq_t* seq, std::string clientName) {
   }
   return {};
 }
+
 }  // namespace
 
 namespace midi::aseq {
@@ -29,7 +31,7 @@ Transport::Transport(snd_seq_t* const& seq, std::string client) : seq_(seq) {
                  SND_SEQ_PORT_TYPE_APPLICATION));
   auto clientId = findClient(seq_, client);
   if (clientId) {
-    LOG << client << " is " << clientId.value() << "\n";
+    ASEQ_CHECK(snd_seq_connect_from(seq_, port_, clientId.value(), 0));
   } else {
     LOG << "ALSA Sequencer client '" << client << "' not found\n";
   }
