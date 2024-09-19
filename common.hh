@@ -2,7 +2,7 @@
 #include <iostream>
 
 #define LOG \
-  (std::clog << __FILE__ << ":" << __LINE__ << " " << __FUNCTION__ << ": ")
+  (std::clog << __FILE__ << ":" << __LINE__ << " " << __FUNCTION__ << "(): ")
 
 #define FATAL(msg)                                                           \
   {                                                                          \
