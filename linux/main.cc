@@ -16,8 +16,8 @@ int main(void) {
   launchpad.init();
   jamb.init();
 
-  LOG << "Waiting 30s\n";
-  std::this_thread::sleep_for(std::chrono::seconds(10));
+  LOG << "Waiting 300s\n";
+  std::this_thread::sleep_for(std::chrono::seconds(300));
   LOG << "\n" << aeolusMidi << "\n";
 
   return 0;

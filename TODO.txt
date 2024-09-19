@@ -1,8 +1,6 @@
 trigger general cancel
     launchpad event loop
-        alsa connections
-            connect launchpad
-            connect aeolus
+        confirm communications
 
 make gtest optional (-lgtest -lfmt would fail)
     vendor them?
