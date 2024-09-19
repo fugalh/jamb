@@ -20,6 +20,11 @@ std::optional<int> findClient(snd_seq_t* seq, std::string clientName) {
   return {};
 }
 
+void sendEvent(snd_seq_t* seq, snd_seq_event_t& ev) {
+  snd_seq_event_output(seq, &ev);
+  snd_seq_drain_output(seq);
+}
+
 }  // namespace
 
 namespace midi::aseq {
@@ -55,8 +60,42 @@ Transport::Transport(snd_seq_t* const& seq, std::string client) : seq_(seq) {
 }
 
 Transport::~Transport() {
-  if (port_ >= 0) {
-    snd_seq_delete_simple_port(seq_, port_);
+  snd_seq_delete_simple_port(seq_, port_);
+}
+
+snd_seq_event_t Transport::eventPrototype() {
+  snd_seq_event_t ev;
+  snd_seq_ev_clear(&ev);
+  snd_seq_ev_set_source(&ev, port_);
+  snd_seq_ev_set_subs(&ev);
+  snd_seq_ev_set_direct(&ev);
+  return ev;
+}
+
+void Transport::send(Message msg) {
+  LOGf("%02x %02x %02x", msg.status, msg.data[0], msg.data[1]);
+  auto ch = msg.status & 0x0f;
+  switch (msg.status & 0xf0) {
+    case 0xb0: {
+      auto ev = eventPrototype();
+      auto const cc = msg.data[0];
+      auto const val = msg.data[1];
+      snd_seq_ev_set_controller(&ev, ch, cc, val);
+      sendEvent(seq_, ev);
+      break;
+    }
+
+    case 0x90: {
+      auto ev = eventPrototype();
+      auto const key = msg.data[0];
+      auto const vel = msg.data[1];
+      snd_seq_ev_set_noteon(&ev, ch, key, vel);
+      sendEvent(seq_, ev);
+      break;
+    }
+
+    default:
+      LOGf("unknown status %2x", msg.status);
   }
 }
 

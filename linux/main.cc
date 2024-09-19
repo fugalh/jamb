@@ -11,7 +11,7 @@ int main(void) {
   midi::aseq::Sequencer seq("jamb");
   FakeMidi aeolusMidi;
   Launchpad launchpad{*seq.launchpad_};
-  Aeolus aeolus{aeolusMidi};
+  Aeolus aeolus{*seq.aeolus_};
   Jamb jamb{launchpad, aeolus};
   launchpad.init();
   jamb.init();
