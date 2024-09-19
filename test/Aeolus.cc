@@ -17,3 +17,10 @@ TEST(Aeolus, programChange) {
   aeolus.programChange(42);
   ApprovalTests::Approvals::verify(midi);
 }
+
+TEST(Aeolus, noteOn) {
+  FakeMidi midi;
+  auto aeolus = Aeolus{midi};
+  aeolus.noteOn(69, 64);  // A440 at half velocity
+  ApprovalTests::Approvals::verify(midi);
+}

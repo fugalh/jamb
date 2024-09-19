@@ -16,6 +16,10 @@ void Aeolus::programChange(uint8_t program) {
   aeolus_.send({0xC0, {program}});
 }
 
+void Aeolus::noteOn(uint8_t key, uint8_t velocity) {
+  aeolus_.send({0x90, {key, velocity}});
+}
+
 /*
 Make a seq, and two ports (one duplex for launchpad and one simplex output for
 aeolus)
