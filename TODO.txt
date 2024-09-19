@@ -10,3 +10,5 @@ make gtest optional (-lgtest -lfmt would fail)
     tup generate just build linux (not tests)
         linux/Tupfile or maybe tup options
 
+bwv651.mid plays on two channels (pedal on 0, manual on 1)
+pmidi -p 128:0 000_bach.mid

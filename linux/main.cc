@@ -15,8 +15,12 @@ int main(void) {
   Jamb jamb{launchpad, aeolus};
   launchpad.init();
   jamb.init();
-  aeolus.stopOn(1, 0);
-  aeolus.noteOn(0, 69);
+  aeolus.generalCancel();
+  aeolus.stopOn(1, 0);  // listening on channel 0
+  aeolus.stopOn(2, 3);  // listening on channel 1
+  aeolus.stopOn(2, 4);  // listening on channel 1
+  // Less annoying: `watch pmidi -p 128:0 ~/bwv651.mid`
+  // aeolus.noteOn(0, 69);
 
   LOG << "Waiting 300s\n";
   std::this_thread::sleep_for(std::chrono::seconds(300));
