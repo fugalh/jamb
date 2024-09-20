@@ -9,12 +9,14 @@ struct Command {
     StopToggle,
     MidiPanic,
   };
+  struct Stop {
+    uint8_t group;
+    uint8_t button;
+  };
+
   Type type;
   union {
-    struct {
-      uint8_t group;
-      uint8_t button;
-    } stop;
+    Stop stop;
     uint8_t preset;
   } u;
 

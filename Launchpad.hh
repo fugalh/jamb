@@ -22,5 +22,6 @@ struct Launchpad {
       observer_(cmd);
     }
   }
+  Command::Stop gridToStop(uint8_t button);
   uint8_t velocity(Color, Intensity);
 };

@@ -1,7 +1,7 @@
 [0] = 
 [1] = 0xb0 62 70: group 0 toggle
-0xb0 62 17: stop 15
-0xb0 62 70: group 2 toggle
+0xb0 62 0f: stop 15
+0xb0 62 72: group 2 toggle
 0xb0 62 02: stop 2
 
 

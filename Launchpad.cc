@@ -10,11 +10,9 @@ void Launchpad::init() {
 void Launchpad::dispatch(midi::Message const msg) {
   // LOGf("%2x %2x %2x", msg.status, msg.data[0], msg.data[1]);
   if (msg.status == 0x90 && msg.data[1] != 0) {
-    // TODO translate key to group,button
-    uint8_t group = 0;
     uint8_t button = msg.data[0];
     if (button < 0x80 && (button & 0x0f) < 8) {
-      emit({Command::Type::StopToggle, .u.stop{0, button}});
+            emit({Command::Type::StopToggle, gridToStop(button)});
     } else if (button == 0x78) {
       emit({Command::Type::GeneralCancel});
     }
@@ -59,4 +57,14 @@ uint8_t Launchpad::velocity(Launchpad::Color color,
   red *= int(intensity);
   uint8_t flags = 0x0c;
   return 0x10 * green + red + flags;
+}
+
+Command::Stop Launchpad::gridToStop(uint8_t button) {
+  Command::Stop stop;
+  stop.group = (button & 0xf0) >> 5;
+  stop.button = button & 0x0f;
+  if (button & 0x10) {
+    stop.button += 8;
+  }
+  return stop;
 }
