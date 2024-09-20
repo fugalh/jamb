@@ -40,6 +40,10 @@ void Aeolus::stopToggle(uint8_t group, uint8_t element) {
   setStop(group, element, 0b11);
 }
 
+void Aeolus::allSoundOff() {
+  aeolus_.send({0xb0, {0x78, 1}});
+}
+
 /*
 Make a seq, and two ports (one duplex for launchpad and one simplex output for
 aeolus)

@@ -16,6 +16,9 @@ void Jamb::dispatch(Command cmd) {
     case Command::Type::StopToggle:
       aeolus_.stopToggle(cmd.u.stop.group, cmd.u.stop.button);
       break;
+    case Command::Type::MidiPanic:
+      aeolus_.allSoundOff();
+      break;
     default:
       LOGf("event type %d not yet handled", cmd.type);
   }

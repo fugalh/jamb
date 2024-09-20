@@ -12,6 +12,7 @@ struct Aeolus {
   void stopOn(uint8_t group, uint8_t element);
   void stopOff(uint8_t group, uint8_t element);
   void stopToggle(uint8_t group, uint8_t element);
+  void allSoundOff();
 
  protected:
   void setStop(uint8_t group, uint8_t element, uint8_t mode);

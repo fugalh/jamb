@@ -3,8 +3,14 @@
 
 void Launchpad::init() {
   midi_.observer = [this](midi::Message msg) { dispatch(msg); };
-  midi_.send({0xB0, {0, 0}});
-  midi_.send({0x90, {0x78, 0x0D}});  // light the general cancel button
+  reset();
+  grid(0x68, Color::Red, Intensity::Low);    // midi panic
+  grid(0x78, Color::Amber, Intensity::Low);  // general cancel
+}
+
+void Launchpad::reset() {
+  midi_.observer = [this](midi::Message msg) { dispatch(msg); };
+  midi_.send({0xb0, {0, 0}});
 }
 
 void Launchpad::dispatch(midi::Message const msg) {
@@ -15,6 +21,8 @@ void Launchpad::dispatch(midi::Message const msg) {
       Command cmd{Command::Type::StopToggle};
       cmd.u.stop = gridToStop(button);
       emit(cmd);
+    } else if (button == 0x68) {
+      emit({Command::Type::MidiPanic});
     } else if (button == 0x78) {
       emit({Command::Type::GeneralCancel});
     }
@@ -31,7 +39,7 @@ void Launchpad::grid(uint8_t loc,
                      Launchpad::Intensity intensity) {
   auto const vel = velocity(color, intensity);
   if (loc < 0x80) {
-    if ((loc & 0x0f) < 8) {
+    if ((loc & 0x0f) <= 8) {
       midi_.send({0x90, {loc, vel}});
     }
   } else if (loc < 0x88) {
@@ -40,10 +48,21 @@ void Launchpad::grid(uint8_t loc,
     midi_.send({0xb0, {loc, vel}});
   }
 }
+
 void Launchpad::resetTopRow() {
   for (auto i = 0; i < 8; i++) {
     grid(0x80 + i, Launchpad::Color::Off, Launchpad::Intensity::Off);
   }
+}
+
+Command::Stop Launchpad::gridToStop(uint8_t button) {
+  Command::Stop stop;
+  stop.group = (button & 0xf0) >> 5;
+  stop.button = button & 0x0f;
+  if (button & 0x10) {
+    stop.button += 8;
+  }
+  return stop;
 }
 
 uint8_t Launchpad::velocity(Launchpad::Color color,
@@ -60,14 +79,4 @@ uint8_t Launchpad::velocity(Launchpad::Color color,
   red *= int(intensity);
   uint8_t flags = 0x0c;
   return 0x10 * green + red + flags;
-}
-
-Command::Stop Launchpad::gridToStop(uint8_t button) {
-  Command::Stop stop;
-  stop.group = (button & 0xf0) >> 5;
-  stop.button = button & 0x0f;
-  if (button & 0x10) {
-    stop.button += 8;
-  }
-  return stop;
 }
