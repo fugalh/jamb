@@ -1,4 +1,5 @@
 trigger presets with top row
+    light up selected preset
         
 
 make gtest optional (-lgtest -lfmt would fail)

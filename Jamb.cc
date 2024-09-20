@@ -7,10 +7,10 @@ void Jamb::init() {
 void Jamb::dispatch(Launchpad::Event ev) {
   switch (ev.type) {
     case Launchpad::Event::Type::ButtonPress:
-      switch (ev.button) {
-        case 0x78:
-          aeolus_.generalCancel();
-          break;
+      if (ev.button == 0x78) {
+        aeolus_.generalCancel();
+      } else if (ev.button >= 0x80) {
+        aeolus_.programChange(ev.button - 0x80);
       }
   }
 }

@@ -78,6 +78,15 @@ void Transport::send(Message msg) {
        msg.data[1]);
   auto ch = msg.status & 0x0f;
   switch (msg.status & 0xf0) {
+    case 0x90: {
+      auto ev = eventPrototype();
+      auto const key = msg.data[0];
+      auto const vel = msg.data[1];
+      snd_seq_ev_set_noteon(&ev, ch, key, vel);
+      sendEvent(seq_, ev);
+      break;
+    }
+
     case 0xb0: {
       auto ev = eventPrototype();
       auto const cc = msg.data[0];
@@ -87,11 +96,10 @@ void Transport::send(Message msg) {
       break;
     }
 
-    case 0x90: {
+    case 0xc0: {
       auto ev = eventPrototype();
-      auto const key = msg.data[0];
-      auto const vel = msg.data[1];
-      snd_seq_ev_set_noteon(&ev, ch, key, vel);
+      auto const val = msg.data[0];
+      snd_seq_ev_set_pgmchange(&ev, ch, val);
       sendEvent(seq_, ev);
       break;
     }
@@ -112,15 +120,27 @@ void Transport::readLoop() {
     if (!ev || !observer) {
       continue;
     }
-    auto const& note = ev->data.note;
     uint8_t status;
     switch (ev->type) {
-      case SND_SEQ_EVENT_NOTEON:
-        status = note.channel | 0x90;
-        observer({status, {note.note, note.velocity}});
+      case SND_SEQ_EVENT_NOTEON: {
+        auto const& note = ev->data.note;
+        if (note.velocity > 0) {
+          LOGf("noteon %2x %2x", note.note, note.velocity);
+          status = note.channel | 0x90;
+          observer({status, {note.note, note.velocity}});
+        }
         break;
+      }
+      case SND_SEQ_EVENT_CONTROLLER: {
+        auto const& control = ev->data.control;
+        LOGf("controller %2x %2x", control.param, control.value);
+        status = control.channel | 0xb0;
+        observer({status, {uint8_t(control.param), uint8_t(control.value)}});
+        break;
+      }
       default:
-        LOG << "unrecognized event type " << ev->type << "\n";
+        LOG << "unknown event type " << int(ev->type) << "\n";
+        break;
     }
   }
 }
