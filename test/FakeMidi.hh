@@ -1,6 +1,4 @@
 #pragma once
-#include <fmt/format.h>
-#include <sstream>
 
 #include "../Aeolus.hh"
 #include "../Midi.hh"

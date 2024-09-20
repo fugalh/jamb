@@ -1,7 +1,7 @@
 #include "FakeMidi.hh"
 
 #include <fmt/format.h>
-#include <iostream>
+#include <sstream>
 
 std::string FakeMidi::toString() const {
   std::ostringstream os;

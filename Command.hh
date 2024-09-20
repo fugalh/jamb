@@ -1,5 +1,6 @@
 #pragma once
-#include <iostream>
+#include <cstdint>
+#include <string>
 
 struct Command {
   enum class Type {
@@ -17,9 +18,10 @@ struct Command {
   } u;
 
   std::string toString() const;
-};
 
-std::ostream& operator<<(std::ostream& os, const Command& x) {
-  os << x.toString();
-  return os;
-}
+  template <class STREAM>
+  friend STREAM& operator<<(STREAM& os, const Command& x) {
+    os << x.toString();
+    return os;
+  }
+};
