@@ -24,12 +24,19 @@ void Launchpad::grid(uint8_t loc,
                      Launchpad::Color color,
                      Launchpad::Intensity intensity) {
   auto const vel = velocity(color, intensity);
-  if (loc < 0x80 && (loc & 0xf <= 8)) {
-    midi_.send({0x90, {loc, vel}});
+  if (loc < 0x80) {
+    if ((loc & 0x0f) < 8) {
+      midi_.send({0x90, {loc, vel}});
+    }
   } else if (loc < 0x88) {
     loc -= 0x80;
     loc += 0x68;
     midi_.send({0xb0, {loc, vel}});
+  }
+}
+void Launchpad::resetTopRow() {
+  for (auto i = 0; i < 8; i++) {
+    grid(0x80 + i, Launchpad::Color::Off, Launchpad::Intensity::Off);
   }
 }
 
@@ -43,6 +50,8 @@ uint8_t Launchpad::velocity(Launchpad::Color color,
   if (color == Color::Red || color == Color::Amber) {
     red = 1;
   }
-  uint8_t flags = 0;
-  return 0x10 * green + red;
+  green *= int(intensity);
+  red *= int(intensity);
+  uint8_t flags = 0x0c;
+  return 0x10 * green + red + flags;
 }

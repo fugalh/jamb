@@ -30,7 +30,10 @@ TEST(Launchpad, buttons) {
   FakeMidi midi;
   auto lp = Launchpad{midi};
   lp.init();
-  lp.grid(0x78, Launchpad::Color::Amber, Launchpad::Intensity::Mid);
-  lp.grid(0x85, Launchpad::Color::Amber, Launchpad::Intensity::Mid);
+  lp.grid(0x42, Launchpad::Color::Amber, Launchpad::Intensity::Mid);
+  lp.grid(0x77, Launchpad::Color::Green, Launchpad::Intensity::High);
+  lp.grid(0x85, Launchpad::Color::Red, Launchpad::Intensity::Low);
+  lp.grid(0x00, Launchpad::Color::Red, Launchpad::Intensity::Off);
+  lp.grid(0x01, Launchpad::Color::Off, Launchpad::Intensity::High);
   ApprovalTests::Approvals::verify(midi);
 }

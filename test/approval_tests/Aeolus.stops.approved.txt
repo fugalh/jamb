@@ -1,7 +1,7 @@
-0xB0 62 61: group 1 on
-0xB0 62 3: stop 3
-0xB0 62 52: group 2 off
-0xB0 62 2: stop 2
-0xB0 62 73: group 3 toggle
-0xB0 62 1: stop 1
+0xb0 62 61: group 1 on
+0xb0 62 03: stop 3
+0xb0 62 52: group 2 off
+0xb0 62 02: stop 2
+0xb0 62 73: group 3 toggle
+0xb0 62 01: stop 1
 

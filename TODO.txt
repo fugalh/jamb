@@ -1,11 +1,23 @@
-trigger presets with top row
-    light up selected preset
-        
+basic functionality
+    stop buttons (unlighted)
 
-make gtest optional (-lgtest -lfmt would fail)
-    vendor them?
-    tup generate just build linux (not tests)
-        linux/Tupfile or maybe tup options
+release v0.1
+    [basic functionality]
+    cleanup
+        change Launchpad events from "button press" to logical (a la OSC sketch)
+        make gtest optional (-lgtest -lfmt would fail)
+            vendor them?
+            tup generate just build linux (not tests)
+                linux/Tupfile or maybe tup options
 
+set preset
+    stops lighted
+        model holds stops
+        model sends diff of stops
+    set+preset
+        preset db
+        update stops
+
+## Notes
 bwv651.mid plays on two channels (pedal on 0, manual on 1)
-pmidi -p 128:0 000_bach.mid
+pmidi -p 128:0 ~/bwv651.mid

@@ -19,6 +19,7 @@ struct Launchpad {
   void init();
   void reset();
   void grid(uint8_t loc, Color, Intensity);
+  void resetTopRow();
 
  protected:
   void dispatch(midi::Message const);

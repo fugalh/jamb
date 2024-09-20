@@ -6,7 +6,8 @@
 std::string FakeMidi::toString() const {
   std::ostringstream os;
   for (auto const& msg : messages_) {
-    os << fmt::format("0x{:X} {:X} {:X}", msg.status, msg.data[0], msg.data[1]);
+    os << fmt::format("0x{:02x} {:02x} {:02x}", msg.status, msg.data[0],
+                      msg.data[1]);
     switch ((msg.status & 0xf0) >> 4) {
       case 0xB:
         if (msg.data[0] == StopController) {

@@ -1,5 +1,5 @@
-0xB0 62 40: group 0 cancel
-0xB0 62 41: group 1 cancel
-0xB0 62 42: group 2 cancel
-0xB0 62 43: group 3 cancel
+0xb0 62 40: group 0 cancel
+0xb0 62 41: group 1 cancel
+0xb0 62 42: group 2 cancel
+0xb0 62 43: group 3 cancel
 

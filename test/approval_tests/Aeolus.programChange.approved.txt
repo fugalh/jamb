@@ -1,2 +1,2 @@
-0xC0 2A 0: program change 42
+0xc0 2a 00: program change 42
 

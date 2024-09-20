@@ -105,7 +105,7 @@ void Transport::send(Message msg) {
     }
 
     default:
-      LOGf("unknown status %2x", msg.status);
+      LOGf("unknown status 0x%02x", msg.status);
   }
 }
 
@@ -125,7 +125,7 @@ void Transport::readLoop() {
       case SND_SEQ_EVENT_NOTEON: {
         auto const& note = ev->data.note;
         if (note.velocity > 0) {
-          LOGf("noteon %2x %2x", note.note, note.velocity);
+          LOGf("noteon %02x %02x", note.note, note.velocity);
           status = note.channel | 0x90;
           observer({status, {note.note, note.velocity}});
         }
@@ -133,7 +133,7 @@ void Transport::readLoop() {
       }
       case SND_SEQ_EVENT_CONTROLLER: {
         auto const& control = ev->data.control;
-        LOGf("controller %2x %2x", control.param, control.value);
+        LOGf("controller %02x %02x", control.param, control.value);
         status = control.channel | 0xb0;
         observer({status, {uint8_t(control.param), uint8_t(control.value)}});
         break;

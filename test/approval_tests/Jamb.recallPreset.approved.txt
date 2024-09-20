@@ -1,3 +1,6 @@
-0xC0 1 0: program change 1
+[0] = 0xb0 00 00
+0x90 78 0d
 
-and color
+[1] = 0xc0 01 00: program change 1
+
+

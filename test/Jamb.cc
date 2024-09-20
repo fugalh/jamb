@@ -25,5 +25,5 @@ TEST(Jamb, recallPreset) {
   jamb.init();
 
   lpMidi.emit({0xB0, {0x69, 0x7f}});
-  ApprovalTests::Approvals::verify(aeolusMidi);
+  ApprovalTests::Approvals::verifyAll({lpMidi, aeolusMidi});
 }
