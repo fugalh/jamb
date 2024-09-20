@@ -1,14 +1,11 @@
-basic functionality
-    stop buttons (unlighted)
-
 release v0.1
-    [basic functionality]
     cleanup
-        change Launchpad events from "button press" to logical (a la OSC sketch)
         make gtest optional (-lgtest -lfmt would fail)
             vendor them?
             tup generate just build linux (not tests)
                 linux/Tupfile or maybe tup options
+    distro stuff
+        test with fresh rpi installation
 
 set preset
     stops lighted
