@@ -12,14 +12,17 @@ void Launchpad::dispatch(midi::Message const msg) {
   if (msg.status == 0x90 && msg.data[1] != 0) {
     uint8_t button = msg.data[0];
     if (button < 0x80 && (button & 0x0f) < 8) {
-            emit({Command::Type::StopToggle, gridToStop(button)});
+      Command cmd{Command::Type::StopToggle};
+      cmd.u.stop = gridToStop(button);
+      emit(cmd);
     } else if (button == 0x78) {
       emit({Command::Type::GeneralCancel});
     }
   }
   if (msg.status == 0xb0 && msg.data[1] != 0) {
-    uint8_t preset = msg.data[0] - 0x68;
-    emit({Command::Type::RecallPreset, .u.preset{preset}});
+    Command cmd{Command::Type::RecallPreset};
+    cmd.u.preset = msg.data[0] - 0x68;
+    emit(cmd);
   }
 }
 
