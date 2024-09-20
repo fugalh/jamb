@@ -1,17 +1,11 @@
 #pragma once
+#include "Command.hh"
 #include "Midi.hh"
 
 struct Launchpad {
-  struct Event {
-    enum class Type {
-      ButtonPress,
-    };
-    Type type;
-    uint8_t button;
-  };
   enum class Color { Off, Red, Green, Amber };
   enum class Intensity { Off = 0, Low = 1, Mid = 2, High = 3 };
-  using Observer = std::function<void(Event)>;
+  using Observer = std::function<void(Command)>;
 
   midi::Transport& midi_;
   Observer observer_;
@@ -23,9 +17,9 @@ struct Launchpad {
 
  protected:
   void dispatch(midi::Message const);
-  void emit(Event ev) {
+  void emit(Command cmd) {
     if (observer_) {
-      observer_(ev);
+      observer_(cmd);
     }
   }
   uint8_t velocity(Color, Intensity);

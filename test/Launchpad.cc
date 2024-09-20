@@ -15,8 +15,8 @@ TEST(Launchpad, init) {
 TEST(Launchpad, observerCalledBack) {
   FakeMidi lpMidi;
   bool visited = false;
-  Launchpad lp{lpMidi, [&](Launchpad::Event ev) {
-                 EXPECT_EQ(ev.button, 0x78);
+  Launchpad lp{lpMidi, [&](Command ev) {
+                 EXPECT_EQ(ev.type, Command::Type::GeneralCancel);
                  visited = true;
                }};
   lp.init();

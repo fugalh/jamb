@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Aeolus.hh"
+#include "Command.hh"
 #include "Launchpad.hh"
 
 struct Jamb {
@@ -10,5 +11,5 @@ struct Jamb {
   void init();
 
  protected:
-  void dispatch(Launchpad::Event);
+  void dispatch(Command);
 };
