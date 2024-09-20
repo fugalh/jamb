@@ -25,3 +25,12 @@ TEST(Launchpad, observerCalledBack) {
   lpMidi.emit({0x90, {0x78, velocity}});
   EXPECT_TRUE(visited);
 }
+
+TEST(Launchpad, buttons) {
+  FakeMidi midi;
+  auto lp = Launchpad{midi};
+  lp.init();
+  lp.grid(0x78, Launchpad::Color::Amber, Launchpad::Intensity::Mid);
+  lp.grid(0x85, Launchpad::Color::Amber, Launchpad::Intensity::Mid);
+  ApprovalTests::Approvals::verify(midi);
+}
