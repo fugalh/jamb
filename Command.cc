@@ -1,9 +1,13 @@
 #include "Command.hh"
+#include <fmt/format.h>
 
 std::string Command::toString() const {
   switch (type) {
     case Type::GeneralCancel:
       return "general cancel";
+    case Type::StopToggle:
+      return fmt::format("stop: group {} button {}", u.stop.group,
+                         u.stop.button);
   }
   return "invalid";
 }

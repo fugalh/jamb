@@ -4,6 +4,7 @@ cxx_library(
     name = "lib",
     srcs = glob(["*.cc"]),
     headers = glob(["*.hh"]),
+    linker_flags = ['-L/opt/homebrew/lib', '-lfmt'],
 
     compiler_flags = COMPILER_FLAGS,
 )

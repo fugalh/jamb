@@ -1,2 +1,3 @@
 [0] = general cancel
+[1] = stop: group 1 button 3
 
