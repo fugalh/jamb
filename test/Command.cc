@@ -7,6 +7,7 @@
 
 TEST(Command, toString) {
   std::vector<Command> cmds = {{Command::Type::GeneralCancel},
-                               {Command::Type::StopToggle, .u.stop = {1, 3}}};
+                               {Command::Type::StopToggle, .u.stop = {1, 3}},
+                               {Command::Type::MidiPanic}};
   ApprovalTests::Approvals::verifyAll(cmds);
 }

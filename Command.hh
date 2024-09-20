@@ -5,6 +5,7 @@ struct Command {
   enum class Type {
     GeneralCancel,
     StopToggle,
+    MidiPanic,
   };
   struct Stop {
     uint8_t group;
