@@ -1,4 +1,5 @@
 [0] = general cancel
-[1] = stop: group 1 button 3
-[2] = midi panic
+[1] = recall preset 7
+[2] = stop: group 1 button 3
+[3] = midi panic
 
