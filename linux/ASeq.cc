@@ -101,6 +101,30 @@ void Transport::send(Message msg) {
   }
 }
 
+void Transport::readLoop() {
+  while (true) {
+    snd_seq_event_t* ev{};
+    auto err = snd_seq_event_input(seq_, &ev);
+    if (err < 0) {
+      LOG << snd_strerror(err) << "\n";
+      break;
+    }
+    if (!ev || !observer) {
+      continue;
+    }
+    auto const& note = ev->data.note;
+    uint8_t status;
+    switch (ev->type) {
+      case SND_SEQ_EVENT_NOTEON:
+        status = note.channel | 0x90;
+        observer({status, {note.note, note.velocity}});
+        break;
+      default:
+        LOG << "unrecognized event type " << ev->type << "\n";
+    }
+  }
+}
+
 Sequencer::Sequencer(std::string name) {
   ASEQ_CHECK(snd_seq_open(&seq_, "default", SND_SEQ_OPEN_DUPLEX, 0));
   ASEQ_CHECK(snd_seq_set_client_name(seq_, name.c_str()));

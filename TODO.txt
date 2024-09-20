@@ -1,8 +1,4 @@
-trigger general cancel
-    launchpad event loop
-        emit general cancel when 0x78
-            confirm lp input
-            confirm lp input dispatch
+trigger presets with top row
         
 
 make gtest optional (-lgtest -lfmt would fail)

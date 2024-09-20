@@ -26,6 +26,7 @@ struct Transport : public midi::Transport {
   Transport(snd_seq_t* const&, std::string client);
   ~Transport() override;
   void send(Message) override;
+  void readLoop();
 
  protected:
   snd_seq_event_t eventPrototype();
