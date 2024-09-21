@@ -6,16 +6,26 @@ status(4 bits type, 4 bits channel); message (1 or 2 bytes)
 0xB. 0C ..  tremulant frequency
 0xB. 0D ..  tremulant amplitude
 0xB. 20 ..  preset bank         
-0xB. 62 ..  stop control
-    01mm0ggg mode and group set
-        modes 00/01/10/11 are reset/set off/set on/toggle
-    000bbbbb button
+0xB. 62 vv  stop control
+    vv = 01mm0ggg mode and group set
+        modes 00/01/10/11 are reset/off/on/toggle
+    -- or --
+    vv = 000bbbbb button
 0xC. ..  program change
 
 # OSC sketch
-/aeolus/swell
-/aeolus/tfreq 
-/aeolus/tmodd 
-/aeolus/bank
-/aeolus/button/g/b
-/aeolus/preset/p
+/aeolus/cancel/general
+/aeolus/midi-panic
+/aeolus/stop/on ii (group, button)
+/aeolus/stop/off ii
+/aeolus/stop/toggle ii
+/aeolus/preset/recall i
+/aeolus/preset/set i
+
+## Later
+/aeolus/bank-select i
+/aeolus/swell f
+/aeolus/tfreq f
+/aeolus/tmodd f
+/aeolus/cancel/division i
+/aeolus/cancel/keyboard i
