@@ -7,15 +7,30 @@ void Jamb::init() {
 
 void Jamb::dispatch(Command cmd) {
   switch (cmd.type) {
-    case Command::Type::GeneralCancel:
+    case Command::Type::GeneralCancel: {
+      state_.activePreset = {};
+      for (auto& g : state_.groups) {
+        g.reset();
+      }
       aeolus_.generalCancel();
+      emitState();
       break;
+    }
     case Command::Type::RecallPreset:
       aeolus_.programChange(cmd.u.preset);
       break;
-    case Command::Type::StopToggle:
-      aeolus_.stopToggle(cmd.u.stop.group, cmd.u.stop.button);
+    case Command::Type::StopToggle: {
+      auto const g = cmd.u.stop.group;
+      auto const b = cmd.u.stop.button;
+      state_.groups[g][b].flip();
+      if (state_.groups[g][b]) {
+        aeolus_.stopOn(g, b);
+      } else {
+        aeolus_.stopOff(g, b);
+      }
+      emitState();
       break;
+    }
     case Command::Type::MidiPanic:
       aeolus_.allSoundOff();
       break;

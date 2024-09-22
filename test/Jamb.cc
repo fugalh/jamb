@@ -42,6 +42,7 @@ TEST(Jamb, stopToggle) {
 
   lpMidi.emit({0x90, {0x17, 0x7f}});  // group 1 button 15
   lpMidi.emit({0x90, {0x42, 0x7f}});  // group 2 button 2
+  lpMidi.emit({0x90, {0x42, 0x7f}});  // group 2 button 2
   ApprovalTests::Approvals::verifyAll({lpMidi, aeolusMidi});
 }
 
