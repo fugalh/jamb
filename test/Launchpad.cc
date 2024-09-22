@@ -31,11 +31,25 @@ TEST(Launchpad, buttons) {
   FakeMidi midi;
   auto lp = Launchpad{midi};
   lp.init();
-  lp.grid(0x42, Launchpad::Color::Amber, Launchpad::Intensity::Mid);
-  lp.grid(0x77, Launchpad::Color::Green, Launchpad::Intensity::High);
-  lp.topRow(0x05, {Launchpad::Color::Red, Launchpad::Intensity::Low});
-  lp.grid(0x00, Launchpad::Color::Red, Launchpad::Intensity::Off);
-  lp.grid(0x01, Launchpad::Color::Off, Launchpad::Intensity::High);
+  lp.grid(4, 2, {Launchpad::Color::Amber, Launchpad::Intensity::Mid});
+  lp.grid(7, 7, {Launchpad::Color::Green, Launchpad::Intensity::High});
+  lp.topRow(5, {Launchpad::Color::Red, Launchpad::Intensity::Low});
+  lp.grid(0, 0, {Launchpad::Color::Red, Launchpad::Intensity::Off});
+  lp.grid(0, 1, {Launchpad::Color::Off, Launchpad::Intensity::High});
+  ApprovalTests::Approvals::verify(midi);
+}
+
+TEST(Launchpad, resetTopRow) {
+  FakeMidi midi;
+  auto lp = Launchpad{midi};
+  lp.init();
+  midi.clear();
+
+  lp.resetTopRow();  // nothing
+
+  lp.topRow(2, {Launchpad::Color::Amber, Launchpad::Intensity::Mid});
+  lp.resetTopRow();  // turn off just 2
+
   ApprovalTests::Approvals::verify(midi);
 }
 

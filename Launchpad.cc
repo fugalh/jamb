@@ -5,8 +5,8 @@
 void Launchpad::init() {
   midi_.observer = [this](midi::Message msg) { dispatch(msg); };
   reset();
-  grid(0x68, Color::Red, Intensity::Low);    // midi panic
-  grid(0x78, Color::Amber, Intensity::Low);  // general cancel
+  grid(6, 8, {Color::Red, Intensity::Low});    // midi panic
+  grid(7, 8, {Color::Amber, Intensity::Low});  // general cancel
 }
 
 void Launchpad::reset() {
@@ -35,9 +35,16 @@ void Launchpad::dispatch(midi::Message const msg) {
   }
 }
 
-void Launchpad::grid(uint8_t loc,
-                     Launchpad::Color color,
-                     Launchpad::Intensity intensity) {
+void Launchpad::grid(uint8_t row, uint8_t col, Button b) {
+  auto s2 = state_;
+  s2.grid.at(row).at(col) = b;
+  render(s2);
+}
+
+// send the MIDI message to update the grid. the top row is mapped to 0x80+i
+void Launchpad::grid_(uint8_t loc, Button b) {
+  auto const color = b.color;
+  auto const intensity = b.intensity;
   auto const vel = velocity(color, intensity);
   if (loc < 0x80) {
     if ((loc & 0x0f) <= 8) {
@@ -51,9 +58,11 @@ void Launchpad::grid(uint8_t loc,
 }
 
 void Launchpad::resetTopRow() {
-  for (auto i = 0; i < 8; i++) {
-    grid(0x80 + i, Launchpad::Color::Off, Launchpad::Intensity::Off);
+  auto s2 = state_;
+  for (auto& x : s2.topRow) {
+    x = {Launchpad::Color::Off, Launchpad::Intensity::Off};
   }
+  render(s2);
 }
 
 Command::Stop Launchpad::gridToStop(uint8_t button) {
@@ -83,7 +92,9 @@ uint8_t Launchpad::velocity(Launchpad::Color color,
 }
 
 void Launchpad::topRow(uint8_t loc, Button button) {
-  grid(loc + 0x80, button);
+  auto s2 = state_;
+  s2.topRow.at(loc) = button;
+  render(s2);
 }
 
 void Launchpad::jambStateUpdate(jamb::State const& j) {
@@ -123,7 +134,7 @@ void Launchpad::render(State const& s2) {
   for (auto i = 0; i < 8; i++) {
     auto& b = s2.topRow[i];
     if (state_.topRow[i] != b) {
-      topRow(i, b);
+      grid_(0x80 + i, b);
     }
   }
 
@@ -132,7 +143,7 @@ void Launchpad::render(State const& s2) {
     for (auto col = 0; col < 9; col++) {
       auto& b = s2.grid[row][col];
       if (state_.grid[row][col] != b) {
-        grid((row * 0x10) | col, b);
+        grid_((0x10 * row) | col, b);
       }
     }
   }

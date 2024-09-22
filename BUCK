@@ -13,7 +13,7 @@ cxx_library(
 cxx_test(
     name = 'test',
     srcs = glob(["test/*.cc"]),
-    headers = glob(["test/*.hh"]),
+    headers = glob(["test/*.hh", "*.hh"]),
     deps = [":lib"],
 
     linker_flags = LINKER_FLAGS,

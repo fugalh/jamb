@@ -31,14 +31,12 @@ struct Launchpad {
   void init();
   void reset();
 
-  [[deprecated]] void grid(uint8_t loc, Color, Intensity);
-  void grid(uint8_t loc, Button button) {
-    grid(loc, button.color, button.intensity);
-  }
+  void jambStateUpdate(jamb::State const&);
+
+  // testing only
+  void grid(uint8_t row, uint8_t col, Button button);
   void topRow(uint8_t loc, Button);
   void resetTopRow();
-
-  void jambStateUpdate(jamb::State const&);
 
  protected:
   State state_{};
@@ -51,4 +49,5 @@ struct Launchpad {
   Command::Stop gridToStop(uint8_t button);
   uint8_t velocity(Color, Intensity);
   void render(State const&);
+  void grid_(uint8_t loc, Button button);
 };
