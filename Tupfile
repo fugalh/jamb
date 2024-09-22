@@ -2,6 +2,9 @@ CXXFLAGS = -g -std=c++20
 CXX = c++
 LIBS = -lgtest -lasound -lfmt -lpthread 
 
+# clang has better errors but isn't installed by default
+#CXX = clang++
+
 !compile = |> $(CXX) $(CXXFLAGS) -c %f -o %o |>
 !link = |> $(CXX) $(CXXFLAGS) %f $(LIBS) -o %o |>
 
