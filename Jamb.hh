@@ -15,6 +15,8 @@ struct Model {
   Launchpad& launchpad_;
   Aeolus& aeolus_;
 
+  Model(Launchpad& lp, Aeolus& a) : launchpad_{lp}, aeolus_{a} {}
+
   void init();
 
  protected:
