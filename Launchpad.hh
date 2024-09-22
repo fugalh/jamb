@@ -23,7 +23,12 @@ struct Launchpad {
 
   void init();
   void reset();
-  void grid(uint8_t loc, Color, Intensity);
+
+  [[deprecated]] void grid(uint8_t loc, Color, Intensity);
+  void grid(uint8_t loc, Button button) {
+    grid(loc, button.color, button.intensity);
+  }
+  void topRow(uint8_t loc, Button);
   void resetTopRow();
 
   void jambStateUpdate(jamb::State const&);

@@ -81,4 +81,8 @@ uint8_t Launchpad::velocity(Launchpad::Color color,
   return 0x10 * green + red + flags;
 }
 
+void Launchpad::topRow(uint8_t loc, Button button) {
+  grid(loc + 0x80, button);
+}
+
 void Launchpad::jambStateUpdate(jamb::State const& s) {}

@@ -20,7 +20,7 @@ struct Model {
   void init();
 
  protected:
-  State state_;
+  State state_{};
   void dispatch(Command);
   void emitState();
 };
