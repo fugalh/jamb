@@ -1,4 +1,5 @@
 #include "Launchpad.hh"
+#include "Jamb.hh"
 #include "common.hh"
 
 void Launchpad::init() {
@@ -85,4 +86,56 @@ void Launchpad::topRow(uint8_t loc, Button button) {
   grid(loc + 0x80, button);
 }
 
-void Launchpad::jambStateUpdate(jamb::State const& s) {}
+void Launchpad::jambStateUpdate(jamb::State const& j) {
+  Button const off = {Launchpad::Color::Off, Launchpad::Intensity::Off};
+  State s2 = state_;
+  for (auto i = 0; i < 8; i++) {
+    s2.topRow[i] = off;
+  }
+
+  if (j.activePreset.has_value()) {
+    s2.topRow[*j.activePreset] = {Launchpad::Color::Green,
+                                  Launchpad::Intensity::Mid};
+  }
+
+  for (auto i = 0; i < j.groups.size(); i++) {
+    auto& g = j.groups[i];
+    for (auto j = 0; j < g.size(); j++) {
+      auto row = i * 2;
+      auto col = j;
+      if (j >= 8) {
+        row++;
+        col -= 8;
+      }
+      if (g[j]) {
+        s2.grid[row][col] = {Launchpad::Color::Amber,
+                             Launchpad::Intensity::Mid};
+      } else {
+        s2.grid[row][col] = off;
+      }
+    }
+  }
+  render(s2);
+}
+
+void Launchpad::render(State const& s2) {
+  // top row
+  for (auto i = 0; i < 8; i++) {
+    auto& b = s2.topRow[i];
+    if (state_.topRow[i] != b) {
+      topRow(i, b);
+    }
+  }
+
+  // grid (including rightmost column)
+  for (auto row = 0; row < 8; row++) {
+    for (auto col = 0; col < 9; col++) {
+      auto& b = s2.grid[row][col];
+      if (state_.grid[row][col] != b) {
+        grid((row * 0x10) | col, b);
+      }
+    }
+  }
+
+  state_ = s2;
+}

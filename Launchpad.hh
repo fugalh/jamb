@@ -11,6 +11,10 @@ struct Launchpad {
   struct Button {
     Color color;
     Intensity intensity;
+
+    bool operator==(Button const& other) const {
+      return color == other.color && intensity == other.intensity;
+    }
   };
   struct State {
     std::array<std::array<Button, 9>, 8> grid;
@@ -20,6 +24,9 @@ struct Launchpad {
 
   midi::Transport& midi_;
   Observer observer_;
+
+  Launchpad(midi::Transport& midi) : midi_{midi} {}
+  Launchpad(midi::Transport& midi, Observer o) : midi_{midi}, observer_{o} {}
 
   void init();
   void reset();
@@ -34,6 +41,7 @@ struct Launchpad {
   void jambStateUpdate(jamb::State const&);
 
  protected:
+  State state_{};
   void dispatch(midi::Message const);
   void emit(Command cmd) {
     if (observer_) {
@@ -42,5 +50,5 @@ struct Launchpad {
   }
   Command::Stop gridToStop(uint8_t button);
   uint8_t velocity(Color, Intensity);
-  void render();
+  void render(State const&);
 };

@@ -12,6 +12,7 @@ struct FakeMidi : public midi::Transport {
       observer(msg);
     }
   }
+  void clear() { messages_.clear(); }
 
   std::string toString() const;
 

@@ -3,6 +3,7 @@
 #include "ApprovalTests.hpp"
 #include "FakeMidi.hh"
 
+#include "../Jamb.hh"
 #include "../Launchpad.hh"
 
 TEST(Launchpad, init) {
@@ -35,5 +36,23 @@ TEST(Launchpad, buttons) {
   lp.topRow(0x05, {Launchpad::Color::Red, Launchpad::Intensity::Low});
   lp.grid(0x00, Launchpad::Color::Red, Launchpad::Intensity::Off);
   lp.grid(0x01, Launchpad::Color::Off, Launchpad::Intensity::High);
+  ApprovalTests::Approvals::verify(midi);
+}
+
+TEST(Launchpad, jambStateUpdate) {
+  FakeMidi midi;
+  auto lp = Launchpad{midi};
+  auto jState = jamb::State{};
+  lp.init();
+  midi.clear();
+
+  jState.groups[1][0] = true;
+  jState.groups[1][1] = true;
+  jState.activePreset = 3;
+  lp.jambStateUpdate(jState);
+  jState.groups[1][1] = false;
+  jState.activePreset = std::nullopt;
+  lp.jambStateUpdate(jState);
+
   ApprovalTests::Approvals::verify(midi);
 }

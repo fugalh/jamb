@@ -8,6 +8,7 @@
 
 namespace jamb {
 struct State {
+  std::optional<uint8_t> activePreset;
   std::array<std::bitset<16>, 4> groups;
 };
 
