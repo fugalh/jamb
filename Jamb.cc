@@ -23,3 +23,7 @@ void Jamb::dispatch(Command cmd) {
       LOGf("event type %d not yet handled", cmd.type);
   }
 }
+
+void Jamb::emitState() {
+  launchpad_.jambStateUpdate(state_);
+}

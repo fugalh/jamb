@@ -80,3 +80,5 @@ uint8_t Launchpad::velocity(Launchpad::Color color,
   uint8_t flags = 0x0c;
   return 0x10 * green + red + flags;
 }
+
+void Launchpad::jambStateUpdate(jamb::State const& s) {}
