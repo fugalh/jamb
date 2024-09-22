@@ -9,9 +9,10 @@ struct Message {
 };
 
 struct Transport {
+  std::function<void(Message)> observer{};
+
   virtual ~Transport() = default;
   virtual void send(Message) = 0;
-  std::function<void(Message)> observer{};
 };
 
 }  // namespace midi

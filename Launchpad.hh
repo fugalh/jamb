@@ -40,6 +40,7 @@ struct Launchpad {
 
  protected:
   State state_{};
+
   void dispatch(midi::Message const);
   void emit(Command cmd) {
     if (observer_) {
