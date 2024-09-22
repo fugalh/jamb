@@ -1,9 +1,13 @@
+._*
+.DS_Store
+
 buck-out
 .tup
+
 *.o
 *.swp
+gtest
+
 jamb
 test/jamb
 linux/jamb
-._*
-.DS_Store
