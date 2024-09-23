@@ -119,8 +119,11 @@ void Launchpad::jambStateUpdate(jamb::State const& j) {
         col -= 8;
       }
       if (g[j]) {
-        s2.grid[row][col] = {Launchpad::Color::Amber,
-                             Launchpad::Intensity::Mid};
+        auto color = Launchpad::Color::Amber;
+        if (i % 2) {
+          color = Launchpad::Color::Red;
+        }
+        s2.grid[row][col] = {color, Launchpad::Intensity::Mid};
       } else {
         s2.grid[row][col] = off;
       }
