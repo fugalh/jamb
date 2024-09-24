@@ -26,13 +26,23 @@ void Launchpad::dispatch(midi::Message const msg) {
       emit({Command::Type::MidiPanic});
     } else if (button == 0x78) {
       emit({Command::Type::GeneralCancel});
+    } else if (button == 0x08) {
+      state_.pressingSet = (msg.data[1] != 0);
     }
   }
-  if (msg.status == 0xb0 && msg.data[1] != 0) {
-    Command cmd{Command::Type::RecallCombination};
-    cmd.u.combo.memory = 0;
-    cmd.u.combo.piston = msg.data[0] - 0x68;
-    emit(cmd);
+  if (msg.status == 0xb0) {
+    auto const piston = msg.data[0];
+    if (piston >= 0x68 && piston <= 0x6f && msg.data[1] != 0) {
+      Command cmd;
+      if (state_.pressingSet) {
+        cmd = {Command::Type::SetCombination};
+      } else {
+        cmd = {Command::Type::RecallCombination};
+      }
+      cmd.u.combo.memory = 0;
+      cmd.u.combo.piston = msg.data[0] - 0x68;
+      emit(cmd);
+    }
   }
 }
 

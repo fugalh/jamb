@@ -70,3 +70,20 @@ TEST(Launchpad, jambStateUpdate) {
 
   ApprovalTests::Approvals::verify(midi);
 }
+
+TEST(Launchpad, emitSetCombo) {
+  FakeMidi midi;
+  Command cmd{};
+  auto lp = Launchpad{midi, [&](Command ev) { cmd = ev; }};
+  auto jState = jamb::State{};
+  lp.init();
+  midi.clear();
+
+  midi.emit({0x90, {0x08, 0x7f}});
+  midi.emit({0xb0, {0x69, 0x7f}});
+  midi.emit({0x90, {0x08, 0x00}});
+
+  EXPECT_EQ(cmd.type, Command::Type::SetCombination);
+  EXPECT_EQ(cmd.u.combo.memory, 0);
+  EXPECT_EQ(cmd.u.combo.piston, 1);
+}
