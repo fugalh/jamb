@@ -59,3 +59,27 @@ TEST(Jamb, midiPanic) {
   lpMidi.emit({0x90, {0x68, 0x7f}});
   ApprovalTests::Approvals::verifyAll({lpMidi, aeolusMidi});
 }
+
+TEST(Jamb, setCombo) {
+  FakeMidi lpMidi, aeolusMidi;
+  auto launchpad = Launchpad{lpMidi};
+  launchpad.init();
+  auto aeolus = Aeolus{aeolusMidi};
+  Jamb jamb{launchpad, aeolus};
+  jamb.init();
+  lpMidi.messages_.clear();
+  aeolusMidi.messages_.clear();
+
+  lpMidi.emit({0x90, {0x17, 0x7f}});
+  lpMidi.emit({0x90, {0x13, 0x7f}});
+  lpMidi.emit({0x90, {0x42, 0x7f}});
+  lpMidi.emit({0x90, {0x42, 0x7f}});
+  lpMidi.emit({0x90, {0x08, 0x7f}});
+  lpMidi.emit({0xB0, {0x69, 0x7f}});
+  lpMidi.emit({0x90, {0x78, 1}});
+
+  lpMidi.emit({0x90, {0x08, 0}});     // general cancel
+  lpMidi.emit({0xB0, {0x69, 0x7f}});  // recall combo
+
+  ApprovalTests::Approvals::verifyAll({lpMidi, aeolusMidi});
+}

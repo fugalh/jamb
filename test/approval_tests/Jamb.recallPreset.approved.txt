@@ -1,5 +1,4 @@
-[0] = 0xb0 69 2c
-
+[0] = 
 [1] = 0xc0 01 00: program change 1
 
 
