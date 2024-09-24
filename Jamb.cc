@@ -8,7 +8,7 @@ void Jamb::init() {
 void Jamb::dispatch(Command cmd) {
   switch (cmd.type) {
     case Command::Type::GeneralCancel: {
-      state_.activePreset = {};
+      state_.activeCombination = {};
       for (auto& g : state_.groups) {
         g.reset();
       }
@@ -16,8 +16,8 @@ void Jamb::dispatch(Command cmd) {
       emitState();
       break;
     }
-    case Command::Type::RecallPreset:
-      aeolus_.programChange(cmd.u.preset);
+    case Command::Type::RecallCombination:
+      aeolus_.programChange(cmd.u.combo.piston);
       break;
     case Command::Type::StopToggle: {
       auto const g = cmd.u.stop.group;

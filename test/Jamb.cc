@@ -16,7 +16,7 @@ TEST(Jamb, generalCancel) {
   ApprovalTests::Approvals::verify(aeolusMidi);
 }
 
-TEST(Jamb, recallPreset) {
+TEST(Jamb, recallCombo) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
   launchpad.init();

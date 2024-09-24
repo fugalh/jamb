@@ -62,10 +62,10 @@ TEST(Launchpad, jambStateUpdate) {
 
   jState.groups[1][0] = true;
   jState.groups[1][1] = true;
-  jState.activePreset = 3;
+  jState.activeCombination = {1, 3};
   lp.jambStateUpdate(jState);
   jState.groups[1][1] = false;
-  jState.activePreset = std::nullopt;
+  jState.activeCombination = std::nullopt;
   lp.jambStateUpdate(jState);
 
   ApprovalTests::Approvals::verify(midi);

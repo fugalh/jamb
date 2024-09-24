@@ -29,8 +29,9 @@ void Launchpad::dispatch(midi::Message const msg) {
     }
   }
   if (msg.status == 0xb0 && msg.data[1] != 0) {
-    Command cmd{Command::Type::RecallPreset};
-    cmd.u.preset = msg.data[0] - 0x68;
+    Command cmd{Command::Type::RecallCombination};
+    cmd.u.combo.memory = 0;
+    cmd.u.combo.piston = msg.data[0] - 0x68;
     emit(cmd);
   }
 }
@@ -104,9 +105,9 @@ void Launchpad::jambStateUpdate(jamb::State const& j) {
     s2.topRow[i] = off;
   }
 
-  if (j.activePreset.has_value()) {
-    s2.topRow[*j.activePreset] = {Launchpad::Color::Green,
-                                  Launchpad::Intensity::Mid};
+  if (j.activeCombination.has_value()) {
+    s2.topRow[j.activeCombination->piston] = {Launchpad::Color::Green,
+                                              Launchpad::Intensity::Mid};
   }
 
   for (auto i = 0; i < j.groups.size(); i++) {

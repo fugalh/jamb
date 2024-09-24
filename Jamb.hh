@@ -8,7 +8,7 @@
 
 namespace jamb {
 struct State {
-  std::optional<uint8_t> activePreset;
+  std::optional<Command::Combination> activeCombination;
   // Aeolus uses a "group" and "element" scheme for referring to buttons. These
   // are the groups and elements as arranged in the UI for that instrument.
   // Aeolus doesn't restrict it to 4 groups and 16 elements I don't think, and

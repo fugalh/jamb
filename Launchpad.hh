@@ -19,6 +19,7 @@ struct Launchpad {
   struct State {
     std::array<std::array<Button, 9>, 8> grid;
     std::array<Button, 8> topRow;
+    bool pressingSet{false};
   };
   using Observer = std::function<void(Command)>;
 

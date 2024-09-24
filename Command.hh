@@ -5,7 +5,8 @@
 struct Command {
   enum class Type {
     GeneralCancel,
-    RecallPreset,
+    SetCombination,
+    RecallCombination,
     StopToggle,
     MidiPanic,
   };
@@ -13,11 +14,15 @@ struct Command {
     uint8_t group;
     uint8_t button;
   };
+  struct Combination {
+    uint8_t memory;
+    uint8_t piston;
+  };
 
   Type type;
   union {
     Stop stop;
-    uint8_t preset;
+    Combination combo;
   } u;
 
   std::string toString() const;

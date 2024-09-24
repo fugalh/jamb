@@ -12,8 +12,8 @@ TEST(Command, toString) {
   cmd = {Command::Type::GeneralCancel};
   cmds.push_back(cmd);
 
-  cmd = {Command::Type::RecallPreset};
-  cmd.u.preset = 7;
+  cmd = {Command::Type::RecallCombination};
+  cmd.u.combo = {3, 7};
   cmds.push_back(cmd);
 
   cmd = {Command::Type::StopToggle};
