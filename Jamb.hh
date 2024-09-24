@@ -5,6 +5,8 @@
 #include "Launchpad.hh"
 
 namespace jamb {
+using ComboAddr = Command::Combination;
+using Groups = Aeolus::State::Groups;
 struct State {
   std::optional<Command::Combination> activeCombination;
   // Aeolus uses a "group" and "element" scheme for referring to buttons. These
@@ -12,7 +14,8 @@ struct State {
   // Aeolus doesn't restrict it to 4 groups and 16 elements I don't think, and
   // may be less, but we just treat them as a fixed array of 4x16 because that's
   // what we can reasonably do with a Launchpad Mini.
-  Aeolus::State::Groups groups;
+  Groups groups;
+  std::map<ComboAddr, Groups> memory;
 };
 
 struct Model {

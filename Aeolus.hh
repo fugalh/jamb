@@ -3,6 +3,7 @@
 #include "Midi.hh"
 
 #include <bitset>
+#include <map>
 
 uint8_t constexpr StopController = 98;
 namespace jamb {

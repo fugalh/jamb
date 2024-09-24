@@ -7,6 +7,8 @@
 0x90 13 0c
 0x90 17 0c
 0xb0 69 2c
+0x90 13 2e
+0x90 17 2e
 
 [1] = 0xb0 62 60: group 0 on
 0xb0 62 0f: stop 15
@@ -20,9 +22,9 @@
 0xb0 62 41: group 1 cancel
 0xb0 62 42: group 2 cancel
 0xb0 62 43: group 3 cancel
-0xb0 62 50: group 0 off
+0xb0 62 60: group 0 on
 0xb0 62 0b: stop 11
-0xb0 62 50: group 0 off
+0xb0 62 60: group 0 on
 0xb0 62 0f: stop 15
 
 

@@ -16,19 +16,25 @@ void Launchpad::reset() {
 
 void Launchpad::dispatch(midi::Message const msg) {
   // LOGf("%2x %2x %2x", msg.status, msg.data[0], msg.data[1]);
-  if (msg.status == 0x90 && msg.data[1] != 0) {
+  if (msg.status == 0x90) {
     uint8_t button = msg.data[0];
-    if (button < 0x80 && (button & 0x0f) < 8) {
-      Command cmd{Command::Type::StopToggle};
-      cmd.u.stop = gridToStop(button);
-      emit(cmd);
-    } else if (button == 0x68) {
-      emit({Command::Type::MidiPanic});
-    } else if (button == 0x78) {
-      resetTopRow();
-      emit({Command::Type::GeneralCancel});
-    } else if (button == 0x08) {
-      state_.pressingSet = (msg.data[1] != 0);
+    uint8_t val = msg.data[1];
+    if (val != 0) {
+      if (button < 0x80 && (button & 0x0f) < 8) {
+        Command cmd{Command::Type::StopToggle};
+        cmd.u.stop = gridToStop(button);
+        emit(cmd);
+      }
+      if (button == 0x68) {
+        emit({Command::Type::MidiPanic});
+      }
+      if (button == 0x78) {
+        resetTopRow();
+        emit({Command::Type::GeneralCancel});
+      }
+    }
+    if (button == 0x08) {
+      state_.pressingSet = (val != 0);
     }
   }
   if (msg.status == 0xb0) {

@@ -15,8 +15,10 @@ struct Command {
     uint8_t button;
   };
   struct Combination {
-    uint8_t memory;
-    uint8_t piston;
+    uint8_t memory, piston;
+    bool operator<(Combination const& other) const {
+      return memory < other.memory && piston < other.piston;
+    }
   };
 
   Type type;

@@ -28,6 +28,7 @@ void Aeolus::generalCancel() {
     // 01mm0ggg with mm=00 indicating cancel
     uint8_t value = 0x40 | group;
     aeolus_.send(midi::Message{status, {param, value}});
+    state_.groups = {};
   }
 }
 
