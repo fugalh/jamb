@@ -1,4 +1,4 @@
 0xb0 00 00
-0x90 68 0d
-0x90 78 1d
+0x90 68 0d: midi panic 01
+0x90 78 1d: general cancel 11
 

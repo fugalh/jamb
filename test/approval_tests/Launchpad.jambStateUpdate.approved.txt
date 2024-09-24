@@ -1,6 +1,6 @@
-0xb0 6b 2c
-0x90 20 0e
-0x90 21 0e
-0xb0 6b 0c
-0x90 21 0c
+0xb0 6b 2c: piston 3 20
+0x90 20 0e: grid 0 0 02
+0x90 21 0e: grid 1 1 02
+0xb0 6b 0c: piston 3 00
+0x90 21 0c: grid 1 1 00
 

@@ -46,6 +46,14 @@ TEST(Jamb, midiPanic) {
   ApprovalTests::Approvals::verifyAll({lpMidi, aeolusMidi});
 }
 
+auto setPreset(FakeMidi& m, uint8_t piston) {
+  piston += 0x68;
+  m.emit({0x90, {0x08, 0x7f}});
+  m.emit({0xB0, {piston, 0x7f}});
+  m.emit({0xB0, {piston, 0x00}});
+  m.emit({0x90, {0x08, 0x00}});
+}
+
 TEST(Jamb, setCombo) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
@@ -56,14 +64,12 @@ TEST(Jamb, setCombo) {
   lpMidi.messages_.clear();
   aeolusMidi.messages_.clear();
 
-  lpMidi.emit({0x90, {0x17, 0x7f}});
-  lpMidi.emit({0x90, {0x13, 0x7f}});
-  lpMidi.emit({0x90, {0x42, 0x7f}});
-  lpMidi.emit({0x90, {0x42, 0x7f}});
-  lpMidi.emit({0x90, {0x08, 0x7f}});
-  lpMidi.emit({0xB0, {0x69, 0x7f}});
-  lpMidi.emit({0x90, {0x08, 0}});
-  lpMidi.emit({0xB0, {0x69, 0x00}});
+  lpMidi.emit({0x90, {0x01, 0x7f}});
+  setPreset(lpMidi, 0);
+  lpMidi.emit({0x90, {0x12, 0x7f}});
+  setPreset(lpMidi, 1);
+  lpMidi.emit({0x90, {0x15, 0x7f}});
+  setPreset(lpMidi, 2);
 
   lpMidi.emit({0x90, {0x78, 1}});     // general cancel
   lpMidi.emit({0xB0, {0x69, 0x7f}});  // recall combo

@@ -16,8 +16,8 @@ struct Command {
   };
   struct Combination {
     uint8_t memory, piston;
-    bool operator<(Combination const& other) const {
-      return memory < other.memory && piston < other.piston;
+    bool operator<(Combination other) const {
+      return memory < other.memory || piston < other.piston;
     }
   };
 

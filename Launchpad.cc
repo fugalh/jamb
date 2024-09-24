@@ -42,9 +42,9 @@ void Launchpad::dispatch(midi::Message const msg) {
     if (piston >= 0x68 && piston <= 0x6f && msg.data[1] != 0) {
       Command cmd;
       if (state_.pressingSet) {
-        cmd = {Command::Type::SetCombination};
+        cmd.type = Command::Type::SetCombination;
       } else {
-        cmd = {Command::Type::RecallCombination};
+        cmd.type = Command::Type::RecallCombination;
       }
       cmd.u.combo.memory = 0;
       cmd.u.combo.piston = msg.data[0] - 0x68;
