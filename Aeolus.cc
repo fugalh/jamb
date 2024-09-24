@@ -1,5 +1,24 @@
 #include "Aeolus.hh"
+#include "Jamb.hh"
 #include "Midi.hh"
+
+void Aeolus::jambStateUpdate(jamb::State const& s2) {
+  for (auto g = 0; g < state_.groups.size(); g++) {
+    auto const& group = state_.groups[g];
+    for (auto s = 0; s < group.size(); s++) {
+      bool stop = group[s];
+      bool stop2 = s2.groups[g][s];
+      if (stop != stop2) {
+        if (stop2) {
+          stopOn(g, s);
+        } else {
+          stopOff(g, s);
+        }
+      }
+    }
+  }
+  state_.groups = s2.groups;
+}
 
 void Aeolus::generalCancel() {
   for (unsigned group = 0; group < 4; group++) {

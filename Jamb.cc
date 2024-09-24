@@ -23,11 +23,6 @@ void Jamb::dispatch(Command cmd) {
       auto const g = cmd.u.stop.group;
       auto const b = cmd.u.stop.button;
       state_.groups[g][b].flip();
-      if (state_.groups[g][b]) {
-        aeolus_.stopOn(g, b);
-      } else {
-        aeolus_.stopOff(g, b);
-      }
       emitState();
       break;
     }
@@ -41,4 +36,5 @@ void Jamb::dispatch(Command cmd) {
 
 void Jamb::emitState() {
   launchpad_.jambStateUpdate(state_);
+  aeolus_.jambStateUpdate(state_);
 }
