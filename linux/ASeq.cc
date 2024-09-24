@@ -122,13 +122,16 @@ void Transport::readLoop() {
     }
     uint8_t status;
     switch (ev->type) {
+      case SND_SEQ_EVENT_NOTEOFF:
+        // I'm not sure we even get noteoff events but if we do we have no need
+        // for non-zero velocity
+        ev->data.note.velocity = 0;
+        // fallthrough
       case SND_SEQ_EVENT_NOTEON: {
         auto const& note = ev->data.note;
-        if (note.velocity > 0) {
-          LOGf("noteon %02x %02x", note.note, note.velocity);
-          status = note.channel | 0x90;
-          observer({status, {note.note, note.velocity}});
-        }
+        LOGf("noteon %02x %02x", note.note, note.velocity);
+        status = note.channel | 0x90;
+        observer({status, {note.note, note.velocity}});
         break;
       }
       case SND_SEQ_EVENT_CONTROLLER: {

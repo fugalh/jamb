@@ -19,6 +19,9 @@ struct Command {
     bool operator<(Combination other) const {
       return memory < other.memory || piston < other.piston;
     }
+    std::string toString() {
+      return std::to_string(memory) + "." + std::to_string(piston);
+    }
   };
 
   Type type;
