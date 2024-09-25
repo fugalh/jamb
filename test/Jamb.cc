@@ -76,3 +76,20 @@ TEST(Jamb, setCombo) {
 
   ApprovalTests::Approvals::verifyAll({lpMidi, aeolusMidi});
 }
+
+TEST(Jamb, serializeMemory) {
+  FakeMidi lpMidi, aeolusMidi;
+  auto launchpad = Launchpad{lpMidi};
+  launchpad.init();
+  auto aeolus = Aeolus{aeolusMidi};
+  Jamb jamb{launchpad, aeolus};
+  jamb.init();
+
+  lpMidi.emit({0x90, {0x01, 0x7f}});
+  setPreset(lpMidi, 0);
+  lpMidi.emit({0x90, {0x78, 1}});  // general cancel
+  lpMidi.emit({0x90, {0x73, 0x7f}});
+  setPreset(lpMidi, 3);
+
+  ApprovalTests::Approvals::verify(jamb.serializeState());
+}

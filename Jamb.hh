@@ -25,6 +25,7 @@ struct Model {
   Model(Launchpad& lp, Aeolus& a) : launchpad_{lp}, aeolus_{a} {}
 
   void init();
+  std::string serializeState();
 
  protected:
   State state_{};

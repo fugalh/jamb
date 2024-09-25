@@ -1,5 +1,5 @@
 COMPILER_FLAGS = ['-g', '-O2', '-std=c++20', '-I/opt/homebrew/include']
-LINKER_FLAGS = ['-L/opt/homebrew/lib', '-lfmt', '-lgtest']
+LINKER_FLAGS = ['-L/opt/homebrew/lib', '-lfmt', '-lgtest', '-lyaml-cpp']
 
 cxx_library(
     name = "lib",
