@@ -34,7 +34,13 @@ void Launchpad::dispatch(midi::Message const msg) {
       }
     }
     if (button == 0x08) {
-      state_.pressingSet = (val != 0);
+      if (val == 0) {
+        grid(0, 8, {Color::Green, Intensity::Off});
+        state_.pressingSet = false;
+      } else {
+        grid(0, 8, {Color::Green, Intensity::High});
+        state_.pressingSet = true;
+      }
     }
   }
   if (msg.status == 0xb0) {
