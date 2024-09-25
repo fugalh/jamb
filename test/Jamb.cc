@@ -91,5 +91,5 @@ TEST(Jamb, serializeMemory) {
   lpMidi.emit({0x90, {0x73, 0x7f}});
   setPreset(lpMidi, 3);
 
-  ApprovalTests::Approvals::verify(jamb.serializeState());
+  ApprovalTests::Approvals::verify(jamb.memoryString());
 }

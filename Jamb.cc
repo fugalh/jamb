@@ -1,7 +1,11 @@
 #include "Jamb.hh"
 #include "common.hh"
 
-void Jamb::init() {
+#include <fmt/os.h>
+#include <yaml-cpp/yaml.h>
+
+void Jamb::init(bool persistMemory) {
+  persistMemory_ = persistMemory;
   launchpad_.observer_ = [this](Command cmd) { dispatch(cmd); };
 }
 
@@ -18,6 +22,9 @@ void Jamb::dispatch(Command cmd) {
       state_.memory[cmd.u.combo] = state_.groups;
       state_.activeCombination = cmd.u.combo;
       emitState();
+      if (persistMemory_) {
+        writeMemory();
+      }
       break;
     case Command::Type::RecallCombination:
       if (state_.memory.contains(cmd.u.combo)) {
@@ -46,9 +53,7 @@ void Jamb::emitState() {
   aeolus_.jambStateUpdate(state_);
 }
 
-#include <yaml-cpp/yaml.h>
-
-std::string Jamb::serializeState() {
+std::string Jamb::memoryString() {
   using std::map;
   using std::string;
   using std::vector;
@@ -69,4 +74,9 @@ std::string Jamb::serializeState() {
   YAML::Emitter out;
   out << x;
   return out.c_str();
+}
+
+void Jamb::writeMemory() {
+  auto out = fmt::output_file(fmt::format("{}/.jamb.memory", getenv("HOME")));
+  out.print("{}\n", memoryString());
 }

@@ -24,11 +24,13 @@ struct Model {
 
   Model(Launchpad& lp, Aeolus& a) : launchpad_{lp}, aeolus_{a} {}
 
-  void init();
-  std::string serializeState();
+  void init(bool persistMemory = false);
+  std::string memoryString();
+  void writeMemory();
 
  protected:
   State state_{};
+  bool persistMemory_{false};
   void dispatch(Command);
   void emitState();
 };
