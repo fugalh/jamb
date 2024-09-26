@@ -1,7 +1,12 @@
 #include "Jamb.hh"
 #include "common.hh"
 
-void Jamb::init() {
+#include <fmt/os.h>
+#include <yaml-cpp/yaml.h>
+#include <fstream>
+
+void Jamb::init(bool persistMemory) {
+  persistMemory_ = persistMemory;
   launchpad_.observer_ = [this](Command cmd) { dispatch(cmd); };
 }
 
@@ -18,6 +23,9 @@ void Jamb::dispatch(Command cmd) {
       state_.memory[cmd.u.combo] = state_.groups;
       state_.activeCombination = cmd.u.combo;
       emitState();
+      if (persistMemory_) {
+        writeMemory();
+      }
       break;
     case Command::Type::RecallCombination:
       if (state_.memory.contains(cmd.u.combo)) {
@@ -44,4 +52,61 @@ void Jamb::dispatch(Command cmd) {
 void Jamb::emitState() {
   launchpad_.jambStateUpdate(state_);
   aeolus_.jambStateUpdate(state_);
+}
+
+std::string Jamb::memoryString() {
+  using std::map;
+  using std::string;
+  using std::vector;
+  map<string, map<int, map<int, vector<string>>>> x;
+  auto& mem = x["memory"];
+
+  for (uint8_t m = 0; m < (1 << 4); m++) {  // memory number
+    for (uint8_t p = 0; p < 8; p++) {       // piston number
+      auto const addr = ComboAddr{m, p};
+      if (state_.memory.contains(addr)) {
+        for (auto const& g : state_.memory[addr]) {  // group
+          mem[m][p].push_back(g.to_string('.', 'o'));
+        }
+      }
+    }
+  }
+
+  YAML::Emitter out;
+  out << x;
+  return out.c_str();
+}
+
+void Jamb::memoryFromString(std::string str) {
+  auto x = YAML::Load(str);
+  x = x["memory"];
+  for (uint8_t m = 0; m < (1 << 4); m++) {  // memory number
+    if (!x[m]) {
+      continue;
+    }
+    for (uint8_t p = 0; p < 8; p++) {  // piston number
+      if (x[m][p]) {
+        auto const& v = x[m][p].as<std::vector<std::string>>();
+        for (auto g = 0; g < v.size(); g++) {
+          state_.memory[{m, p}][g] = std::bitset<16>(v[g], 0, 16, '.', 'o');
+        }
+      }
+    }
+  }
+}
+
+static std::string getConfigPath() {
+  return fmt::format("{}/.jamb.memory", getenv("HOME"));
+}
+
+void Jamb::writeMemory() {
+  std::ofstream out(getConfigPath());
+  out << memoryString() << "\n";
+}
+
+void Jamb::readMemory() {
+  std::ifstream input(getConfigPath());
+  std::stringstream buf;
+  buf << input.rdbuf();
+  memoryFromString(buf.str());
 }

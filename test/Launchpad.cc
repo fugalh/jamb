@@ -87,3 +87,15 @@ TEST(Launchpad, emitSetCombo) {
   EXPECT_EQ(cmd.u.combo.memory, 0);
   EXPECT_EQ(cmd.u.combo.piston, 1);
 }
+
+TEST(Launchpad, setButtonLightedWhilePressed) {
+  FakeMidi midi;
+  auto lp = Launchpad{midi};
+  lp.init();
+  midi.clear();
+
+  midi.emit({0x90, {0x08, 0x7f}});
+  midi.emit({0x90, {0x08, 0x00}});
+
+  ApprovalTests::Approvals::verify(midi);
+}

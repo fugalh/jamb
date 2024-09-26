@@ -1,11 +1,17 @@
 [0] = 0x90 01 2e: grid 1 1 22
+0x90 08 3c: set 30
 0xb0 68 2c: piston 0 20
+0x90 08 0c: set 00
 0x90 12 2e: grid 2 2 22
+0x90 08 3c: set 30
 0xb0 69 2c: piston 1 20
 0xb0 68 0c: piston 0 00
+0x90 08 0c: set 00
 0x90 15 2e: grid 5 5 22
+0x90 08 3c: set 30
 0xb0 6a 2c: piston 2 20
 0xb0 69 0c: piston 1 00
+0x90 08 0c: set 00
 0xb0 6a 0c: piston 2 00
 0x90 01 0c: grid 1 1 00
 0x90 12 0c: grid 2 2 00

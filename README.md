@@ -67,7 +67,7 @@ Then in another tmux window I make my MIDI connections, and run jamb:
 This could all be set up to happen automatically at boot, though I haven't yet.
 
 ## Install Jamb
-    apt-get install aeolus alsa-utils cmake tup libasound-dev libfmt-dev googletest
+    apt-get install aeolus alsa-utils cmake tup libasound-dev libfmt-dev googletest libyaml-cpp-dev
 
 Bootstrap development
 
@@ -107,7 +107,7 @@ e.g. download the compressed binary then
 
 Install dependencies with homebrew
 
-    brew install fmt googletest
+    brew install fmt googletest yaml-cpp
 
 Run tests
 

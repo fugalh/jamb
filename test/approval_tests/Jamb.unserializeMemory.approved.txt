@@ -1,0 +1,7 @@
+[0] = 0xb0 68 2c: piston 0 20
+0x90 01 2e: grid 1 1 22
+
+[1] = 0xb0 62 60: group 0 on
+0xb0 62 01: stop 1
+
+
