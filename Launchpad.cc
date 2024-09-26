@@ -29,7 +29,6 @@ void Launchpad::dispatch(midi::Message const msg) {
         emit({Command::Type::MidiPanic});
       }
       if (button == 0x78) {
-        resetTopRow();
         emit({Command::Type::GeneralCancel});
       }
     }
@@ -54,7 +53,6 @@ void Launchpad::dispatch(midi::Message const msg) {
       }
       cmd.u.combo.memory = 0;
       cmd.u.combo.piston = msg.data[0] - 0x68;
-      topRow(cmd.u.combo.piston, {Color::Green, Intensity::Mid});
       emit(cmd);
     }
   }
