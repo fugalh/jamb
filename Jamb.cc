@@ -81,8 +81,9 @@ std::string Jamb::memoryString() {
   return out.c_str();
 }
 
-void Jamb::memoryFromString(std::string str) {
-  auto x = YAML::Load(str);
+void Jamb::memoryFromString(std::string ss) {
+  LOGf("loading memory from string\n%s", ss.c_str());
+  auto x = YAML::Load(ss);
   x = x["memory"];
   for (uint8_t m = 0; m < (1 << 4); m++) {  // memory number
     if (!x[m]) {
@@ -111,8 +112,8 @@ void Jamb::writeMemory() {
 }
 
 void Jamb::readMemory() {
-  std::ifstream input(getConfigPath());
+  std::ifstream in(getConfigPath());
   std::stringstream buf;
-  buf << input.rdbuf();
+  buf << in.rdbuf();
   memoryFromString(buf.str());
 }
