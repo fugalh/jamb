@@ -3,6 +3,7 @@
 
 #include <fmt/os.h>
 #include <yaml-cpp/yaml.h>
+#include <algorithm>
 #include <fstream>
 
 void Jamb::init(bool persistMemory) {
@@ -54,10 +55,11 @@ void Jamb::emitState() {
   aeolus_.jambStateUpdate(state_);
 }
 
+using std::map;
+using std::string;
+using std::vector;
+
 std::string Jamb::memoryString() {
-  using std::map;
-  using std::string;
-  using std::vector;
   map<string, map<int, map<int, vector<string>>>> x;
   auto& mem = x["memory"];
 
@@ -66,7 +68,9 @@ std::string Jamb::memoryString() {
       auto const addr = ComboAddr{m, p};
       if (state_.memory.contains(addr)) {
         for (auto const& g : state_.memory[addr]) {  // group
-          mem[m][p].push_back(g.to_string('.', 'o'));
+          auto bs = g.to_string('.', 'o');
+          std::reverse(bs.begin(), bs.end());
+          mem[m][p].push_back(bs);
         }
       }
     }
@@ -88,7 +92,9 @@ void Jamb::memoryFromString(std::string str) {
       if (x[m][p]) {
         auto const& v = x[m][p].as<std::vector<std::string>>();
         for (auto g = 0; g < v.size(); g++) {
-          state_.memory[{m, p}][g] = std::bitset<16>(v[g], 0, 16, '.', 'o');
+          auto bs = v[g];
+          std::reverse(bs.begin(), bs.end());
+          state_.memory[{m, p}][g] = std::bitset<16>(bs, 0, 16, '.', 'o');
         }
       }
     }

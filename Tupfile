@@ -1,7 +1,7 @@
 GTEST = /usr/src/googletest/googletest
 CXXFLAGS = -g -std=c++20 -I$(GTEST)/include
 CXX = c++
-LIBS = -lgtest -lasound -lfmt -lpthread 
+LIBS = -lgtest -lasound -lfmt -lpthread -lyaml-cpp
 
 # clang has better errors but isn't installed by default
 #CXX = clang++
