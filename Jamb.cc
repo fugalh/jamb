@@ -82,21 +82,19 @@ std::string Jamb::memoryString() {
 }
 
 void Jamb::memoryFromString(std::string ss) {
-  LOGf("loading memory from string\n%s", ss.c_str());
   auto x = YAML::Load(ss);
-  x = x["memory"];
-  for (uint8_t m = 0; m < (1 << 4); m++) {  // memory number
-    if (!x[m]) {
-      continue;
-    }
-    for (uint8_t p = 0; p < 8; p++) {  // piston number
-      if (x[m][p]) {
-        auto const& v = x[m][p].as<std::vector<std::string>>();
-        for (auto g = 0; g < v.size(); g++) {
-          auto bs = v[g];
-          std::reverse(bs.begin(), bs.end());
-          state_.memory[{m, p}][g] = std::bitset<16>(bs, 0, 16, '.', 'o');
-        }
+  for (auto it_m : x["memory"]) {
+    for (auto it_p : it_m.second) {
+      auto& gs = it_p.second;
+      for (int g = 0; g < gs.size(); g++) {
+        // yaml-cpp version 6.3 that ships with raspbian treats as<uint8_t> as a
+        // character, e.g. '0' instead of 0. So we do as<int> and then cast to
+        // uint8_t.
+        auto m = uint8_t(it_m.first.as<int>());
+        auto p = uint8_t(it_p.first.as<int>());
+        auto bs = gs[g].as<string>();
+        std::reverse(bs.begin(), bs.end());
+        state_.memory[{m, p}][g] = std::bitset<16>(bs, 0, 16, '.', 'o');
       }
     }
   }
