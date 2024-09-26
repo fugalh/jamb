@@ -3,6 +3,7 @@
 
 #include <fmt/os.h>
 #include <yaml-cpp/yaml.h>
+#include <fstream>
 
 void Jamb::init(bool persistMemory) {
   persistMemory_ = persistMemory;
@@ -60,8 +61,8 @@ std::string Jamb::memoryString() {
   map<string, map<int, map<int, vector<string>>>> x;
   auto& mem = x["memory"];
 
-  for (uint8_t m = 0; m < 1 << 4; m++) {  // memory number
-    for (uint8_t p = 0; p < 8; p++) {     // piston number
+  for (uint8_t m = 0; m < (1 << 4); m++) {  // memory number
+    for (uint8_t p = 0; p < 8; p++) {       // piston number
       auto const addr = ComboAddr{m, p};
       if (state_.memory.contains(addr)) {
         for (auto const& g : state_.memory[addr]) {  // group
@@ -76,7 +77,36 @@ std::string Jamb::memoryString() {
   return out.c_str();
 }
 
+void Jamb::memoryFromString(std::string str) {
+  auto x = YAML::Load(str);
+  x = x["memory"];
+  for (uint8_t m = 0; m < (1 << 4); m++) {  // memory number
+    if (!x[m]) {
+      continue;
+    }
+    for (uint8_t p = 0; p < 8; p++) {  // piston number
+      if (x[m][p]) {
+        auto const& v = x[m][p].as<std::vector<std::string>>();
+        for (auto g = 0; g < v.size(); g++) {
+          state_.memory[{m, p}][g] = std::bitset<16>(v[g], 0, 16, '.', 'o');
+        }
+      }
+    }
+  }
+}
+
+static std::string getConfigPath() {
+  return fmt::format("{}/.jamb.memory", getenv("HOME"));
+}
+
 void Jamb::writeMemory() {
-  auto out = fmt::output_file(fmt::format("{}/.jamb.memory", getenv("HOME")));
-  out.print("{}\n", memoryString());
+  std::ofstream out(getConfigPath());
+  out << memoryString() << "\n";
+}
+
+void Jamb::readMemory() {
+  std::ifstream input(getConfigPath());
+  std::stringstream buf;
+  buf << input.rdbuf();
+  memoryFromString(buf.str());
 }

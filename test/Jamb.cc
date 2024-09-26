@@ -93,3 +93,33 @@ TEST(Jamb, serializeMemory) {
 
   ApprovalTests::Approvals::verify(jamb.memoryString());
 }
+
+TEST(Jamb, unserializeMemory) {
+  FakeMidi lpMidi, aeolusMidi;
+  auto launchpad = Launchpad{lpMidi};
+  launchpad.init();
+  lpMidi.clear();
+  auto aeolus = Aeolus{aeolusMidi};
+  Jamb jamb{launchpad, aeolus};
+  jamb.init();
+
+  std::string memory = R"(
+memory:
+  0:
+    0:
+      - ..............o.
+      - ................
+      - ................
+      - ................
+    3:
+      - ................
+      - ................
+      - ................
+      - ....o...........
+
+  )";
+  jamb.memoryFromString(memory);
+  lpMidi.emit({0xb0, {0x68, 0x7f}});
+
+  ApprovalTests::Approvals::verifyAll({lpMidi, aeolusMidi});
+}

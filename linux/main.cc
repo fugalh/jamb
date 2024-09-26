@@ -15,6 +15,7 @@ int main(void) {
   Jamb jamb{launchpad, aeolus};
   launchpad.init();
   jamb.init(true /* persistMemory */);
+  jamb.readMemory();
 
   seq.launchpad_->readLoop();
   return 0;

@@ -26,7 +26,9 @@ struct Model {
 
   void init(bool persistMemory = false);
   std::string memoryString();
+  void memoryFromString(std::string);
   void writeMemory();
+  void readMemory();
 
  protected:
   State state_{};
