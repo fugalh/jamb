@@ -22,6 +22,7 @@ struct Launchpad {
     bool pressingSet{false};
   };
   using Observer = std::function<void(Command)>;
+  static uint8_t constexpr kSetButton = 0x58;
 
   midi::Transport& midi_;
   Observer observer_;

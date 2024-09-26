@@ -1,4 +1,5 @@
 #include "FakeMidi.hh"
+#include "../Launchpad.hh"
 
 #include <fmt/format.h>
 #include <sstream>
@@ -17,7 +18,7 @@ std::string FakeMidi::toString() const {
           os << fmt::format(": grid {} {} {:02x}", (k & 0xf0) >> 4, k & 0x0f,
                             color);
         }
-        if (k == 0x08) {
+        if (k == Launchpad::kSetButton) {
           os << fmt::format(": set {:02x}", color);
         }
         if (k == 0x68) {

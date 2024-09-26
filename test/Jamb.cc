@@ -26,9 +26,9 @@ TEST(Jamb, stopToggle) {
   lpMidi.messages_.clear();
   aeolusMidi.messages_.clear();
 
-  lpMidi.emit({0x90, {0x17, 0x7f}});  // group 1 button 15
-  lpMidi.emit({0x90, {0x42, 0x7f}});  // group 2 button 2
-  lpMidi.emit({0x90, {0x42, 0x7f}});  // group 2 button 2
+  lpMidi.emit({0x90, {0x17, midi::kFullVelocity}});  // group 1 button 15
+  lpMidi.emit({0x90, {0x42, midi::kFullVelocity}});  // group 2 button 2
+  lpMidi.emit({0x90, {0x42, midi::kFullVelocity}});  // group 2 button 2
   ApprovalTests::Approvals::verifyAll({lpMidi, aeolusMidi});
 }
 
@@ -42,16 +42,16 @@ TEST(Jamb, midiPanic) {
   lpMidi.messages_.clear();
   aeolusMidi.messages_.clear();
 
-  lpMidi.emit({0x90, {0x68, 0x7f}});
+  lpMidi.emit({0x90, {0x68, midi::kFullVelocity}});
   ApprovalTests::Approvals::verifyAll({lpMidi, aeolusMidi});
 }
 
 auto setPreset(FakeMidi& m, uint8_t piston) {
   piston += 0x68;
-  m.emit({0x90, {0x08, 0x7f}});
-  m.emit({0xB0, {piston, 0x7f}});
+  m.emit({0x90, {Launchpad::kSetButton, midi::kFullVelocity}});
+  m.emit({0xB0, {piston, midi::kFullVelocity}});
   m.emit({0xB0, {piston, 0x00}});
-  m.emit({0x90, {0x08, 0x00}});
+  m.emit({0x90, {Launchpad::kSetButton, 0x00}});
 }
 
 TEST(Jamb, setCombo) {
@@ -64,15 +64,15 @@ TEST(Jamb, setCombo) {
   lpMidi.messages_.clear();
   aeolusMidi.messages_.clear();
 
-  lpMidi.emit({0x90, {0x01, 0x7f}});
+  lpMidi.emit({0x90, {0x01, midi::kFullVelocity}});
   setPreset(lpMidi, 0);
-  lpMidi.emit({0x90, {0x12, 0x7f}});
+  lpMidi.emit({0x90, {0x12, midi::kFullVelocity}});
   setPreset(lpMidi, 1);
-  lpMidi.emit({0x90, {0x15, 0x7f}});
+  lpMidi.emit({0x90, {0x15, midi::kFullVelocity}});
   setPreset(lpMidi, 2);
 
-  lpMidi.emit({0x90, {0x78, 1}});     // general cancel
-  lpMidi.emit({0xB0, {0x69, 0x7f}});  // recall combo
+  lpMidi.emit({0x90, {0x78, 1}});                    // general cancel
+  lpMidi.emit({0xB0, {0x69, midi::kFullVelocity}});  // recall combo
 
   ApprovalTests::Approvals::verifyAll({lpMidi, aeolusMidi});
 }
@@ -85,10 +85,10 @@ TEST(Jamb, serializeMemory) {
   Jamb jamb{launchpad, aeolus};
   jamb.init();
 
-  lpMidi.emit({0x90, {0x01, 0x7f}});
+  lpMidi.emit({0x90, {0x01, midi::kFullVelocity}});
   setPreset(lpMidi, 0);
   lpMidi.emit({0x90, {0x78, 1}});  // general cancel
-  lpMidi.emit({0x90, {0x73, 0x7f}});
+  lpMidi.emit({0x90, {0x73, midi::kFullVelocity}});
   setPreset(lpMidi, 3);
 
   ApprovalTests::Approvals::verify(jamb.memoryString());
@@ -119,7 +119,7 @@ memory:
 
   )";
   jamb.memoryFromString(memory);
-  lpMidi.emit({0xb0, {0x68, 0x7f}});
+  lpMidi.emit({0xb0, {0x68, midi::kFullVelocity}});
 
   ApprovalTests::Approvals::verifyAll({lpMidi, aeolusMidi});
 }

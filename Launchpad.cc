@@ -33,12 +33,14 @@ void Launchpad::dispatch(midi::Message const msg) {
         emit({Command::Type::GeneralCancel});
       }
     }
-    if (button == 0x08) {
+    if (button == kSetButton) {
+      auto const row = (button & 0xf0) >> 4;
+      auto const col = button & 0x0f;
       if (val == 0) {
-        grid(0, 8, {Color::Green, Intensity::Off});
+        grid(row, col, {Color::Green, Intensity::Low});
         state_.pressingSet = false;
       } else {
-        grid(0, 8, {Color::Green, Intensity::High});
+        grid(row, col, {Color::Green, Intensity::High});
         state_.pressingSet = true;
       }
     }

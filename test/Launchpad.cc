@@ -79,9 +79,9 @@ TEST(Launchpad, emitSetCombo) {
   lp.init();
   midi.clear();
 
-  midi.emit({0x90, {0x08, 0x7f}});
-  midi.emit({0xb0, {0x69, 0x7f}});
-  midi.emit({0x90, {0x08, 0x00}});
+  midi.emit({0x90, {Launchpad::kSetButton, midi::kFullVelocity}});
+  midi.emit({0xb0, {0x69, midi::kFullVelocity}});
+  midi.emit({0x90, {Launchpad::kSetButton, 0x00}});
 
   EXPECT_EQ(cmd.type, Command::Type::SetCombination);
   EXPECT_EQ(cmd.u.combo.memory, 0);
@@ -94,8 +94,8 @@ TEST(Launchpad, setButtonLightedWhilePressed) {
   lp.init();
   midi.clear();
 
-  midi.emit({0x90, {0x08, 0x7f}});
-  midi.emit({0x90, {0x08, 0x00}});
+  midi.emit({0x90, {Launchpad::kSetButton, midi::kFullVelocity}});
+  midi.emit({0x90, {Launchpad::kSetButton, 0}});
 
   ApprovalTests::Approvals::verify(midi);
 }
