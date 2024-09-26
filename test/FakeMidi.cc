@@ -14,7 +14,7 @@ std::string FakeMidi::toString() const {
         auto const k = msg.data[0];
         auto const v = msg.data[1];
         if (k <= 0x80 && (k & 0x0f) < 8) {
-          os << fmt::format(": grid {} {} {:02x}", k & 0xf0 >> 4, k & 0x0f,
+          os << fmt::format(": grid {} {} {:02x}", (k & 0xf0) >> 4, k & 0x0f,
                             color);
         }
         if (k == 0x08) {

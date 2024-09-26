@@ -1,9 +1,9 @@
 0xb0 00 00
 0x90 68 0d: midi panic 01
 0x90 78 1d: general cancel 11
-0x90 42 2e: grid 2 2 22
+0x90 42 2e: grid 4 2 22
 0x90 77 3c: grid 7 7 30
 0xb0 6d 0d: piston 5 01
 0x90 00 0c: grid 0 0 00
-0x90 01 0c: grid 1 1 00
+0x90 01 0c: grid 0 1 00
 
