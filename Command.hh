@@ -13,6 +13,7 @@ struct Command {
   struct Stop {
     uint8_t group;
     uint8_t button;
+    bool operator==(Stop const& other) const = default;
   };
   struct Combination {
     uint8_t memory, piston;

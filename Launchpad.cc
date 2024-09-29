@@ -2,6 +2,8 @@
 #include "Jamb.hh"
 #include "common.hh"
 
+#include <yaml-cpp/yaml.h>
+
 void Launchpad::init() {
   midi_.observer = [this](midi::Message msg) { dispatch(msg); };
   reset();
@@ -14,6 +16,10 @@ void Launchpad::reset() {
   midi_.send({0xb0, {0, 0}});
 }
 
+void Launchpad::configureStopmap(std::string config) {
+  stopmap_ = launchpad::parseStopmapFromConfig(std::move(config));
+}
+
 void Launchpad::dispatch(midi::Message const msg) {
   // LOGf("%2x %2x %2x", msg.status, msg.data[0], msg.data[1]);
   if (msg.status == 0x90) {
@@ -22,8 +28,11 @@ void Launchpad::dispatch(midi::Message const msg) {
     if (val != 0) {
       if (button < 0x80 && (button & 0x0f) < 8) {
         Command cmd{Command::Type::StopToggle};
-        cmd.u.stop = gridToStop(button);
-        emit(cmd);
+        auto stop = gridToStop(button);
+        if (stop) {
+          cmd.u.stop = *stop;
+          emit(cmd);
+        }
       }
       if (button == 0x68) {
         emit({Command::Type::MidiPanic});
@@ -32,12 +41,14 @@ void Launchpad::dispatch(midi::Message const msg) {
         emit({Command::Type::GeneralCancel});
       }
     }
-    if (button == 0x08) {
+    if (button == kSetButton) {
+      auto const row = (button & 0xf0) >> 4;
+      auto const col = button & 0x0f;
       if (val == 0) {
-        grid(0, 8, {Color::Green, Intensity::Off});
+        grid(row, col, {Color::Green, Intensity::Low});
         state_.pressingSet = false;
       } else {
-        grid(0, 8, {Color::Green, Intensity::High});
+        grid(row, col, {Color::Green, Intensity::High});
         state_.pressingSet = true;
       }
     }
@@ -88,14 +99,11 @@ void Launchpad::resetTopRow() {
   render(s2);
 }
 
-Command::Stop Launchpad::gridToStop(uint8_t button) {
+std::optional<Command::Stop> Launchpad::gridToStop(uint8_t button) {
   Command::Stop stop;
-  stop.group = (button & 0xf0) >> 5;
-  stop.button = button & 0x0f;
-  if (button & 0x10) {
-    stop.button += 8;
-  }
-  return stop;
+  uint8_t row = (button & 0xf0) >> 4;
+  uint8_t col = button & 0x0f;
+  return stopmap_[{row, col}];
 }
 
 uint8_t Launchpad::velocity(Launchpad::Color color,
@@ -176,3 +184,82 @@ void Launchpad::render(State const& s2) {
 
   state_ = s2;
 }
+namespace launchpad {
+Stopmap parseStopmapFromConfig(std::string config, std::string instrument) {
+  Stopmap result;
+  YAML::Node y = YAML::Load(config);
+
+  using std::string;
+  using std::vector;
+  for (auto it : y) {
+    if (it["instrument"]) {
+      auto yInstr = it["instrument"];
+      if (it["launchpad"] && it["instrument"].as<string>() == instrument) {
+        std::stringstream ss;
+        auto yLp = it["launchpad"];
+        vector<int> groupmap = {0, 1, 2, 3};
+        if (yLp["groupmap"]) {
+          groupmap = yLp["groupmap"].as<vector<int>>();
+        }
+        auto sStopmap = yLp["stopmap"].as<string>();
+        // strip leading whitespace
+        auto beg = sStopmap.find_first_not_of(" \t\n");
+        sStopmap = sStopmap.erase(0, beg);
+        uint8_t row = 0, col = 0;
+        bool success = false;
+        for (char x : sStopmap) {
+          if (x == '\n') {
+            if (++row >= 8) {
+              success = true;
+              break;
+            }
+            col = 0;
+            continue;
+          }
+          if (x == ' ') {
+            continue;
+          }
+          if (x == '.') {
+            col++;
+            continue;
+          }
+          if (col >= 8) {
+            // if we go off the end, just keep going until we find a newline
+            continue;
+          }
+          uint8_t const group = groupmap[col / 2];
+          int elem;
+          char buf[] = {x, '\0'};
+          sscanf(buf, "%x", &elem);
+          if (group >= 4 || elem >= 16) {
+            // bad input
+            LOG << "Bad data in stopmap\n";
+          } else {
+            result[{row, col}] = {group, uint8_t(elem)};
+          }
+          col++;
+        }
+        if (success) {
+          return result;
+        } else {
+          LOG << "Unable to interpret stopmap data";
+        }
+      }  // if we found an entry
+    }
+  }
+
+  // fallback to direct columnar map
+  Stopmap defaultResult;
+  for (uint8_t row = 0; row < 8; row++) {
+    for (uint8_t col = 0; col < 8; col++) {
+      uint8_t const group = col / 2;
+      uint8_t element = (7 - row) * 2;
+      if (col & 1) {
+        element++;
+      }
+      defaultResult[{row, col}] = {group, element};
+    }
+  }
+  return defaultResult;
+}
+}  // namespace launchpad

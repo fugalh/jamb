@@ -3,6 +3,7 @@
 #include <functional>
 
 namespace midi {
+uint8_t constexpr kFullVelocity = 0x7f;
 struct Message {
   uint8_t status;
   uint8_t data[2];
