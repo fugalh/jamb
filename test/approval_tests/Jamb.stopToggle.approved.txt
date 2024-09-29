@@ -1,7 +1,10 @@
-[0] = 0x90 07 2e: grid 0 7 22
-0x90 07 0c: grid 0 7 00
+[0] = 0x90 12 0e: grid 1 2 02
+0x90 42 2e: grid 4 2 22
+0x90 42 0c: grid 4 2 00
 
-[1] = 0xb0 62 60: group 0 on
+[1] = 0xb0 62 63: group 3 on
+0xb0 62 0f: stop 15
+0xb0 62 60: group 0 on
 0xb0 62 07: stop 7
 0xb0 62 50: group 0 off
 0xb0 62 07: stop 7

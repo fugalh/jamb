@@ -23,8 +23,8 @@ std::string const kDefaultConfig = R"(
     # Pedal Swell Great Choir
     groupmap: [3, 0, 2, 1]
     stopmap: |
-      ce b. de bc
-      9f .. cf ..
+      ce b. de b.
+      9f .. cf .c
       ad a. 3b 9.
       b8 89 5a 6a
       45 76 29 78
