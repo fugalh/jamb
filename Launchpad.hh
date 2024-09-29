@@ -57,6 +57,7 @@ struct Launchpad {
  protected:
   State state_{};
   launchpad::Stopmap stopmap_;
+  std::map<Command::Stop, std::pair<int, int>> gridmap_;
 
   void dispatch(midi::Message const);
   void emit(Command cmd) {
@@ -65,6 +66,7 @@ struct Launchpad {
     }
   }
   std::optional<Command::Stop> gridToStop(uint8_t button);
+  std::optional<std::pair<int, int>> stopToGrid(Command::Stop);
   uint8_t velocity(Color, Intensity);
   void render(State const&);
   void grid_(uint8_t loc, Button button);

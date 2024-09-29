@@ -12,12 +12,19 @@ void Launchpad::init() {
 }
 
 void Launchpad::reset() {
-  midi_.observer = [this](midi::Message msg) { dispatch(msg); };
   midi_.send({0xb0, {0, 0}});
 }
 
 void Launchpad::configureStopmap(std::string config) {
-  stopmap_ = launchpad::parseStopmapFromConfig(std::move(config));
+  stopmap_ = launchpad::parseStopmapFromConfig(config);
+  gridmap_.clear();
+  for (auto [button, stop] : stopmap_) {
+    if (stop) {
+      gridmap_[*stop] = button;
+    } else {
+      LOGf("No stop for %x%x", button.first, button.second);
+    }
+  }
 }
 
 void Launchpad::dispatch(midi::Message const msg) {
@@ -108,6 +115,13 @@ std::optional<Command::Stop> Launchpad::gridToStop(uint8_t button) {
   return stopmap_[{row, col}];
 }
 
+std::optional<std::pair<int, int>> Launchpad::stopToGrid(Command::Stop stop) {
+  if (gridmap_.contains(stop)) {
+    return gridmap_[stop];
+  }
+  return {};
+}
+
 uint8_t Launchpad::velocity(Launchpad::Color color,
                             Launchpad::Intensity intensity) {
   uint8_t green = 0;
@@ -130,23 +144,27 @@ void Launchpad::topRow(uint8_t loc, Button button) {
   render(s2);
 }
 
-void Launchpad::jambStateUpdate(jamb::State const& j) {
+void Launchpad::jambStateUpdate(jamb::State const& jState) {
   Button const off = {Launchpad::Color::Off, Launchpad::Intensity::Off};
   State s2 = state_;
   for (auto i = 0; i < 8; i++) {
     s2.topRow[i] = off;
   }
 
-  if (j.activeCombination.has_value()) {
-    s2.topRow[j.activeCombination->piston] = {Launchpad::Color::Green,
-                                              Launchpad::Intensity::Mid};
+  if (jState.activeCombination.has_value()) {
+    s2.topRow[jState.activeCombination->piston] = {Launchpad::Color::Green,
+                                                   Launchpad::Intensity::Mid};
   }
 
-  for (auto i = 0; i < j.groups.size(); i++) {
-    auto& g = j.groups[i];
+  for (auto i = 0; i < jState.groups.size(); i++) {
+    auto& g = jState.groups[i];
     for (auto j = 0; j < g.size(); j++) {
-      auto row = i * 2;
-      auto col = j;
+      Command::Stop stop{uint8_t(i), uint8_t(j)};
+      auto oGrid = stopToGrid(stop);
+      if (!oGrid.has_value()) {
+        continue;
+      }
+      auto [row, col] = *oGrid;
       if (j >= 8) {
         row++;
         col -= 8;
@@ -206,16 +224,24 @@ Stopmap parseStopmapFromConfig(std::string config, std::string instrument) {
         auto sStopmap = yLp["stopmap"].as<string>();
         // strip leading whitespace
         auto beg = sStopmap.find_first_not_of(" \t\n");
-        sStopmap = sStopmap.erase(0, beg);
+        sStopmap.erase(0, beg);
         uint8_t row = 0, col = 0;
         bool success = false;
         for (char x : sStopmap) {
           if (x == '\n') {
-            if (++row >= 8) {
+            if (col < 8) {
+              break;
+            }
+            row++;
+            if (row >= 8) {
               success = true;
               break;
             }
             col = 0;
+            continue;
+          }
+          if (col >= 8) {
+            // if we go off the end, just keep going until we find a newline
             continue;
           }
           if (x == ' ') {
@@ -225,17 +251,12 @@ Stopmap parseStopmapFromConfig(std::string config, std::string instrument) {
             col++;
             continue;
           }
-          if (col >= 8) {
-            // if we go off the end, just keep going until we find a newline
-            continue;
-          }
           uint8_t const group = groupmap[col / 2];
           int elem;
           char buf[] = {x, '\0'};
           sscanf(buf, "%x", &elem);
           if (group >= 4 || elem >= 16) {
-            // bad input
-            LOG << "Bad data in stopmap\n";
+            LOG << "Bad data in config\n";
           } else {
             result[{row, col}] = {group, uint8_t(elem)};
           }

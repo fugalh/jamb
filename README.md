@@ -11,7 +11,7 @@ Traditional organ consoles arrange stops in columns by division, with lower stop
 
 ![default stop layout spreadsheet screenshot](default-config.png)
 
-This assumes the default "Aeolus" instrument. See jamb-config.yaml
+This assumes the default "Aeolus" instrument. See `jamb.config.yaml`.
 
 [View a demonstration](https://www.youtube.com/shorts/1N0cK-HaY4k)
 
