@@ -163,14 +163,10 @@ void Launchpad::jambStateUpdate(jamb::State const& jState) {
         continue;
       }
       auto [row, col] = *oGrid;
-      if (j >= 8) {
-        row++;
-        col -= 8;
-      }
       if (g[j]) {
-        auto color = Launchpad::Color::Amber;
+        auto color = Launchpad::Color::Red;
         if (i % 2) {
-          color = Launchpad::Color::Red;
+          color = Launchpad::Color::Amber;
         }
         s2.grid[row][col] = {color, Launchpad::Intensity::Mid};
       } else {

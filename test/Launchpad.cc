@@ -79,7 +79,7 @@ TEST(Launchpad, jambStateUpdate) {
   lp.init();
   midi.clear();
 
-  jState.groups[1][0] = true;
+  jState.groups[2][9] = true;
   jState.groups[1][1] = true;
   jState.activeCombination = {1, 3};
   lp.jambStateUpdate(jState);
