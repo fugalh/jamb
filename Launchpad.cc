@@ -165,7 +165,7 @@ void Launchpad::jambStateUpdate(jamb::State const& jState) {
       auto [row, col] = *oGrid;
       if (g[j]) {
         auto color = Launchpad::Color::Red;
-        if (i % 2) {
+        if (col & 0b10) {
           color = Launchpad::Color::Amber;
         }
         s2.grid[row][col] = {color, Launchpad::Intensity::Mid};
@@ -245,7 +245,7 @@ Stopmap parseStopmapFromConfig(std::string config, std::string instrument) {
             col++;
             continue;
           }
-          uint8_t const group = groupmap[col / 2];
+          uint8_t const group = groupmap.at(col / 2);
           int elem;
           char buf[] = {x, '\0'};
           sscanf(buf, "%x", &elem);

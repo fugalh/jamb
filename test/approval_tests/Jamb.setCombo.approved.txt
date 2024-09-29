@@ -1,4 +1,4 @@
-[0] = 0x90 01 2e: grid 0 1 22
+[0] = 0x90 01 0e: grid 0 1 02
 0x90 58 3c: set 30
 0xb0 68 2c: piston 0 20
 0x90 58 1c: set 10
@@ -15,7 +15,7 @@
 0x90 01 0c: grid 0 1 00
 0x90 15 0c: grid 1 5 00
 0xb0 69 2c: piston 1 20
-0x90 01 2e: grid 0 1 22
+0x90 01 0e: grid 0 1 02
 
 [1] = 0xb0 62 63: group 3 on
 0xb0 62 0e: stop 14

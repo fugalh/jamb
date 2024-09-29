@@ -2,13 +2,13 @@
 0x90 15 0e: grid 1 5 02
 0x90 26 2e: grid 2 6 22
 0x90 44 0e: grid 4 4 02
-0x90 50 2e: grid 5 0 22
-0x90 52 0e: grid 5 2 02
-0x90 60 2e: grid 6 0 22
-0x90 62 0e: grid 6 2 02
+0x90 50 0e: grid 5 0 02
+0x90 52 2e: grid 5 2 22
+0x90 60 0e: grid 6 0 02
+0x90 62 2e: grid 6 2 22
 0x90 64 0e: grid 6 4 02
-0x90 70 2e: grid 7 0 22
-0x90 72 0e: grid 7 2 02
+0x90 70 0e: grid 7 0 02
+0x90 72 2e: grid 7 2 22
 0x90 74 0e: grid 7 4 02
 
 [1] = 0xb0 62 60: group 0 on
