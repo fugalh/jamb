@@ -1,38 +1,31 @@
-[0] = 0x90 01 2e: grid 0 1 22
+[0] = 0x90 76 0e: grid 7 6 02
 0x90 58 3c: set 30
 0xb0 68 2c: piston 0 20
 0x90 58 1c: set 10
-0x90 12 2e: grid 1 2 22
 0x90 58 3c: set 30
 0xb0 69 2c: piston 1 20
 0xb0 68 0c: piston 0 00
 0x90 58 1c: set 10
-0x90 15 2e: grid 1 5 22
+0x90 57 2e: grid 5 7 22
 0x90 58 3c: set 30
 0xb0 6a 2c: piston 2 20
 0xb0 69 0c: piston 1 00
 0x90 58 1c: set 10
 0xb0 6a 0c: piston 2 00
-0x90 01 0c: grid 0 1 00
-0x90 12 0c: grid 1 2 00
-0x90 15 0c: grid 1 5 00
+0x90 57 0c: grid 5 7 00
+0x90 76 0c: grid 7 6 00
 0xb0 69 2c: piston 1 20
-0x90 01 2e: grid 0 1 22
-0x90 12 2e: grid 1 2 22
+0x90 76 0e: grid 7 6 02
 
-[1] = 0xb0 62 60: group 0 on
-0xb0 62 01: stop 1
-0xb0 62 60: group 0 on
-0xb0 62 0a: stop 10
-0xb0 62 60: group 0 on
-0xb0 62 0d: stop 13
+[1] = 0xb0 62 63: group 3 on
+0xb0 62 0e: stop 14
+0xb0 62 62: group 2 on
+0xb0 62 0f: stop 15
 0xb0 62 40: group 0 cancel
 0xb0 62 41: group 1 cancel
 0xb0 62 42: group 2 cancel
 0xb0 62 43: group 3 cancel
-0xb0 62 60: group 0 on
-0xb0 62 01: stop 1
-0xb0 62 60: group 0 on
-0xb0 62 0a: stop 10
+0xb0 62 63: group 3 on
+0xb0 62 0e: stop 14
 
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "Command.hh"
+#include "Launchpad-defaultConfig.hh"
 #include "Midi.hh"
 
 #include <map>
@@ -37,12 +38,15 @@ struct Launchpad {
   midi::Transport& midi_;
   Observer observer_;
 
-  Launchpad(midi::Transport& midi) : midi_{midi} {}
+  Launchpad(midi::Transport& midi) : midi_{midi} {
+    configureStopmap(launchpad::kDefaultConfig);
+  }
   Launchpad(midi::Transport& midi, Observer o) : midi_{midi}, observer_{o} {}
 
   void init();
   void reset();
 
+  void configureStopmap(std::string config);
   void jambStateUpdate(jamb::State const&);
 
   // public for testing only
@@ -52,6 +56,7 @@ struct Launchpad {
 
  protected:
   State state_{};
+  launchpad::Stopmap stopmap_;
 
   void dispatch(midi::Message const);
   void emit(Command cmd) {
@@ -59,7 +64,7 @@ struct Launchpad {
       observer_(cmd);
     }
   }
-  Command::Stop gridToStop(uint8_t button);
+  std::optional<Command::Stop> gridToStop(uint8_t button);
   uint8_t velocity(Color, Intensity);
   void render(State const&);
   void grid_(uint8_t loc, Button button);

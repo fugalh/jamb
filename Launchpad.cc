@@ -16,6 +16,10 @@ void Launchpad::reset() {
   midi_.send({0xb0, {0, 0}});
 }
 
+void Launchpad::configureStopmap(std::string config) {
+  stopmap_ = launchpad::parseStopmapFromConfig(std::move(config));
+}
+
 void Launchpad::dispatch(midi::Message const msg) {
   // LOGf("%2x %2x %2x", msg.status, msg.data[0], msg.data[1]);
   if (msg.status == 0x90) {
@@ -24,8 +28,11 @@ void Launchpad::dispatch(midi::Message const msg) {
     if (val != 0) {
       if (button < 0x80 && (button & 0x0f) < 8) {
         Command cmd{Command::Type::StopToggle};
-        cmd.u.stop = gridToStop(button);
-        emit(cmd);
+        auto stop = gridToStop(button);
+        if (stop) {
+          cmd.u.stop = *stop;
+          emit(cmd);
+        }
       }
       if (button == 0x68) {
         emit({Command::Type::MidiPanic});
@@ -94,14 +101,11 @@ void Launchpad::resetTopRow() {
   render(s2);
 }
 
-Command::Stop Launchpad::gridToStop(uint8_t button) {
+std::optional<Command::Stop> Launchpad::gridToStop(uint8_t button) {
   Command::Stop stop;
-  stop.group = (button & 0xf0) >> 5;
-  stop.button = button & 0x0f;
-  if (button & 0x10) {
-    stop.button += 8;
-  }
-  return stop;
+  uint8_t row = (button & 0xf0) >> 4;
+  uint8_t col = button & 0x0f;
+  return stopmap_[{row, col}];
 }
 
 uint8_t Launchpad::velocity(Launchpad::Color color,
