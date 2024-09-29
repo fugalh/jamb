@@ -7,6 +7,12 @@ It supports toggling stop tabs - up to 16 buttons in up to 4 "groups" (in Aeolus
 
 Jamb will automatically connect to Aeolus and a Launchpad Mini at startup if they're active.
 
+Traditional organ consoles arrange stops in columns by division, with lower stops at the bottom (e.g. see [AGO Standard Console Specifications](https://wicksorgan.com/wp-content/uploads/2020/01/agoconsole.pdf)). In that spirit, the default stop layout is:
+
+![default stop layout spreadsheet screenshot](default-config.png)
+
+This assumes the default "Aeolus" instrument. See jamb-config.yaml
+
 [View a demonstration](https://www.youtube.com/shorts/1N0cK-HaY4k)
 
 # Aeolus notes
