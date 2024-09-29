@@ -4,7 +4,26 @@
 #include "FakeMidi.hh"
 
 #include "../Jamb.hh"
+#include "../Launchpad-defaultConfig.hh"
 #include "../Launchpad.hh"
+
+static std::string dumpStopmap(launchpad::Stopmap& stopmap) {
+  std::stringstream ss;
+  using std::hex;
+  for (uint8_t row = 0; row < 8; row++) {
+    for (uint8_t col = 0; col < 8; col++) {
+      auto x = stopmap[{row, col}];
+      if (x) {
+        ss << hex << int(x->group) << hex << int(x->button);
+      } else {
+        ss << "  ";
+      }
+      ss << " ";
+    }
+    ss << "\n";
+  }
+  return ss.str();
+}
 
 TEST(Launchpad, init) {
   FakeMidi midi;
@@ -98,4 +117,21 @@ TEST(Launchpad, setButtonLightedWhilePressed) {
   midi.emit({0x90, {Launchpad::kSetButton, 0}});
 
   ApprovalTests::Approvals::verify(midi);
+}
+
+TEST(Launchpad, parseStopmap) {
+  auto stopmap = launchpad::parseStopmapFromConfig(launchpad::kDefaultConfig);
+
+  ApprovalTests::Approvals::verify(dumpStopmap(stopmap));
+}
+
+TEST(Launchpad, badStopmap) {
+  auto stopmap = launchpad::parseStopmapFromConfig("nonsense");
+  ApprovalTests::Approvals::verify(dumpStopmap(stopmap));
+}
+
+TEST(Launchpad, invalidInstrumentForStopmap) {
+  auto stopmap = launchpad::parseStopmapFromConfig(launchpad::kDefaultConfig,
+                                                   "bad instrument");
+  ApprovalTests::Approvals::verify(dumpStopmap(stopmap));
 }

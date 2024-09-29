@@ -2,9 +2,19 @@
 #include "Command.hh"
 #include "Midi.hh"
 
+#include <map>
+
 namespace jamb {
 struct State;
-}
+}  // namespace jamb
+
+namespace launchpad {
+
+using Stopmap = std::map<std::pair<int, int>, std::optional<Command::Stop>>;
+Stopmap parseStopmapFromConfig(std::string config,
+                               std::string instrument = "Aeolus");
+}  // namespace launchpad
+
 struct Launchpad {
   enum class Color { Off, Red, Green, Amber };
   enum class Intensity { Off = 0, Low = 1, Mid = 2, High = 3 };
@@ -35,7 +45,7 @@ struct Launchpad {
 
   void jambStateUpdate(jamb::State const&);
 
-  // testing only
+  // public for testing only
   void grid(uint8_t row, uint8_t col, Button button);
   void topRow(uint8_t loc, Button);
   void resetTopRow();
