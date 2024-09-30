@@ -4,8 +4,8 @@
 #include "FakeMidi.hh"
 
 #include "../Jamb.hh"
-#include "../Launchpad-defaultConfig.hh"
 #include "../Launchpad.hh"
+#include "Launchpad-defaultConfig.hh"
 
 static std::string dumpStopmap(launchpad::Stopmap& stopmap) {
   std::stringstream ss;
