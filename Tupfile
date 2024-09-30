@@ -1,5 +1,5 @@
 GTEST = /usr/src/googletest/googletest
-CXXFLAGS = -g -std=c++20 -I$(GTEST)/include
+CXXFLAGS = -g -std=c++20 -I$(GTEST)/include -Igenerated
 CXX = c++
 LIBS = -lgtest -lasound -lfmt -lpthread -lyaml-cpp
 
@@ -12,10 +12,11 @@ LIBS = -lgtest -lasound -lfmt -lpthread -lyaml-cpp
 
 : |> mkdir -p gtest; ln -s $(GTEST)/src/gtest-all.cc gtest |> gtest/gtest-all.cc
 : gtest/gtest-all.cc |> !compile -I$(GTEST) |> gtest/gtest-all.o {test_objs}
+: |> bash codegen-defaultConfig.sh > %o |> generated/Launchpad-defaultConfig.hh {gen}
 
-: foreach *.cc                        ^\._ |> !compile |> %B.o {objs}
-: foreach test/*.cc                   ^\._ |> !compile |> test/%B.o {test_objs}
-: foreach linux/*.cc                  ^\._ |> !compile |> linux/%B.o {linux_objs}
+: foreach *.cc                | {gen} ^\._ |> !compile |> %B.o {objs}
+: foreach test/*.cc           | {gen} ^\._ |> !compile |> test/%B.o {test_objs}
+: foreach linux/*.cc          | {gen} ^\._ |> !compile |> linux/%B.o {linux_objs}
 : {objs} {test_objs}                  ^\._ |> !link    |> test/jamb
 : {objs} {linux_objs} test/FakeMidi.o ^\._ |> !link    |> linux/jamb
 

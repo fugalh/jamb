@@ -1,3 +1,5 @@
+# To change the mapping of stops to buttons, copy this file to ~/.jamb.config
+# and edit it.
 
 # A mapping from Aeolus (group, element) to Launchpad buttons.
 # The Aeolus UI is laid out horizontally, but in the more traditional knob

@@ -1,5 +1,5 @@
 
-cat > "$OUT" <<EOF
+cat <<EOF
 #pragma once
 #include <string>
 
