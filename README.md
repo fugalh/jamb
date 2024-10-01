@@ -1,9 +1,9 @@
 # Synopsis
 Jamb is a stop tablet for [Aeolus](https://kokkinizita.linuxaudio.org/linuxaudio/aeolus/)
 
-It allows for running Aeolus "headless", i.e. with just the text UI in a disconnected terminal (e.g. using [tmux](https://github.com/tmux/tmux/wiki)), and being able to control the stops with a Launchpad Mini MK2.
+It allows for running Aeolus "headless", i.e. with just the text UI in a disconnected terminal (e.g. using [tmux](https://github.com/tmux/tmux/wiki)), and being able to control the stops with a [Launchpad Mini MK2](https://www.amazon.com/Novation-Launchpad-Compact-Controller-Ableton/dp/B00W5F3GJ0?th=1)
 
-It supports toggling stop tabs - up to 16 buttons in up to 4 "groups" (in Aeolus parlance) that correspond directly to the Aeolus UI. The bottom-right button is for general cancel, and the one above that is a MIDI panic button (turn all sound off, to cancel stuck MIDI notes).
+It supports toggling stop tabs - up to 16 buttons in up to 4 "groups" (in Aeolus parlance) that correspond directly to the Aeolus UI. The bottom-right button is for general cancel, and the one above that is a MIDI panic button (turn all sound off, to cancel stuck MIDI notes). The button above that is the "set" button and can be used in combination with the top row of buttons ("pistons") in the same way as a traditional combination action on an organ.
 
 Jamb will automatically connect to Aeolus and a Launchpad Mini at startup if they're active.
 
@@ -73,26 +73,25 @@ Then in another tmux window I make my MIDI connections, and run jamb:
 This could all be set up to happen automatically at boot, though I haven't yet.
 
 ## Install Jamb
-    apt-get install aeolus alsa-utils cmake tup libasound-dev libfmt-dev googletest libyaml-cpp-dev
-
-Bootstrap development
-
-    ./bootstrap.sh
+    apt-get install aeolus alsa-utils googletest libasound-dev libfmt-dev libyaml-cpp-dev tup
 
 Build and install
-
-    tup
+    bash -x build.sh
     install linux/jamb /usr/local/bin
 
 ## Development
 Note that if you try to run a parallel build you will probably run out of memory and start thrashing. Especially if you do it while also running Aeolus. For this reason, `bootstrap.sh` configures tup to use `-j1`.
 I also suggest installing `swapspace` which will at least give a dynamic amount of swap if it's necessary, rather than oom-killing things.
 
+Bootstrap development (do this once)
+
+    ./bootstrap.sh
+
 Build and run
 
     ./run.sh
 
-Just build binary
+Just build the binary
 
     tup linux/jamb
 
@@ -101,6 +100,11 @@ Run tests
     ./test.sh
 
 A full build of from zero takes about 4 minutes on my Raspberry Pi Zero 2W.
+
+To regenerate `build.sh` (needs a newer version of tup than is in Raspbian, so I run it on Mac):
+
+    git clean -dxf
+    tup generate build.sh linux/jamb
 
 # Mac setup (for core development)
 Compilation on a Raspberry Pi Zero 2W is quite slow, so I do most of my development on my laptop with MIDI fakes and approval testing.
