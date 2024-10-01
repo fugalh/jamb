@@ -89,25 +89,18 @@ Bootstrap development (do this once)
 
     ./bootstrap.sh
 
+Build
+    ./build.sh
+
 Build and run
 
     ./run.sh
-
-Just build the binary
-
-    tup linux/jamb
 
 Run tests
 
     ./test.sh
 
 A full build of binary and tests from zero takes about 4 minutes on my Raspberry Pi Zero 2W.
-
-To regenerate `build.sh` (needs a newer version of tup than is in Raspbian, so I run it on Mac):
-
-    git clean -dxf
-    ./bootstrap.sh
-    tup generate build.sh linux/jamb
 
 # Mac setup (for core development)
 Compilation on a Raspberry Pi Zero 2W is quite slow, so I do most of my development on my laptop with MIDI fakes and approval testing.
@@ -125,6 +118,12 @@ Install dependencies with homebrew
 Run tests
 
     ./test.sh
+
+To regenerate `build.sh` needs a newer version of tup than is in Raspbian, so I run it on Mac:
+
+    git clean -dxf
+    tup init
+    tup generate build.sh linux/jamb
 
 # Future plans
 - More robust auto-connect (if things (re)appear after startup)
