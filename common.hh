@@ -18,3 +18,8 @@
                              std::to_string(__LINE__) + " " + __FUNCTION__ + \
                              "(): " + msg);                                  \
   }
+
+// The top four bits of a byte
+static uint8_t topFour(uint8_t x) {
+  return (x & 0xf0) >> 4;
+}

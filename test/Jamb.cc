@@ -7,10 +7,8 @@
 TEST(Jamb, generalCancel) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
-  launchpad.init();
   auto aeolus = Aeolus{aeolusMidi};
-  Jamb jamb{launchpad, aeolus};
-  jamb.init();
+  jamb::Model jamb{launchpad, aeolus};
 
   lpMidi.emit({0x90, {0x78, 1}});
   ApprovalTests::Approvals::verify(aeolusMidi);
@@ -19,10 +17,8 @@ TEST(Jamb, generalCancel) {
 TEST(Jamb, stopToggle) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
-  launchpad.init();
   auto aeolus = Aeolus{aeolusMidi};
-  Jamb jamb{launchpad, aeolus};
-  jamb.init();
+  jamb::Model jamb{launchpad, aeolus};
   lpMidi.messages_.clear();
   aeolusMidi.messages_.clear();
 
@@ -35,10 +31,8 @@ TEST(Jamb, stopToggle) {
 TEST(Jamb, midiPanic) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
-  launchpad.init();
   auto aeolus = Aeolus{aeolusMidi};
-  Jamb jamb{launchpad, aeolus};
-  jamb.init();
+  jamb::Model jamb{launchpad, aeolus};
   lpMidi.messages_.clear();
   aeolusMidi.messages_.clear();
 
@@ -49,18 +43,16 @@ TEST(Jamb, midiPanic) {
 auto setPreset(FakeMidi& m, uint8_t piston) {
   piston += 0x68;
   m.emit({0x90, {Launchpad::kSetButton, midi::kFullVelocity}});
-  m.emit({0xB0, {piston, midi::kFullVelocity}});
-  m.emit({0xB0, {piston, 0x00}});
+  m.emit({midi::kController, {piston, midi::kFullVelocity}});
+  m.emit({midi::kController, {piston, 0x00}});
   m.emit({0x90, {Launchpad::kSetButton, 0x00}});
 }
 
 TEST(Jamb, setCombo) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
-  launchpad.init();
   auto aeolus = Aeolus{aeolusMidi};
-  Jamb jamb{launchpad, aeolus};
-  jamb.init();
+  jamb::Model jamb{launchpad, aeolus};
   lpMidi.messages_.clear();
   aeolusMidi.messages_.clear();
 
@@ -71,8 +63,9 @@ TEST(Jamb, setCombo) {
   lpMidi.emit({0x90, {0x15, midi::kFullVelocity}});
   setPreset(lpMidi, 2);
 
-  lpMidi.emit({0x90, {0x78, 1}});                    // general cancel
-  lpMidi.emit({0xB0, {0x69, midi::kFullVelocity}});  // recall combo
+  lpMidi.emit({0x90, {0x78, 1}});  // general cancel
+  lpMidi.emit(
+      {midi::kController, {0x69, midi::kFullVelocity}});  // recall combo
 
   ApprovalTests::Approvals::verifyAll({lpMidi, aeolusMidi});
 }
@@ -80,10 +73,8 @@ TEST(Jamb, setCombo) {
 TEST(Jamb, serializeMemory) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
-  launchpad.init();
   auto aeolus = Aeolus{aeolusMidi};
-  Jamb jamb{launchpad, aeolus};
-  jamb.init();
+  jamb::Model jamb{launchpad, aeolus};
 
   lpMidi.emit({0x90, {0x01, midi::kFullVelocity}});
   setPreset(lpMidi, 0);
@@ -97,11 +88,9 @@ TEST(Jamb, serializeMemory) {
 TEST(Jamb, unserializeMemory) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
-  launchpad.init();
   lpMidi.clear();
   auto aeolus = Aeolus{aeolusMidi};
-  Jamb jamb{launchpad, aeolus};
-  jamb.init();
+  jamb::Model jamb{launchpad, aeolus};
 
   std::string memory = R"(
 memory:
@@ -118,7 +107,7 @@ memory:
       - ....o..o........
   )";
   jamb.memoryFromString(memory);
-  lpMidi.emit({0xb0, {0x68, midi::kFullVelocity}});
+  lpMidi.emit({midi::kController, {0x68, midi::kFullVelocity}});
 
   ApprovalTests::Approvals::verifyAll({lpMidi, aeolusMidi});
 }

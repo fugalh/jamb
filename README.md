@@ -72,14 +72,16 @@ Then in another tmux window I make my MIDI connections, and run jamb:
 
 This could all be set up to happen automatically at boot, though I haven't yet.
 
-## Install Jamb
-    apt-get install aeolus alsa-utils googletest libasound-dev libfmt-dev libyaml-cpp-dev tup
+## Install Aeolus, alsa-utils, and Jamb
+    apt-get install aeolus alsa-utils libasound-dev libfmt-dev libyaml-cpp-dev
 
 Build and install
     bash -x build.sh
     install linux/jamb /usr/local/bin
 
 ## Development
+    apt-get install libasound-dev libfmt-dev libyaml-cpp-dev tup googletest
+
 Note that if you try to run a parallel build you will probably run out of memory and start thrashing. Especially if you do it while also running Aeolus. For this reason, `bootstrap.sh` configures tup to use `-j1`.
 I also suggest installing `swapspace` which will at least give a dynamic amount of swap if it's necessary, rather than oom-killing things.
 
@@ -99,11 +101,12 @@ Run tests
 
     ./test.sh
 
-A full build of from zero takes about 4 minutes on my Raspberry Pi Zero 2W.
+A full build of binary and tests from zero takes about 4 minutes on my Raspberry Pi Zero 2W.
 
 To regenerate `build.sh` (needs a newer version of tup than is in Raspbian, so I run it on Mac):
 
     git clean -dxf
+    ./bootstrap.sh
     tup generate build.sh linux/jamb
 
 # Mac setup (for core development)
@@ -124,7 +127,6 @@ Run tests
     ./test.sh
 
 # Future plans
-- Combination action (presets)
 - More robust auto-connect (if things (re)appear after startup)
 - Support OSC control e.g. using TouchOSC on a phone or iPad or Android Tablet
 - Support newer Launchpad Minis with more color (I suspect a new one would work fine out of the box, please let me know if you succeed)
@@ -132,5 +134,3 @@ Run tests
 
 # Notes
 On a pipe organ console, the panels of wood holding stop knobs or rocker tabs is called the stop jamb.
-
-The top row of buttons will recall Aeolus presets, but if you use this the stops will then not reflect Aeolus state, so I suggest waiting for true combination action. There is no way to use jamb to set an Aeolus preset, you have to do this through the GUI.

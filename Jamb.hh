@@ -5,6 +5,7 @@
 #include "Launchpad.hh"
 
 namespace jamb {
+
 using ComboAddr = Command::Combination;
 using Groups = Aeolus::State::Groups;
 struct State {
@@ -13,7 +14,7 @@ struct State {
   // are the groups and elements as arranged in the UI for that instrument.
   // Aeolus doesn't restrict it to 4 groups and 16 elements I don't think, and
   // may be less, but we just treat them as a fixed array of 4x16 because that's
-  // what we can reasonably do with a Launchpad Mini.
+  // what we can display with a Launchpad.
   Groups groups;
   std::map<ComboAddr, Groups> memory;
 };
@@ -22,12 +23,19 @@ struct Model {
   Launchpad& launchpad_;
   Aeolus& aeolus_;
 
-  Model(Launchpad& lp, Aeolus& a) : launchpad_{lp}, aeolus_{a} {}
+  Model(Launchpad& lp, Aeolus& a, bool persistMemory = false)
+      : launchpad_{lp}, aeolus_{a}, persistMemory_{persistMemory} {
+    launchpad_.observer_ = [this](Command cmd) { dispatch(cmd); };
+  }
 
-  void init(bool persistMemory = false);
+  // Dump the memory to a YAML string
   std::string memoryString();
-  void memoryFromString(std::string);
+  // Write the memory to ~/.jamb.memory
   void writeMemory();
+
+  // Load the memory from this YAML string
+  void memoryFromString(std::string yaml);
+  // Read the memory from ~/.jamb.memory
   void readMemory();
 
  protected:
@@ -38,5 +46,3 @@ struct Model {
 };
 
 }  // namespace jamb
-
-using Jamb = jamb::Model;  // deprecated name

@@ -6,12 +6,12 @@
 #include <algorithm>
 #include <fstream>
 
-void Jamb::init(bool persistMemory) {
-  persistMemory_ = persistMemory;
-  launchpad_.observer_ = [this](Command cmd) { dispatch(cmd); };
-}
+using std::map;
+using std::string;
+using std::vector;
+namespace jamb {
 
-void Jamb::dispatch(Command cmd) {
+void Model::dispatch(Command cmd) {
   switch (cmd.type) {
     case Command::Type::GeneralCancel: {
       state_.activeCombination = {};
@@ -20,6 +20,7 @@ void Jamb::dispatch(Command cmd) {
       emitState();
       break;
     }
+
     case Command::Type::SetCombination:
       state_.memory[cmd.u.combo] = state_.groups;
       state_.activeCombination = cmd.u.combo;
@@ -28,6 +29,7 @@ void Jamb::dispatch(Command cmd) {
         writeMemory();
       }
       break;
+
     case Command::Type::RecallCombination:
       if (state_.memory.contains(cmd.u.combo)) {
         state_.groups = state_.memory[cmd.u.combo];
@@ -35,6 +37,7 @@ void Jamb::dispatch(Command cmd) {
         emitState();
       }
       break;
+
     case Command::Type::StopToggle: {
       auto const g = cmd.u.stop.group;
       auto const b = cmd.u.stop.button;
@@ -42,6 +45,7 @@ void Jamb::dispatch(Command cmd) {
       emitState();
       break;
     }
+
     case Command::Type::MidiPanic:
       aeolus_.allSoundOff();
       break;
@@ -50,16 +54,12 @@ void Jamb::dispatch(Command cmd) {
   }
 }
 
-void Jamb::emitState() {
+void Model::emitState() {
   launchpad_.jambStateUpdate(state_);
   aeolus_.jambStateUpdate(state_);
 }
 
-using std::map;
-using std::string;
-using std::vector;
-
-std::string Jamb::memoryString() {
+std::string Model::memoryString() {
   map<string, map<int, map<int, vector<string>>>> x;
   auto& mem = x["memory"];
 
@@ -81,7 +81,7 @@ std::string Jamb::memoryString() {
   return out.c_str();
 }
 
-void Jamb::memoryFromString(std::string ss) {
+void Model::memoryFromString(std::string ss) {
   auto x = YAML::Load(ss);
   for (auto it_m : x["memory"]) {
     for (auto it_p : it_m.second) {
@@ -104,14 +104,16 @@ static std::string getConfigPath() {
   return fmt::format("{}/.jamb.memory", getenv("HOME"));
 }
 
-void Jamb::writeMemory() {
+void Model::writeMemory() {
   std::ofstream out(getConfigPath());
   out << memoryString() << "\n";
 }
 
-void Jamb::readMemory() {
+void Model::readMemory() {
   std::ifstream in(getConfigPath());
   std::stringstream buf;
   buf << in.rdbuf();
   memoryFromString(buf.str());
 }
+
+}  // namespace jamb

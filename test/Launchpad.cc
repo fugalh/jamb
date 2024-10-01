@@ -28,7 +28,6 @@ static std::string dumpStopmap(launchpad::Stopmap& stopmap) {
 TEST(Launchpad, init) {
   FakeMidi midi;
   auto lp = Launchpad{midi};
-  lp.init();
   ApprovalTests::Approvals::verify(midi);
 }
 
@@ -39,7 +38,6 @@ TEST(Launchpad, observerCalledBack) {
                  EXPECT_EQ(ev.type, Command::Type::GeneralCancel);
                  visited = true;
                }};
-  lp.init();
 
   uint8_t const velocity = 1;
   lpMidi.emit({0x90, {0x78, velocity}});
@@ -49,7 +47,6 @@ TEST(Launchpad, observerCalledBack) {
 TEST(Launchpad, buttons) {
   FakeMidi midi;
   auto lp = Launchpad{midi};
-  lp.init();
   lp.grid(4, 2, {Launchpad::Color::Amber, Launchpad::Intensity::Mid});
   lp.grid(7, 7, {Launchpad::Color::Green, Launchpad::Intensity::High});
   lp.topRow(5, {Launchpad::Color::Red, Launchpad::Intensity::Low});
@@ -61,7 +58,6 @@ TEST(Launchpad, buttons) {
 TEST(Launchpad, resetTopRow) {
   FakeMidi midi;
   auto lp = Launchpad{midi};
-  lp.init();
   midi.clear();
 
   lp.resetTopRow();  // nothing
@@ -76,7 +72,6 @@ TEST(Launchpad, jambStateUpdate) {
   FakeMidi midi;
   auto lp = Launchpad{midi};
   auto jState = jamb::State{};
-  lp.init();
   midi.clear();
 
   jState.groups[2][9] = true;
@@ -95,11 +90,10 @@ TEST(Launchpad, emitSetCombo) {
   Command cmd{};
   auto lp = Launchpad{midi, [&](Command ev) { cmd = ev; }};
   auto jState = jamb::State{};
-  lp.init();
   midi.clear();
 
   midi.emit({0x90, {Launchpad::kSetButton, midi::kFullVelocity}});
-  midi.emit({0xb0, {0x69, midi::kFullVelocity}});
+  midi.emit({midi::kController, {0x69, midi::kFullVelocity}});
   midi.emit({0x90, {Launchpad::kSetButton, 0x00}});
 
   EXPECT_EQ(cmd.type, Command::Type::SetCombination);
@@ -110,7 +104,6 @@ TEST(Launchpad, emitSetCombo) {
 TEST(Launchpad, setButtonLightedWhilePressed) {
   FakeMidi midi;
   auto lp = Launchpad{midi};
-  lp.init();
   midi.clear();
 
   midi.emit({0x90, {Launchpad::kSetButton, midi::kFullVelocity}});
