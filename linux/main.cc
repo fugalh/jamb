@@ -10,12 +10,11 @@
 
 int main(void) {
   midi::aseq::Sequencer seq("jamb");
-  FakeMidi aeolusMidi;
+
   Launchpad launchpad{*seq.launchpad_};
   Aeolus aeolus{*seq.aeolus_};
-  Jamb jamb{launchpad, aeolus};
-  launchpad.init();
-  jamb.init(true /* persistMemory */);
+
+  Jamb jamb{launchpad, aeolus, true /* persistMemory */};
   jamb.readMemory();
 
   seq.launchpad_->readLoop();

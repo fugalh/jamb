@@ -9,7 +9,6 @@ TEST(Jamb, generalCancel) {
   auto launchpad = Launchpad{lpMidi};
   auto aeolus = Aeolus{aeolusMidi};
   jamb::Model jamb{launchpad, aeolus};
-  jamb.init();
 
   lpMidi.emit({0x90, {0x78, 1}});
   ApprovalTests::Approvals::verify(aeolusMidi);
@@ -20,7 +19,6 @@ TEST(Jamb, stopToggle) {
   auto launchpad = Launchpad{lpMidi};
   auto aeolus = Aeolus{aeolusMidi};
   jamb::Model jamb{launchpad, aeolus};
-  jamb.init();
   lpMidi.messages_.clear();
   aeolusMidi.messages_.clear();
 
@@ -35,7 +33,6 @@ TEST(Jamb, midiPanic) {
   auto launchpad = Launchpad{lpMidi};
   auto aeolus = Aeolus{aeolusMidi};
   jamb::Model jamb{launchpad, aeolus};
-  jamb.init();
   lpMidi.messages_.clear();
   aeolusMidi.messages_.clear();
 
@@ -56,7 +53,6 @@ TEST(Jamb, setCombo) {
   auto launchpad = Launchpad{lpMidi};
   auto aeolus = Aeolus{aeolusMidi};
   jamb::Model jamb{launchpad, aeolus};
-  jamb.init();
   lpMidi.messages_.clear();
   aeolusMidi.messages_.clear();
 
@@ -79,7 +75,6 @@ TEST(Jamb, serializeMemory) {
   auto launchpad = Launchpad{lpMidi};
   auto aeolus = Aeolus{aeolusMidi};
   jamb::Model jamb{launchpad, aeolus};
-  jamb.init();
 
   lpMidi.emit({0x90, {0x01, midi::kFullVelocity}});
   setPreset(lpMidi, 0);
@@ -96,7 +91,6 @@ TEST(Jamb, unserializeMemory) {
   lpMidi.clear();
   auto aeolus = Aeolus{aeolusMidi};
   jamb::Model jamb{launchpad, aeolus};
-  jamb.init();
 
   std::string memory = R"(
 memory:

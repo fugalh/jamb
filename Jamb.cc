@@ -8,11 +8,6 @@
 
 namespace jamb {
 
-void Model::init(bool persistMemory) {
-  persistMemory_ = persistMemory;
-  launchpad_.observer_ = [this](Command cmd) { dispatch(cmd); };
-}
-
 void Model::dispatch(Command cmd) {
   switch (cmd.type) {
     case Command::Type::GeneralCancel: {

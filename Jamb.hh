@@ -23,9 +23,11 @@ struct Model {
   Launchpad& launchpad_;
   Aeolus& aeolus_;
 
-  Model(Launchpad& lp, Aeolus& a) : launchpad_{lp}, aeolus_{a} {}
+  Model(Launchpad& lp, Aeolus& a, bool persistMemory = false)
+      : launchpad_{lp}, aeolus_{a}, persistMemory_{persistMemory} {
+    launchpad_.observer_ = [this](Command cmd) { dispatch(cmd); };
+  }
 
-  void init(bool persistMemory = false);
   std::string memoryString();
   void memoryFromString(std::string);
   void writeMemory();
