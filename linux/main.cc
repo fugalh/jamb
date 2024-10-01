@@ -2,7 +2,7 @@
 #include "ASeq.hh"
 
 #include "../Jamb.hh"
-#include "../Launchpad-defaultConfig.hh"
+#include "Launchpad-defaultConfig.hh"
 #include "../common.hh"
 #include "../test/FakeMidi.hh"
 

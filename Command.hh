@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <string>
+#include <tuple>
 
 // Commands that can be sent from Launchpad (or later OSC) to jamb::Model
 struct Command {
