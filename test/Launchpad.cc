@@ -93,7 +93,7 @@ TEST(Launchpad, emitSetCombo) {
   midi.clear();
 
   midi.emit({0x90, {Launchpad::kSetButton, midi::kFullVelocity}});
-  midi.emit({0xb0, {0x69, midi::kFullVelocity}});
+  midi.emit({midi::kController, {0x69, midi::kFullVelocity}});
   midi.emit({0x90, {Launchpad::kSetButton, 0x00}});
 
   EXPECT_EQ(cmd.type, Command::Type::SetCombination);

@@ -1,5 +1,6 @@
 #include "FakeMidi.hh"
 #include "../Launchpad.hh"
+#include "../common.hh"
 
 #include <fmt/format.h>
 #include <sstream>
@@ -15,8 +16,7 @@ std::string FakeMidi::toString() const {
         auto const k = msg.data[0];
         auto const v = msg.data[1];
         if (k <= 0x80 && (k & 0x0f) < 8) {
-          os << fmt::format(": grid {} {} {:02x}", (k & 0xf0) >> 4, k & 0x0f,
-                            color);
+          os << fmt::format(": grid {} {} {:02x}", topFour(k), k & 0x0f, color);
         }
         if (k == Launchpad::kSetButton) {
           os << fmt::format(": set {:02x}", color);
@@ -29,7 +29,7 @@ std::string FakeMidi::toString() const {
         }
         break;
       }
-      case 0xB0: {
+      case midi::kController: {
         auto const c = msg.data[0];
         if (c == StopController) {
           if (v & 0b0100'0000) {

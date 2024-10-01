@@ -87,7 +87,7 @@ void Transport::send(Message msg) {
       break;
     }
 
-    case 0xb0: {
+    case midi::kController: {
       auto ev = eventPrototype();
       auto const cc = msg.data[0];
       auto const val = msg.data[1];
@@ -137,7 +137,7 @@ void Transport::readLoop() {
       case SND_SEQ_EVENT_CONTROLLER: {
         auto const& control = ev->data.control;
         LOGf("controller %02x %02x", control.param, control.value);
-        status = control.channel | 0xb0;
+        status = control.channel | midi::kController;
         observer({status, {uint8_t(control.param), uint8_t(control.value)}});
         break;
       }
