@@ -74,8 +74,8 @@ snd_seq_event_t Transport::eventPrototype() {
 }
 
 void Transport::send(Message msg) {
-  LOGf("[%14s] %02x %02x %02x", name_.c_str(), msg.status, msg.data[0],
-       msg.data[1]);
+  // LOGf("[%14s] %02x %02x %02x", name_.c_str(), msg.status, msg.data[0],
+  //      msg.data[1]);
   auto ch = msg.status & 0x0f;
   switch (msg.status & 0xf0) {
     case 0x90: {
@@ -129,14 +129,14 @@ void Transport::readLoop() {
         // fallthrough
       case SND_SEQ_EVENT_NOTEON: {
         auto const& note = ev->data.note;
-        LOGf("noteon %02x %02x", note.note, note.velocity);
+        // LOGf("noteon %02x %02x", note.note, note.velocity);
         status = note.channel | 0x90;
         observer({status, {note.note, note.velocity}});
         break;
       }
       case SND_SEQ_EVENT_CONTROLLER: {
         auto const& control = ev->data.control;
-        LOGf("controller %02x %02x", control.param, control.value);
+        // LOGf("controller %02x %02x", control.param, control.value);
         status = control.channel | midi::kController;
         observer({status, {uint8_t(control.param), uint8_t(control.value)}});
         break;
