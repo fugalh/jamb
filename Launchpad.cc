@@ -4,15 +4,31 @@
 
 #include <yaml-cpp/yaml.h>
 
-void Launchpad::init() {
-  midi_.observer = [this](midi::Message msg) { dispatch(msg); };
-  reset();
-  grid(6, 8, {Color::Red, Intensity::Low});    // midi panic
-  grid(7, 8, {Color::Amber, Intensity::Low});  // general cancel
+static uint8_t velocity(Launchpad::Color color,
+                        Launchpad::Intensity intensity) {
+  using Color = Launchpad::Color;
+  uint8_t green = 0;
+  uint8_t red = 0;
+  if (color == Color::Green || color == Color::Amber) {
+    green = 1;
+  }
+  if (color == Color::Red || color == Color::Amber) {
+    red = 1;
+  }
+  green *= int(intensity);
+  red *= int(intensity);
+  uint8_t flags = 0x0c;
+  return 0x10 * green + red + flags;
 }
 
-void Launchpad::reset() {
+void Launchpad::init() {
   midi_.send({0xb0, {0, 0}});
+  grid(6, 8, {Color::Red, Intensity::Low});    // midi panic
+  grid(7, 8, {Color::Amber, Intensity::Low});  // general cancel
+
+  midi_.observer = [this](midi::Message msg) { dispatch(msg); };
+
+  configureStopmap(launchpad::kDefaultConfig);
 }
 
 void Launchpad::configureStopmap(std::string config) {
@@ -83,7 +99,7 @@ void Launchpad::grid(uint8_t row, uint8_t col, Button b) {
 }
 
 // send the MIDI message to update the grid. the top row is mapped to 0x80+i
-void Launchpad::grid_(uint8_t loc, Button b) {
+void Launchpad::setGridButton(uint8_t loc, Button b) {
   auto const color = b.color;
   auto const intensity = b.intensity;
   auto const vel = velocity(color, intensity);
@@ -118,22 +134,6 @@ std::optional<std::pair<int, int>> Launchpad::stopToGrid(Command::Stop stop) {
     return gridmap_[stop];
   }
   return {};
-}
-
-uint8_t Launchpad::velocity(Launchpad::Color color,
-                            Launchpad::Intensity intensity) {
-  uint8_t green = 0;
-  uint8_t red = 0;
-  if (color == Color::Green || color == Color::Amber) {
-    green = 1;
-  }
-  if (color == Color::Red || color == Color::Amber) {
-    red = 1;
-  }
-  green *= int(intensity);
-  red *= int(intensity);
-  uint8_t flags = 0x0c;
-  return 0x10 * green + red + flags;
 }
 
 void Launchpad::topRow(uint8_t loc, Button button) {
@@ -182,7 +182,7 @@ void Launchpad::render(State const& s2) {
   for (auto i = 0; i < 8; i++) {
     auto& b = s2.topRow[i];
     if (state_.topRow[i] != b) {
-      grid_(0x80 + i, b);
+      setGridButton(0x80 + i, b);
     }
   }
 
@@ -191,7 +191,7 @@ void Launchpad::render(State const& s2) {
     for (auto col = 0; col < 9; col++) {
       auto& b = s2.grid[row][col];
       if (state_.grid[row][col] != b) {
-        grid_((0x10 * row) | col, b);
+        setGridButton((0x10 * row) | col, b);
       }
     }
   }

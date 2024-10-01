@@ -7,7 +7,6 @@
 TEST(Jamb, generalCancel) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
-  launchpad.init();
   auto aeolus = Aeolus{aeolusMidi};
   Jamb jamb{launchpad, aeolus};
   jamb.init();
@@ -19,7 +18,6 @@ TEST(Jamb, generalCancel) {
 TEST(Jamb, stopToggle) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
-  launchpad.init();
   auto aeolus = Aeolus{aeolusMidi};
   Jamb jamb{launchpad, aeolus};
   jamb.init();
@@ -35,7 +33,6 @@ TEST(Jamb, stopToggle) {
 TEST(Jamb, midiPanic) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
-  launchpad.init();
   auto aeolus = Aeolus{aeolusMidi};
   Jamb jamb{launchpad, aeolus};
   jamb.init();
@@ -57,7 +54,6 @@ auto setPreset(FakeMidi& m, uint8_t piston) {
 TEST(Jamb, setCombo) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
-  launchpad.init();
   auto aeolus = Aeolus{aeolusMidi};
   Jamb jamb{launchpad, aeolus};
   jamb.init();
@@ -80,7 +76,6 @@ TEST(Jamb, setCombo) {
 TEST(Jamb, serializeMemory) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
-  launchpad.init();
   auto aeolus = Aeolus{aeolusMidi};
   Jamb jamb{launchpad, aeolus};
   jamb.init();
@@ -97,7 +92,6 @@ TEST(Jamb, serializeMemory) {
 TEST(Jamb, unserializeMemory) {
   FakeMidi lpMidi, aeolusMidi;
   auto launchpad = Launchpad{lpMidi};
-  launchpad.init();
   lpMidi.clear();
   auto aeolus = Aeolus{aeolusMidi};
   Jamb jamb{launchpad, aeolus};
