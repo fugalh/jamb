@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <string>
+#include <tuple>
 
 struct Command {
   enum class Type {

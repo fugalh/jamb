@@ -14,10 +14,10 @@ LIBS = -lgtest -lasound -lfmt -lpthread -lyaml-cpp
 : gtest/gtest-all.cc |> !compile -I$(GTEST) |> gtest/gtest-all.o {test_objs}
 : |> bash codegen-defaultConfig.sh > %o |> generated/Launchpad-defaultConfig.hh {gen}
 
-: foreach *.cc                | {gen} ^\._ |> !compile |> %B.o {objs}
-: foreach test/*.cc           | {gen} ^\._ |> !compile |> test/%B.o {test_objs}
-: foreach linux/*.cc          | {gen} ^\._ |> !compile |> linux/%B.o {linux_objs}
-: {objs} {test_objs}                  ^\._ |> !link    |> test/jamb
-: {objs} {linux_objs} test/FakeMidi.o ^\._ |> !link    |> linux/jamb
+: foreach *.cc                        ^\._ | {gen} |> !compile |> %B.o {objs}
+: foreach test/*.cc                   ^\._ | {gen} |> !compile |> test/%B.o {test_objs}
+: foreach linux/*.cc                  ^\._ | {gen} |> !compile |> linux/%B.o {linux_objs}
+: {objs} {test_objs}                  ^\._         |> !link    |> test/jamb
+: {objs} {linux_objs} test/FakeMidi.o ^\._         |> !link    |> linux/jamb
 
 # NB Files starting with ._ are artifacts of sshfs and can't be compiled
