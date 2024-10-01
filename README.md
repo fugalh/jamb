@@ -89,9 +89,6 @@ Bootstrap development (do this once)
 
     ./bootstrap.sh
 
-Build
-    ./build.sh
-
 Build and run
 
     ./run.sh
