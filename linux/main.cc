@@ -14,7 +14,7 @@ int main(void) {
   Launchpad launchpad{*seq.launchpad_};
   Aeolus aeolus{*seq.aeolus_};
 
-  Jamb jamb{launchpad, aeolus, true /* persistMemory */};
+  jamb::Model jamb{launchpad, aeolus, true /* persistMemory */};
   jamb.readMemory();
 
   seq.launchpad_->readLoop();
