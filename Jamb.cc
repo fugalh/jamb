@@ -6,6 +6,9 @@
 #include <algorithm>
 #include <fstream>
 
+using std::map;
+using std::string;
+using std::vector;
 namespace jamb {
 
 void Model::dispatch(Command cmd) {
@@ -17,6 +20,7 @@ void Model::dispatch(Command cmd) {
       emitState();
       break;
     }
+
     case Command::Type::SetCombination:
       state_.memory[cmd.u.combo] = state_.groups;
       state_.activeCombination = cmd.u.combo;
@@ -25,6 +29,7 @@ void Model::dispatch(Command cmd) {
         writeMemory();
       }
       break;
+
     case Command::Type::RecallCombination:
       if (state_.memory.contains(cmd.u.combo)) {
         state_.groups = state_.memory[cmd.u.combo];
@@ -32,6 +37,7 @@ void Model::dispatch(Command cmd) {
         emitState();
       }
       break;
+
     case Command::Type::StopToggle: {
       auto const g = cmd.u.stop.group;
       auto const b = cmd.u.stop.button;
@@ -39,6 +45,7 @@ void Model::dispatch(Command cmd) {
       emitState();
       break;
     }
+
     case Command::Type::MidiPanic:
       aeolus_.allSoundOff();
       break;
@@ -51,10 +58,6 @@ void Model::emitState() {
   launchpad_.jambStateUpdate(state_);
   aeolus_.jambStateUpdate(state_);
 }
-
-using std::map;
-using std::string;
-using std::vector;
 
 std::string Model::memoryString() {
   map<string, map<int, map<int, vector<string>>>> x;

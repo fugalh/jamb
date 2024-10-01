@@ -22,7 +22,7 @@ void Aeolus::jambStateUpdate(jamb::State const& s2) {
 
 void Aeolus::generalCancel() {
   for (unsigned group = 0; group < 4; group++) {
-    unsigned const param = StopController;      // MIDICTL_IFELM in Aeolus
+    unsigned const param = kStopController;     // MIDICTL_IFELM in Aeolus
     unsigned const status = midi::kController;  // Control Change
 
     // 01mm0ggg with mm=00 indicating cancel
@@ -63,13 +63,3 @@ void Aeolus::stopToggle(uint8_t group, uint8_t element) {
 void Aeolus::allSoundOff() {
   aeolus_.send({midi::kController, {0x78, 1}});
 }
-
-/*
-Make a seq, and two ports (one duplex for launchpad and one simplex output for
-aeolus)
-
-snd_seq_open
-snd_seq_set_client_name
-snd_seq_create_simple_port
-
-*/

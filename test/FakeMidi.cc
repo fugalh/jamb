@@ -31,7 +31,7 @@ std::string FakeMidi::toString() const {
       }
       case midi::kController: {
         auto const c = msg.data[0];
-        if (c == StopController) {
+        if (c == Aeolus::kStopController) {
           if (v & 0b0100'0000) {
             std::string const modes[4] = {"cancel", "off", "on", "toggle"};
             auto mm = (v & 0b110'000) >> 4;

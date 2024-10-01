@@ -1,4 +1,3 @@
-
 cat <<EOF
 #pragma once
 #include <string>

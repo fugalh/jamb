@@ -5,17 +5,19 @@
 #include <bitset>
 #include <map>
 
-uint8_t constexpr StopController = 98;
 namespace jamb {
 struct State;
 }
 
 struct Aeolus {
+  // cf MIDICTL_IFELM in aeolus/source/global.h
+  static uint8_t constexpr kStopController = 98;
+
   struct State {
     using Groups = std::array<std::bitset<16>, 4>;
     Groups groups;
   };
-  midi::Transport& aeolus_;
+
   Aeolus(midi::Transport& t) : aeolus_{t} {}
 
   void jambStateUpdate(jamb::State const&);
@@ -29,6 +31,7 @@ struct Aeolus {
   void allSoundOff();
 
  protected:
+  midi::Transport& aeolus_;
   State state_{};
   void setStop(uint8_t group, uint8_t element, uint8_t mode);
 };

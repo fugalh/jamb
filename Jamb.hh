@@ -28,9 +28,14 @@ struct Model {
     launchpad_.observer_ = [this](Command cmd) { dispatch(cmd); };
   }
 
+  // Dump the memory to a YAML string
   std::string memoryString();
-  void memoryFromString(std::string);
+  // Write the memory to ~/.jamb.memory
   void writeMemory();
+
+  // Load the memory from this YAML string
+  void memoryFromString(std::string yaml);
+  // Read the memory from ~/.jamb.memory
   void readMemory();
 
  protected:

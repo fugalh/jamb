@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <string>
 
+// Commands that can be sent from Launchpad (or later OSC) to jamb::Model
 struct Command {
   enum class Type {
     GeneralCancel,
@@ -10,6 +11,7 @@ struct Command {
     StopToggle,
     MidiPanic,
   };
+
   struct Stop {
     uint8_t group;
     uint8_t button;
@@ -20,6 +22,7 @@ struct Command {
       return std::tie(group, button) < std::tie(other.group, other.button);
     }
   };
+
   struct Combination {
     uint8_t memory, piston;
     bool operator<(Combination other) const {
