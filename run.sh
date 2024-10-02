@@ -1,5 +1,5 @@
 set -e
-./build.sh
+tup linux/jamb
 {
     sleep 1
     aconnect -l

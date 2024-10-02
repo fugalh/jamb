@@ -9,7 +9,8 @@
 #include <filesystem>
 #include <iostream>
 #include <optional>
-#include <stringstream>
+#include <sstream>
+#include <fstream>
 #include <thread>
 
 static std::optional<std::string> readConfig() {
@@ -29,7 +30,7 @@ int main(void) {
   Launchpad launchpad{*seq.launchpad_};
   auto configStr = readConfig();
   if (configStr) {
-    launchpad.configureStopmap(configStr);
+    launchpad.configureStopmap(*configStr);
   }
   Aeolus aeolus{*seq.aeolus_};
 
