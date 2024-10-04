@@ -7,10 +7,10 @@
 #include "Launchpad-defaultConfig.hh"
 
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <optional>
 #include <sstream>
-#include <fstream>
 #include <thread>
 
 static std::optional<std::string> readConfig() {

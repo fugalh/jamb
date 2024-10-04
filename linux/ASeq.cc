@@ -33,7 +33,8 @@ Transport::Transport(snd_seq_t* const& seq, std::string client)
     : seq_(seq), name_{client} {
   auto const otherClient = findClient(seq_, client);
   int const otherPort = 0;
-  auto caps = SND_SEQ_PORT_CAP_DUPLEX | SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_SUBS_WRITE;
+  auto caps = SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_WRITE |
+	  SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_SUBS_WRITE;
   enum { to, fro, tofro } direction = tofro;
   if (client == "aeolus") {
     caps = SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ;
