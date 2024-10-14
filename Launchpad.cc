@@ -110,6 +110,7 @@ void Launchpad::init() {
   midi_.send({midi::kController, {0, 0}});
   grid(6, 8, {Color::Red, Intensity::Low});    // midi panic
   grid(7, 8, {Color::Amber, Intensity::Low});  // general cancel
+  grid(5, 8, {Color::Green, Intensity::Low});  // set
 
   midi_.observer = [this](midi::Message msg) { dispatch(msg); };
 

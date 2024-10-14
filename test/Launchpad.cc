@@ -47,6 +47,7 @@ TEST(Launchpad, observerCalledBack) {
 TEST(Launchpad, buttons) {
   FakeMidi midi;
   auto lp = Launchpad{midi};
+  midi.clear();
   lp.grid(4, 2, {Launchpad::Color::Amber, Launchpad::Intensity::Mid});
   lp.grid(7, 7, {Launchpad::Color::Green, Launchpad::Intensity::High});
   lp.topRow(5, {Launchpad::Color::Red, Launchpad::Intensity::Low});
