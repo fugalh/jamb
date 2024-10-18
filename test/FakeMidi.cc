@@ -8,13 +8,12 @@
 std::string FakeMidi::toString() const {
   std::ostringstream os;
   for (auto const& msg : messages_) {
+    auto const k = msg.data[0];
     auto const v = msg.data[1];
-    os << fmt::format("0x{:02x} {:02x} {:02x}", msg.status, msg.data[0], v);
+    os << fmt::format("0x{:02x} {:02x} {:02x}", msg.status, k, v);
     auto const color = v & 0x33;
     switch (msg.status & 0xf0) {
       case 0x90: {
-        auto const k = msg.data[0];
-        auto const v = msg.data[1];
         if (k <= 0x80 && (k & 0x0f) < 8) {
           os << fmt::format(": grid {} {} {:02x}", topFour(k), k & 0x0f, color);
         }
@@ -30,8 +29,7 @@ std::string FakeMidi::toString() const {
         break;
       }
       case midi::kController: {
-        auto const c = msg.data[0];
-        if (c == Aeolus::kStopController) {
+        if (k == Aeolus::kStopController) {
           if (v & 0b0100'0000) {
             std::string const modes[4] = {"cancel", "off", "on", "toggle"};
             auto mm = (v & 0b110'000) >> 4;
@@ -41,15 +39,15 @@ std::string FakeMidi::toString() const {
             os << fmt::format(": stop {}", v & 0b00011111);
           }
         }
-        if (c >= 0x68 && c <= 0x6f) {
-          os << fmt::format(": piston {} {:02x}", c - 0x68, color);
+        if (k >= 0x68 && k <= 0x6f) {
+          os << fmt::format(": piston {} {:02x}", k - 0x68, color);
         }
         break;
       }
 
       case 0xC0:
         if (v == 0) {
-          os << fmt::format(": program change {}", msg.data[0]);
+          os << fmt::format(": program change {}", k);
         }
         break;
 

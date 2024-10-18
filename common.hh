@@ -20,6 +20,6 @@
   }
 
 // The top four bits of a byte
-static uint8_t topFour(uint8_t x) {
+static inline uint8_t topFour(uint8_t x) {
   return (x & 0xf0) >> 4;
 }

@@ -2,7 +2,7 @@
 
 load('//:subdir_glob.bzl', 'subdir_glob')
 
-COMPILER_FLAGS = ['-g', '-O2', '-std=c++20', '-I/opt/homebrew/include']
+COMPILER_FLAGS = ['-g', '-O2', '-Wall', '-Werror', '-std=c++20', '-I/opt/homebrew/include']
 LINKER_FLAGS = ['-L/opt/homebrew/lib', '-lfmt', '-lgtest', '-lyaml-cpp']
 
 genrule(
