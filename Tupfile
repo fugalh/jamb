@@ -2,7 +2,7 @@
 
 GTEST = /usr/src/googletest/googletest
 CXX = c++
-CXXFLAGS = -g -std=c++20 -I$(GTEST)/include -Igenerated
+CXXFLAGS = -g -std=c++20 -I$(GTEST)/include -Ibuild
 LIBS = -lgtest -lasound -lfmt -lpthread -lyaml-cpp
 
 # clang has better errors but isn't installed by default
@@ -11,15 +11,15 @@ LIBS = -lgtest -lasound -lfmt -lpthread -lyaml-cpp
 !compile = |> $(CXX) $(CXXFLAGS) -c %f -o %o |>
 !link = |> $(CXX) $(CXXFLAGS) %f $(LIBS) -o %o |>
 
+: |> bash codegen-defaultConfig.sh > %o |> build/Launchpad-defaultConfig.hh {gen}
 
-: |> mkdir -p gtest; ln -s $(GTEST)/src/gtest-all.cc gtest |> gtest/gtest-all.cc
-: gtest/gtest-all.cc |> !compile -I$(GTEST) |> gtest/gtest-all.o {test_objs}
-: |> bash codegen-defaultConfig.sh > %o |> generated/Launchpad-defaultConfig.hh {gen}
+: |> ln -s $(GTEST)/src/gtest-all.cc %o |> build/gtest-all.cc {gtest_src}
+: {gtest_src} |> !compile -I$(GTEST) |> build/gtest-all.o {test_objs}
 
-: foreach *.cc                        ^\._ | {gen} |> !compile |> %B.o {objs}
-: foreach test/*.cc                   ^\._ | {gen} |> !compile |> test/%B.o {test_objs}
-: foreach linux/*.cc                  ^\._ | {gen} |> !compile |> linux/%B.o {linux_objs}
-: {objs} {test_objs}                  ^\._         |> !link    |> test/jamb
-: {objs} {linux_objs} test/FakeMidi.o ^\._         |> !link    |> linux/jamb
+: foreach src/*.cc                          ^\._ | {gen} |> !compile |> build/%B.o {objs}
+: foreach src/test/*.cc                     ^\._ | {gen} |> !compile |> build/test/%B.o {test_objs}
+: foreach src/linux/*.cc                    ^\._ | {gen} |> !compile |> build/linux/%B.o {linux_objs}
+: {objs} {test_objs}                        ^\._         |> !link    |> bin/test
+: {objs} {linux_objs} build/test/FakeMidi.o ^\._         |> !link    |> bin/jamb
 
 # NB Files starting with ._ are artifacts of sshfs and can't be compiled

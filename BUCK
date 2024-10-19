@@ -14,8 +14,8 @@ genrule(
 
 cxx_library(
     name = "lib",
-    srcs = glob(["*.cc"]),
-    exported_headers = subdir_glob([("", "*.hh")]) |
+    srcs = glob(["src/*.cc"]),
+    exported_headers = subdir_glob([("", "src/*.hh")]) |
         {'Launchpad-defaultConfig.hh': ':defaultConfig'},
 
     linker_flags = LINKER_FLAGS,
@@ -24,8 +24,8 @@ cxx_library(
 
 cxx_test(
     name = 'test',
-    srcs = glob(["test/*.cc"]),
-    headers = glob(["test/*.hh"]),
+    srcs = glob(["src/test/*.cc"]),
+    headers = glob(["src/test/*.hh"]),
     deps = [":lib"],
 
     linker_flags = LINKER_FLAGS,

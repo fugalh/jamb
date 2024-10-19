@@ -90,7 +90,7 @@ This could all be set up to happen automatically at boot, though I haven't yet.
 
 Build and install
     bash -x build.sh
-    install linux/jamb /usr/local/bin
+    install bin/jamb /usr/local/bin
 
 ## Development
     apt-get install libasound-dev libfmt-dev libyaml-cpp-dev tup googletest
@@ -133,7 +133,7 @@ To regenerate `build.sh` needs a newer version of tup than is in Raspbian, so I 
 
     git clean -dxf
     tup init
-    tup generate build.sh linux/jamb
+    tup generate build.sh bin/jamb
 
 # Future plans
 - More robust auto-connect (if things (re)appear after startup)
