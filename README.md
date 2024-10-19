@@ -7,7 +7,7 @@ It supports toggling stop tabs - up to 16 buttons in up to 4 "groups" (in Aeolus
 
 Jamb will automatically connect to Aeolus and a Launchpad Mini at startup if they're active.
 
-Traditional organ consoles arrange stops in columns by division, with lower stops at the bottom (e.g. see [AGO Standard Console Specifications](https://wicksorgan.com/wp-content/uploads/2020/01/agoconsole.pdf)). In that spirit, the default stop layout is:
+Traditional organ consoles arrange stops in columns by division, with lower-pitched stops at the bottom (e.g. see [AGO Standard Console Specifications](https://wicksorgan.com/wp-content/uploads/2020/01/agoconsole.pdf)). In that spirit, the default stop layout is:
 
 ![default stop layout spreadsheet screenshot](default-config.png)
 
@@ -16,7 +16,7 @@ This assumes the default "Aeolus" instrument. See `jamb.config.yaml`.
 [View a demonstration](https://www.youtube.com/shorts/1N0cK-HaY4k)
 
 # Aeolus notes
-You should run the Aeolus GUI and set up MIDI routing and audio settings, then exit cleanly so that tuning and settings are saved properly. Be sure to enable control on the first MIDI channel. You can connect from another machine running X (e.g. a Linux desktop or a Mac from [XQuartz](https://www.xquartz.org/)) or you can connect a keyboard, mouse, and display then run `startx`.
+You should run the Aeolus GUI and set up MIDI routing and audio settings, then save and exit cleanly so that tuning and settings are saved properly. Be sure to enable control on the first MIDI channel. You can connect from another machine running X (e.g. a Linux desktop or a Mac with [XQuartz](https://www.xquartz.org/)), or you can connect a keyboard, mouse, and display then run `startx`.
 
 The text UI for Aeolus is poorly documented and doesn't expose the full functionality of the GUI, but here are a few things you can do (refer to Aeolus source for more):
 
@@ -69,34 +69,30 @@ I run Aeolus headless on a Raspberry Pi Zero 2W. Aeolus uses about 115MB and 30%
 
     apt-get install aeolus alsa-utils 
 
-I copied the default instrument and tweaked it for manual order, and called it "Fuglerør" (i.e. I made `~/aeolus/stops/Fugleror/definition`). A stable ALSA address for my USB audio device is `hw:Schiit,0`.
-My `~/.aeolusrc` looks like this:
+I use the default instrument "Aeolus". A stable ALSA address for my USB audio device is `hw:Schiit,0`.
+Thus, my `~/.aeolusrc` looks like this:
 
-    -u -S /home/fugalh/aeolus/stops -I Fugleror -A -d hw:Schiit,0
-
-In tmux I start Aeolus:
-
-    aeolus -t
-
-Then in another tmux window I make my MIDI connections, and run jamb:
-
-    aconnect -x && aconnect 'USB Uno MIDI Interface':0 aeolus:0 && \
-    jamb
-
-This could all be set up to happen automatically at boot, though I haven't yet.
+    -u -S /home/fugalh/aeolus/stops -A -d hw:Schiit,0
 
 ## Install Aeolus, alsa-utils, and Jamb
+
     apt-get install aeolus alsa-utils libasound-dev libfmt-dev libyaml-cpp-dev
 
 Build and install
+
     bash -x build.sh
     install bin/jamb /usr/local/bin
 
+## Run at startup
+I use the script `aeolus-tmux.sh` to start tmux running Aeolus and Jamb. Edit your user's crontab (e.g. `crontab -e`) so that Aeolus and Jamb start automatically at boot with this line:
+
+    @reboot bash /path/to/jamb/aeolus-tmux.sh
+
 ## Development
+
     apt-get install libasound-dev libfmt-dev libyaml-cpp-dev tup googletest
 
-Note that if you try to run a parallel build you will probably run out of memory and start thrashing. Especially if you do it while also running Aeolus. For this reason, `bootstrap.sh` configures tup to use `-j1`.
-I also suggest installing `swapspace` which will at least give a dynamic amount of swap if it's necessary, rather than oom-killing things.
+Note that if you try to run a parallel build you will probably run out of memory and start thrashing. Especially if you do it while also running Aeolus. For this reason, `bootstrap.sh` configures tup to use `-j1`. I also suggest installing `swapspace` which will at least give a dynamic amount of swap if it's necessary, rather than oom-killing things. [Mosh](https://mosh.org/) and [tmux](https://github.com/tmux/tmux/wiki) are convenient too.
 
 Bootstrap development (do this once)
 
@@ -136,7 +132,6 @@ To regenerate `build.sh` needs a newer version of tup than is in Raspbian, so I 
     tup generate build.sh bin/jamb
 
 # Future plans
-- More robust auto-connect (if things (re)appear after startup)
 - Support OSC control e.g. using TouchOSC on a phone or iPad or Android Tablet
 - Support newer Launchpad Minis with more color (I suspect a new one would work fine out of the box, please let me know if you succeed)
 - Support other touchpad interfaces (contributions welcome)
