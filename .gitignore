@@ -1,14 +1,9 @@
 ._*
 .DS_Store
+*.swp
 
 buck-out
 .tup
 
-*.o
-*.swp
-gtest
-
-jamb
-test/jamb
-linux/jamb
-generated
+bin
+build
