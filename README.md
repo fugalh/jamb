@@ -13,7 +13,7 @@ Traditional organ consoles arrange stops in columns by division, with lower-pitc
 
 This assumes the default "Aeolus" instrument. See `jamb.config.yaml`.
 
-[View a demonstration](https://www.youtube.com/shorts/1N0cK-HaY4k)
+[View a demonstration](https://youtu.be/bOEGf_xBQUw)
 
 # Aeolus notes
 You should run the Aeolus GUI and set up MIDI routing and audio settings, then save and exit cleanly so that tuning and settings are saved properly. Be sure to enable control on the first MIDI channel. You can connect from another machine running X (e.g. a Linux desktop or a Mac with [XQuartz](https://www.xquartz.org/)), or you can connect a keyboard, mouse, and display then run `startx`.
