@@ -1,7 +1,7 @@
 set -e
-tup linux/jamb
+tup bin/jamb
 {
     sleep 1
     aconnect -l
 } &
-exec linux/jamb
+exec bin/jamb

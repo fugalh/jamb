@@ -1,4 +1,5 @@
 ## For building on linux
+# Run ./bootstrap.sh first
 
 GTEST = /usr/src/googletest/googletest
 CXX = c++
