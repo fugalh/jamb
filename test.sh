@@ -1,7 +1,7 @@
 if [ `uname` = 'Linux' ]; then
   set -ex
-  tup test/jamb
-  test/jamb
+  tup bin/test
+  bin/test
 else
   buck2 test //...
 fi
