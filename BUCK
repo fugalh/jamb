@@ -2,7 +2,7 @@
 
 load('//:subdir_glob.bzl', 'subdir_glob')
 
-COMPILER_FLAGS = ['-g', '-O2', '-std=c++20', '-I/opt/homebrew/include']
+COMPILER_FLAGS = ['-g', '-O2', '-Wall', '-Werror', '-std=c++20', '-I/opt/homebrew/include']
 LINKER_FLAGS = ['-L/opt/homebrew/lib', '-lfmt', '-lgtest', '-lyaml-cpp']
 
 genrule(
@@ -14,8 +14,8 @@ genrule(
 
 cxx_library(
     name = "lib",
-    srcs = glob(["*.cc"]),
-    exported_headers = subdir_glob([("", "*.hh")]) |
+    srcs = glob(["src/*.cc"]),
+    exported_headers = subdir_glob([("", "src/*.hh")]) |
         {'Launchpad-defaultConfig.hh': ':defaultConfig'},
 
     linker_flags = LINKER_FLAGS,
@@ -24,8 +24,8 @@ cxx_library(
 
 cxx_test(
     name = 'test',
-    srcs = glob(["test/*.cc"]),
-    headers = glob(["test/*.hh"]),
+    srcs = glob(["src/test/*.cc"]),
+    headers = glob(["src/test/*.hh"]),
     deps = [":lib"],
 
     linker_flags = LINKER_FLAGS,

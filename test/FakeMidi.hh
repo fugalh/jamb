@@ -23,6 +23,6 @@ struct FakeMidi : public midi::Transport {
   }
 };
 
-static auto format_as(FakeMidi const& x) {
+static inline auto format_as(FakeMidi const& x) {
   return x.toString();
 }

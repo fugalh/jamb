@@ -208,7 +208,6 @@ void Launchpad::resetTopRow() {
 }
 
 std::optional<Command::Stop> Launchpad::gridToStop(uint8_t button) {
-  Command::Stop stop;
   uint8_t row = topFour(button);
   uint8_t col = button & 0x0f;
   return stopmap_[{row, col}];

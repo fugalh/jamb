@@ -50,6 +50,19 @@ Aeolus> s II + rofl8
 Aeolus> s I - prin8
 ```
 
+I have found [amidiminder](https://github.com/mzero/amidiminder?tab=readme-ov-file#amidiminder) to be helpful, so I never have to manually run `aconnect` if I restart aeolus or plug/unplug my USB devices. Here is my `/etc/amidiminder.rules`:
+```
+# I disabled this
+#.hw <---> .app
+# and left these alone
+RtMidiIn Client <-x- *
+RtMidiOut Client -x-> *
+
+jamb:Launchpad <--> Launchpad
+jamb:aeolus --> aeolus:In
+USB Uno MIDI Interface --> aeolus:In
+```
+
 # Raspberry Pi 
 ## Aeolus
 I run Aeolus headless on a Raspberry Pi Zero 2W. Aeolus uses about 115MB and 30% CPU.
@@ -77,7 +90,7 @@ This could all be set up to happen automatically at boot, though I haven't yet.
 
 Build and install
     bash -x build.sh
-    install linux/jamb /usr/local/bin
+    install bin/jamb /usr/local/bin
 
 ## Development
     apt-get install libasound-dev libfmt-dev libyaml-cpp-dev tup googletest
@@ -120,7 +133,7 @@ To regenerate `build.sh` needs a newer version of tup than is in Raspbian, so I 
 
     git clean -dxf
     tup init
-    tup generate build.sh linux/jamb
+    tup generate build.sh bin/jamb
 
 # Future plans
 - More robust auto-connect (if things (re)appear after startup)
